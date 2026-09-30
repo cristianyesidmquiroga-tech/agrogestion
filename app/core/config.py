@@ -1,4 +1,5 @@
 """Configuración tipada leída del entorno o de un .env fuera de git."""
+
 from functools import lru_cache
 
 from pydantic import Field
@@ -23,6 +24,7 @@ class Settings(BaseSettings):
 
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = Field(default=60, ge=5, le=1440)
+    politica_version: str = "2026-09"
 
     # Orígenes de navegador permitidos; una app móvil nativa no envía Origin.
     cors_origins: list[str] = [

@@ -1,4 +1,5 @@
 """Salud del servicio. No consulta la base de datos a propósito."""
+
 from fastapi import APIRouter
 
 from app.core.config import get_settings
