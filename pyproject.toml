@@ -32,6 +32,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # En las pruebas se permiten aserciones y credenciales de fixture.
 "tests/*" = ["S101", "S105", "S106", "ANN"]
+# Los errores de dominio llevan nombres en español sin sufijo Error.
+"app/core/exceptions.py" = ["N818"]
 
 # ---------------------------------------------------------------------------
 # mypy · tipado estricto
@@ -53,6 +55,7 @@ ignore_missing_imports = true
 # ---------------------------------------------------------------------------
 [tool.coverage.run]
 source = ["app"]
+concurrency = ["greenlet", "thread"]
 omit = ["app/main.py"]
 
 [tool.coverage.report]
