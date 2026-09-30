@@ -12,6 +12,7 @@
           "health"
         ],
         "summary": "Salud del servicio",
+        "description": "No consulta la base de datos a propósito: responde si el servidor está vivo.",
         "operationId": "health_health_get",
         "responses": {
           "200": {
@@ -20,6 +21,27 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "El servicio está listo para trabajar",
+        "operationId": "ready_health_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadyResponse"
                 }
               }
             }
@@ -3756,10 +3778,2115 @@
           }
         ]
       }
+    },
+    "/api/v1/inicio": {
+      "get": {
+        "tags": [
+          "inicio"
+        ],
+        "summary": "Lo de hoy",
+        "operationId": "inicio_api_v1_inicio_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InicioSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/avisos": {
+      "get": {
+        "tags": [
+          "inicio"
+        ],
+        "summary": "Avisos de riesgo según la fase de sus cultivos",
+        "operationId": "avisos_api_v1_avisos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvisosSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/reportes": {
+      "get": {
+        "tags": [
+          "reportes"
+        ],
+        "summary": "Reportes que puedo ver",
+        "operationId": "catalogo_api_v1_reportes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReporteDisponible"
+                  },
+                  "type": "array",
+                  "title": "Response Catalogo Api V1 Reportes Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/reportes/indices": {
+      "get": {
+        "tags": [
+          "reportes"
+        ],
+        "summary": "Índices por planta de mis siembras",
+        "operationId": "indices_api_v1_reportes_indices_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finca_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Finca Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReporteIndices"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reportes/cronograma": {
+      "get": {
+        "tags": [
+          "reportes"
+        ],
+        "summary": "Tiempos de mis ciclos",
+        "operationId": "cronograma_api_v1_reportes_cronograma_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finca_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Finca Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReporteCronograma"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reportes/eventos": {
+      "get": {
+        "tags": [
+          "reportes"
+        ],
+        "summary": "Eventos adversos y su costo",
+        "operationId": "eventos_api_v1_reportes_eventos_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finca_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Finca Id"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Desde"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hasta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReporteEventos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conocimiento": {
+      "get": {
+        "tags": [
+          "conocimiento"
+        ],
+        "summary": "Buscar en la biblioteca",
+        "operationId": "listar_api_v1_conocimiento_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Texto en el nombre o los síntomas",
+              "title": "Q"
+            },
+            "description": "Texto en el nombre o los síntomas"
+          },
+          {
+            "name": "cultivo_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cultivo Id"
+            }
+          },
+          {
+            "name": "tipo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "plaga",
+                    "enfermedad",
+                    "deficiencia",
+                    "clima",
+                    "otro"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tipo"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "borrador",
+                    "validado",
+                    "retirado"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo lo usan administradores y expertos",
+              "title": "Estado"
+            },
+            "description": "Solo lo usan administradores y expertos"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Registros a saltar",
+              "default": 0,
+              "title": "Skip"
+            },
+            "description": "Registros a saltar"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Tamaño de página, máximo 50",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Tamaño de página, máximo 50"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_ProblemaResumen_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "conocimiento"
+        ],
+        "summary": "Crear una ficha en borrador",
+        "operationId": "crear_api_v1_conocimiento_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProblemaCrear"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaRevision"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conocimiento/{problema_id}": {
+      "get": {
+        "tags": [
+          "conocimiento"
+        ],
+        "summary": "Ficha de un problema",
+        "operationId": "ver_api_v1_conocimiento__problema_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "problema_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Problema Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaRevision"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conocimiento/{problema_id}/estado": {
+      "patch": {
+        "tags": [
+          "conocimiento"
+        ],
+        "summary": "Validar, retirar o reabrir una ficha",
+        "operationId": "cambiar_estado_api_v1_conocimiento__problema_id__estado_patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "problema_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Problema Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CambiarEstado"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaRevision"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/fuentes": {
+      "get": {
+        "tags": [
+          "conocimiento"
+        ],
+        "summary": "Fuentes de la biblioteca",
+        "operationId": "listar_fuentes_api_v1_fuentes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FuenteSalida"
+                  },
+                  "type": "array",
+                  "title": "Response Listar Fuentes Api V1 Fuentes Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "conocimiento"
+        ],
+        "summary": "Agregar una fuente",
+        "operationId": "crear_fuente_api_v1_fuentes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FuenteCrear"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FuenteSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/consultas": {
+      "post": {
+        "tags": [
+          "asistente"
+        ],
+        "summary": "Preguntarle al asistente",
+        "operationId": "preguntar_api_v1_consultas_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaCrear"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultaSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Llegó al máximo de consultas del día.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "asistente"
+        ],
+        "summary": "Historial de consultas",
+        "operationId": "historial_api_v1_consultas_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Texto en la pregunta",
+              "title": "Q"
+            },
+            "description": "Texto en la pregunta"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Registros a saltar",
+              "default": 0,
+              "title": "Skip"
+            },
+            "description": "Registros a saltar"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Tamaño de página, máximo 50",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Tamaño de página, máximo 50"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_ConsultaResumen_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/consultas/{consulta_id}": {
+      "get": {
+        "tags": [
+          "asistente"
+        ],
+        "summary": "Una consulta y su respuesta",
+        "operationId": "ver_api_v1_consultas__consulta_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "consulta_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Consulta Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultaSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/consultas/{consulta_id}/retroalimentacion": {
+      "post": {
+        "tags": [
+          "asistente"
+        ],
+        "summary": "Decir si la respuesta sirvió",
+        "operationId": "valorar_api_v1_consultas__consulta_id__retroalimentacion_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "consulta_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Consulta Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetroalimentacionEntrada"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetroalimentacionSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/asistente/calidad": {
+      "get": {
+        "tags": [
+          "asistente"
+        ],
+        "summary": "Calidad del asistente",
+        "operationId": "calidad_api_v1_asistente_calidad_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalidadSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/noticias": {
+      "get": {
+        "tags": [
+          "noticias"
+        ],
+        "summary": "Noticias vigentes de mi región",
+        "operationId": "listar_api_v1_noticias_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(\\d{2}|\\d{5})$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Código DANE; por defecto, el de sus fincas",
+              "title": "Region"
+            },
+            "description": "Código DANE; por defecto, el de sus fincas"
+          },
+          {
+            "name": "cultivo_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cultivo Id"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Registros a saltar",
+              "default": 0,
+              "title": "Skip"
+            },
+            "description": "Registros a saltar"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Tamaño de página, máximo 50",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Tamaño de página, máximo 50"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_NoticiaSalida_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "noticias"
+        ],
+        "summary": "Cargar una noticia",
+        "operationId": "crear_api_v1_noticias_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticiaCrear"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticiaSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AvisoRiesgo": {
+        "properties": {
+          "siembra_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Siembra Id"
+          },
+          "ciclo_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Ciclo Id"
+          },
+          "cultivo": {
+            "type": "string",
+            "title": "Cultivo"
+          },
+          "fase": {
+            "type": "string",
+            "title": "Fase"
+          },
+          "riesgo": {
+            "type": "string",
+            "title": "Riesgo"
+          },
+          "susceptibilidad": {
+            "type": "string",
+            "enum": [
+              "baja",
+              "media",
+              "alta"
+            ],
+            "title": "Susceptibilidad"
+          },
+          "medidas": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Medidas"
+          },
+          "por_validar": {
+            "type": "boolean",
+            "title": "Por Validar"
+          },
+          "texto": {
+            "type": "string",
+            "title": "Texto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "siembra_id",
+          "ciclo_id",
+          "cultivo",
+          "fase",
+          "riesgo",
+          "susceptibilidad",
+          "medidas",
+          "por_validar",
+          "texto"
+        ],
+        "title": "AvisoRiesgo"
+      },
+      "AvisosSalida": {
+        "properties": {
+          "avisos": {
+            "items": {
+              "$ref": "#/components/schemas/AvisoRiesgo"
+            },
+            "type": "array",
+            "title": "Avisos"
+          },
+          "siembras_sin_calendario": {
+            "type": "integer",
+            "title": "Siembras Sin Calendario"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          }
+        },
+        "type": "object",
+        "required": [
+          "avisos",
+          "siembras_sin_calendario"
+        ],
+        "title": "AvisosSalida"
+      },
+      "CalidadSalida": {
+        "properties": {
+          "consultas": {
+            "type": "integer",
+            "title": "Consultas"
+          },
+          "con_valoracion": {
+            "type": "integer",
+            "title": "Con Valoracion"
+          },
+          "sirvieron": {
+            "type": "integer",
+            "title": "Sirvieron"
+          },
+          "no_sirvieron": {
+            "type": "integer",
+            "title": "No Sirvieron"
+          },
+          "equivocadas": {
+            "type": "integer",
+            "title": "Equivocadas"
+          },
+          "porcentaje_que_sirvio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Porcentaje Que Sirvio"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          }
+        },
+        "type": "object",
+        "required": [
+          "consultas",
+          "con_valoracion",
+          "sirvieron",
+          "no_sirvieron",
+          "equivocadas",
+          "porcentaje_que_sirvio"
+        ],
+        "title": "CalidadSalida"
+      },
+      "CambiarEstado": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "borrador",
+              "validado",
+              "retirado"
+            ],
+            "title": "Estado"
+          },
+          "observacion": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observacion"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "estado"
+        ],
+        "title": "CambiarEstado"
+      },
+      "CausaProbable": {
+        "properties": {
+          "problema_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Problema Id"
+          },
+          "problema": {
+            "type": "string",
+            "title": "Problema"
+          },
+          "coincidencia": {
+            "type": "string",
+            "enum": [
+              "alta",
+              "media",
+              "baja"
+            ],
+            "title": "Coincidencia"
+          },
+          "por_que": {
+            "type": "string",
+            "title": "Por Que"
+          },
+          "fuentes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Fuentes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "problema_id",
+          "problema",
+          "coincidencia",
+          "por_que",
+          "fuentes"
+        ],
+        "title": "CausaProbable"
+      },
       "CerrarCicloEntrada": {
         "properties": {
           "motivo_perdida": {
@@ -3810,6 +5937,90 @@
           "tipo"
         ],
         "title": "CicloCrear"
+      },
+      "CicloCronograma": {
+        "properties": {
+          "siembra_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Siembra Id"
+          },
+          "ciclo_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Ciclo Id"
+          },
+          "cultivo": {
+            "type": "string",
+            "title": "Cultivo"
+          },
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          },
+          "fecha_inicio": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha Inicio"
+          },
+          "fase_actual": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fase Actual"
+          },
+          "fases_planeadas": {
+            "type": "integer",
+            "title": "Fases Planeadas"
+          },
+          "fecha_fin_planeada": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha Fin Planeada"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          }
+        },
+        "type": "object",
+        "required": [
+          "siembra_id",
+          "ciclo_id",
+          "cultivo",
+          "tipo",
+          "fecha_inicio",
+          "fase_actual",
+          "fases_planeadas",
+          "fecha_fin_planeada"
+        ],
+        "title": "CicloCronograma"
       },
       "CicloSalida": {
         "properties": {
@@ -3925,6 +6136,137 @@
           "acepta_transferencia_ia"
         ],
         "title": "ConsentimientoSalida"
+      },
+      "ConsultaCrear": {
+        "properties": {
+          "siembra_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Siembra Id"
+          },
+          "texto": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 5,
+            "title": "Texto"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "siembra_id",
+          "texto"
+        ],
+        "title": "ConsultaCrear"
+      },
+      "ConsultaResumen": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "contexto_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Contexto Id"
+          },
+          "creado_en": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Creado En"
+          },
+          "pregunta": {
+            "type": "string",
+            "title": "Pregunta"
+          },
+          "valoracion": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "sirvio",
+                  "no_sirvio",
+                  "equivocado"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valoracion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "contexto_id",
+          "creado_en",
+          "pregunta"
+        ],
+        "title": "ConsultaResumen"
+      },
+      "ConsultaSalida": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "contexto": {
+            "type": "string",
+            "title": "Contexto"
+          },
+          "contexto_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Contexto Id"
+          },
+          "creado_en": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Creado En"
+          },
+          "pregunta": {
+            "type": "string",
+            "title": "Pregunta"
+          },
+          "respuesta": {
+            "$ref": "#/components/schemas/RespuestaAsistente"
+          },
+          "mensaje_respuesta_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Mensaje Respuesta Id"
+          },
+          "valoracion": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "sirvio",
+                  "no_sirvio",
+                  "equivocado"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valoracion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "contexto",
+          "contexto_id",
+          "creado_en",
+          "pregunta",
+          "respuesta",
+          "mensaje_respuesta_id"
+        ],
+        "title": "ConsultaSalida"
       },
       "ConteoCrear": {
         "properties": {
@@ -5073,6 +7415,41 @@
         ],
         "title": "EventoCrear"
       },
+      "EventoReciente": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "riesgo": {
+            "type": "string",
+            "title": "Riesgo"
+          },
+          "severidad": {
+            "type": "string",
+            "enum": [
+              "leve",
+              "moderada",
+              "severa"
+            ],
+            "title": "Severidad"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date",
+            "title": "Inicio"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "riesgo",
+          "severidad",
+          "inicio"
+        ],
+        "title": "EventoReciente"
+      },
       "EventoSalida": {
         "properties": {
           "id": {
@@ -5196,6 +7573,41 @@
           "notas"
         ],
         "title": "EventoSalida"
+      },
+      "EventosPorTipo": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          },
+          "cantidad": {
+            "type": "integer",
+            "title": "Cantidad"
+          },
+          "perdida_estimada": {
+            "type": "number",
+            "title": "Perdida Estimada"
+          },
+          "perdida_promedio_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Perdida Promedio Pct"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tipo",
+          "cantidad",
+          "perdida_estimada",
+          "perdida_promedio_pct"
+        ],
+        "title": "EventosPorTipo"
       },
       "FaseCronograma": {
         "properties": {
@@ -5375,6 +7787,114 @@
         ],
         "title": "FaseSalida"
       },
+      "FuenteCrear": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Nombre"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "fecha": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha"
+          },
+          "licencia": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Licencia"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nombre"
+        ],
+        "title": "FuenteCrear"
+      },
+      "FuenteSalida": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "fecha": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha"
+          },
+          "licencia": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Licencia"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "url",
+          "fecha",
+          "licencia"
+        ],
+        "title": "FuenteSalida"
+      },
       "HealthResponse": {
         "properties": {
           "status": {
@@ -5467,6 +7987,63 @@
         ],
         "title": "Indicador"
       },
+      "IndiceSiembra": {
+        "properties": {
+          "siembra_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Siembra Id"
+          },
+          "cultivo": {
+            "type": "string",
+            "title": "Cultivo"
+          },
+          "lote_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Lote Id"
+          },
+          "fecha_conteo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha Conteo"
+          },
+          "indicadores": {
+            "items": {
+              "$ref": "#/components/schemas/Indicador"
+            },
+            "type": "array",
+            "title": "Indicadores"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          }
+        },
+        "type": "object",
+        "required": [
+          "siembra_id",
+          "cultivo",
+          "lote_id",
+          "fecha_conteo",
+          "indicadores"
+        ],
+        "title": "IndiceSiembra"
+      },
       "IndicesSalida": {
         "properties": {
           "siembra_id": {
@@ -5531,6 +8108,145 @@
         "additionalProperties": false,
         "type": "object",
         "title": "IniciarEntrada"
+      },
+      "InicioSalida": {
+        "properties": {
+          "fincas": {
+            "type": "integer",
+            "title": "Fincas"
+          },
+          "siembras_en_curso": {
+            "type": "integer",
+            "title": "Siembras En Curso"
+          },
+          "siembras_planeadas": {
+            "type": "integer",
+            "title": "Siembras Planeadas"
+          },
+          "avisos": {
+            "items": {
+              "$ref": "#/components/schemas/AvisoRiesgo"
+            },
+            "type": "array",
+            "title": "Avisos"
+          },
+          "eventos_recientes": {
+            "items": {
+              "$ref": "#/components/schemas/EventoReciente"
+            },
+            "type": "array",
+            "title": "Eventos Recientes"
+          },
+          "primeros_pasos": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Primeros Pasos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fincas",
+          "siembras_en_curso",
+          "siembras_planeadas",
+          "avisos",
+          "eventos_recientes",
+          "primeros_pasos"
+        ],
+        "title": "InicioSalida"
+      },
+      "ManejoEntrada": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "prevencion",
+              "cultural",
+              "quimico",
+              "veterinario"
+            ],
+            "title": "Tipo"
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 3,
+            "title": "Descripcion"
+          },
+          "producto_ica": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Producto Ica"
+          },
+          "fuente_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fuente Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tipo",
+          "descripcion"
+        ],
+        "title": "ManejoEntrada"
+      },
+      "ManejoSalida": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          },
+          "descripcion": {
+            "type": "string",
+            "title": "Descripcion"
+          },
+          "producto_ica": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Producto Ica"
+          },
+          "fuente": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuenteSalida"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "tipo",
+          "descripcion",
+          "producto_ica",
+          "fuente"
+        ],
+        "title": "ManejoSalida"
       },
       "MetodoEntrada": {
         "properties": {
@@ -5717,6 +8433,198 @@
         ],
         "title": "NecesidadSalida"
       },
+      "NoticiaCrear": {
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 3,
+            "title": "Titulo"
+          },
+          "resumen": {
+            "type": "string",
+            "maxLength": 400,
+            "minLength": 3,
+            "title": "Resumen"
+          },
+          "enlace": {
+            "type": "string",
+            "maxLength": 400,
+            "minLength": 8,
+            "pattern": "^https?://",
+            "title": "Enlace"
+          },
+          "fuente": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 2,
+            "title": "Fuente"
+          },
+          "region_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Dane"
+          },
+          "cultivo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cultivo Id"
+          },
+          "publicada": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publicada"
+          },
+          "vigente_hasta": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vigente Hasta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "titulo",
+          "resumen",
+          "enlace",
+          "fuente"
+        ],
+        "title": "NoticiaCrear"
+      },
+      "NoticiaSalida": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "titulo": {
+            "type": "string",
+            "title": "Titulo"
+          },
+          "resumen": {
+            "type": "string",
+            "title": "Resumen"
+          },
+          "enlace": {
+            "type": "string",
+            "title": "Enlace"
+          },
+          "fuente": {
+            "type": "string",
+            "title": "Fuente"
+          },
+          "region_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Dane"
+          },
+          "cultivo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cultivo Id"
+          },
+          "publicada": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Publicada"
+          },
+          "vigente_hasta": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Vigente Hasta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "titulo",
+          "resumen",
+          "enlace",
+          "fuente",
+          "region_dane",
+          "cultivo_id",
+          "publicada",
+          "vigente_hasta"
+        ],
+        "title": "NoticiaSalida"
+      },
+      "Page_ConsultaResumen_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ConsultaResumen"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "has_more"
+        ],
+        "title": "Page[ConsultaResumen]"
+      },
       "Page_CultivoResumen_": {
         "properties": {
           "items": {
@@ -5788,6 +8696,78 @@
           "has_more"
         ],
         "title": "Page[EventoSalida]"
+      },
+      "Page_NoticiaSalida_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/NoticiaSalida"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "has_more"
+        ],
+        "title": "Page[NoticiaSalida]"
+      },
+      "Page_ProblemaResumen_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProblemaResumen"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "has_more"
+        ],
+        "title": "Page[ProblemaResumen]"
       },
       "Page_PropagacionSalida_": {
         "properties": {
@@ -5902,6 +8882,199 @@
           "sus_derechos"
         ],
         "title": "PoliticaSalida"
+      },
+      "ProblemaCrear": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 3,
+            "title": "Nombre"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "plaga",
+              "enfermedad",
+              "deficiencia",
+              "clima",
+              "otro"
+            ],
+            "title": "Tipo"
+          },
+          "cultivo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cultivo Id"
+          },
+          "causa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Causa"
+          },
+          "sintomas": {
+            "items": {
+              "$ref": "#/components/schemas/SintomaEntrada"
+            },
+            "type": "array",
+            "maxItems": 30,
+            "title": "Sintomas"
+          },
+          "manejos": {
+            "items": {
+              "$ref": "#/components/schemas/ManejoEntrada"
+            },
+            "type": "array",
+            "maxItems": 30,
+            "title": "Manejos"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nombre",
+          "tipo"
+        ],
+        "title": "ProblemaCrear"
+      },
+      "ProblemaResumen": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          },
+          "cultivo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cultivo Id"
+          },
+          "estado": {
+            "type": "string",
+            "title": "Estado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "tipo",
+          "cultivo_id",
+          "estado"
+        ],
+        "title": "ProblemaResumen"
+      },
+      "ProblemaRevision": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          },
+          "cultivo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cultivo Id"
+          },
+          "estado": {
+            "type": "string",
+            "title": "Estado"
+          },
+          "causa": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Causa"
+          },
+          "sintomas": {
+            "items": {
+              "$ref": "#/components/schemas/SintomaSalida"
+            },
+            "type": "array",
+            "title": "Sintomas"
+          },
+          "manejos": {
+            "items": {
+              "$ref": "#/components/schemas/ManejoSalida"
+            },
+            "type": "array",
+            "title": "Manejos"
+          },
+          "aviso": {
+            "type": "string",
+            "title": "Aviso",
+            "default": "Es una orientación basada en una ficha revisada; no reemplaza a un técnico."
+          },
+          "validaciones": {
+            "items": {
+              "$ref": "#/components/schemas/ValidacionSalida"
+            },
+            "type": "array",
+            "title": "Validaciones"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "tipo",
+          "cultivo_id",
+          "estado",
+          "causa",
+          "sintomas",
+          "manejos",
+          "validaciones"
+        ],
+        "title": "ProblemaRevision"
       },
       "PropagacionActualizar": {
         "properties": {
@@ -6067,6 +9240,304 @@
           "trasplantadas"
         ],
         "title": "PropagacionSalida"
+      },
+      "ReadyResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "service": {
+            "type": "string",
+            "title": "Service"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "base_de_datos": {
+            "type": "string",
+            "title": "Base De Datos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "service",
+          "version",
+          "base_de_datos"
+        ],
+        "title": "ReadyResponse"
+      },
+      "ReporteCronograma": {
+        "properties": {
+          "ciclos": {
+            "items": {
+              "$ref": "#/components/schemas/CicloCronograma"
+            },
+            "type": "array",
+            "title": "Ciclos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ciclos"
+        ],
+        "title": "ReporteCronograma"
+      },
+      "ReporteDisponible": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "titulo": {
+            "type": "string",
+            "title": "Titulo"
+          },
+          "descripcion": {
+            "type": "string",
+            "title": "Descripcion"
+          },
+          "disponible": {
+            "type": "boolean",
+            "title": "Disponible"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "titulo",
+          "descripcion",
+          "disponible",
+          "roles"
+        ],
+        "title": "ReporteDisponible"
+      },
+      "ReporteEventos": {
+        "properties": {
+          "desde": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desde"
+          },
+          "hasta": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hasta"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "perdida_estimada_total": {
+            "type": "number",
+            "title": "Perdida Estimada Total"
+          },
+          "por_tipo": {
+            "items": {
+              "$ref": "#/components/schemas/EventosPorTipo"
+            },
+            "type": "array",
+            "title": "Por Tipo"
+          },
+          "por_severidad": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Por Severidad"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          }
+        },
+        "type": "object",
+        "required": [
+          "desde",
+          "hasta",
+          "total",
+          "perdida_estimada_total",
+          "por_tipo",
+          "por_severidad"
+        ],
+        "title": "ReporteEventos"
+      },
+      "ReporteIndices": {
+        "properties": {
+          "siembras": {
+            "items": {
+              "$ref": "#/components/schemas/IndiceSiembra"
+            },
+            "type": "array",
+            "title": "Siembras"
+          }
+        },
+        "type": "object",
+        "required": [
+          "siembras"
+        ],
+        "title": "ReporteIndices"
+      },
+      "RespuestaAsistente": {
+        "properties": {
+          "lo_que_entendi": {
+            "type": "string",
+            "title": "Lo Que Entendi"
+          },
+          "causas_probables": {
+            "items": {
+              "$ref": "#/components/schemas/CausaProbable"
+            },
+            "type": "array",
+            "title": "Causas Probables"
+          },
+          "que_hacer": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Que Hacer"
+          },
+          "tratamientos": {
+            "items": {
+              "$ref": "#/components/schemas/TratamientoValidado"
+            },
+            "type": "array",
+            "title": "Tratamientos"
+          },
+          "mensaje_tratamiento": {
+            "type": "string",
+            "title": "Mensaje Tratamiento"
+          },
+          "cuando_llamar_al_tecnico": {
+            "type": "string",
+            "title": "Cuando Llamar Al Tecnico"
+          },
+          "aviso": {
+            "type": "string",
+            "title": "Aviso"
+          },
+          "hay_informacion": {
+            "type": "boolean",
+            "title": "Hay Informacion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lo_que_entendi",
+          "causas_probables",
+          "que_hacer",
+          "tratamientos",
+          "mensaje_tratamiento",
+          "cuando_llamar_al_tecnico",
+          "aviso",
+          "hay_informacion"
+        ],
+        "title": "RespuestaAsistente",
+        "description": "Lo que el asistente entiende de la descripción y lo que hay validado para ese cultivo."
+      },
+      "RetroalimentacionEntrada": {
+        "properties": {
+          "valor": {
+            "type": "string",
+            "enum": [
+              "sirvio",
+              "no_sirvio",
+              "equivocado"
+            ],
+            "title": "Valor"
+          },
+          "comentario": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comentario"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "valor"
+        ],
+        "title": "RetroalimentacionEntrada"
+      },
+      "RetroalimentacionSalida": {
+        "properties": {
+          "mensaje_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Mensaje Id"
+          },
+          "valor": {
+            "type": "string",
+            "title": "Valor"
+          },
+          "comentario": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comentario"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mensaje_id",
+          "valor",
+          "comentario"
+        ],
+        "title": "RetroalimentacionSalida"
       },
       "RiesgoCrear": {
         "properties": {
@@ -6362,6 +9833,83 @@
         ],
         "title": "SiembraSalida"
       },
+      "SintomaEntrada": {
+        "properties": {
+          "descripcion": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 3,
+            "title": "Descripcion"
+          },
+          "parte": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parte"
+          },
+          "fase_o_edad": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fase O Edad"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "descripcion"
+        ],
+        "title": "SintomaEntrada"
+      },
+      "SintomaSalida": {
+        "properties": {
+          "descripcion": {
+            "type": "string",
+            "title": "Descripcion"
+          },
+          "parte": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parte"
+          },
+          "fase_o_edad": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fase O Edad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "descripcion",
+          "parte",
+          "fase_o_edad"
+        ],
+        "title": "SintomaSalida"
+      },
       "TerminoSalida": {
         "properties": {
           "id": {
@@ -6411,6 +9959,78 @@
           "cantidad"
         ],
         "title": "TrasplanteEntrada"
+      },
+      "TratamientoValidado": {
+        "properties": {
+          "problema": {
+            "type": "string",
+            "title": "Problema"
+          },
+          "producto_ica": {
+            "type": "string",
+            "title": "Producto Ica"
+          },
+          "descripcion": {
+            "type": "string",
+            "title": "Descripcion"
+          },
+          "fuente": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fuente"
+          }
+        },
+        "type": "object",
+        "required": [
+          "problema",
+          "producto_ica",
+          "descripcion",
+          "fuente"
+        ],
+        "title": "TratamientoValidado"
+      },
+      "ValidacionSalida": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "title": "Estado"
+          },
+          "experto_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Experto Id"
+          },
+          "observacion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observacion"
+          },
+          "creado_en": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Creado En"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado",
+          "experto_id",
+          "observacion",
+          "creado_en"
+        ],
+        "title": "ValidacionSalida"
       }
     },
     "securitySchemes": {
@@ -6445,6 +10065,26 @@
     {
       "name": "cuenta",
       "description": "Glosario, política de datos y consentimiento."
+    },
+    {
+      "name": "conocimiento",
+      "description": "Biblioteca de problemas sanitarios revisados por expertos."
+    },
+    {
+      "name": "asistente",
+      "description": "Consultas sobre fichas validadas; no inventa diagnósticos."
+    },
+    {
+      "name": "noticias",
+      "description": "Noticias de su región que vencen solas."
+    },
+    {
+      "name": "inicio",
+      "description": "Lo de hoy y avisos de riesgo por fase."
+    },
+    {
+      "name": "reportes",
+      "description": "Reportes con los datos disponibles."
     },
     {
       "name": "health",

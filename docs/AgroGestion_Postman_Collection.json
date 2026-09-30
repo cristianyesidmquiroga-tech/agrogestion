@@ -1270,6 +1270,614 @@
       ]
     },
     {
+      "name": "conocimiento",
+      "item": [
+        {
+          "name": "GET Buscar en la biblioteca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conocimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/conocimiento"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto en el nombre o los síntomas"
+                },
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "tipo",
+                  "value": "plaga",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "estado",
+                  "value": "borrador",
+                  "disabled": true,
+                  "description": "Solo lo usan administradores y expertos"
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Buscar en la biblioteca"
+          }
+        },
+        {
+          "name": "POST Crear una ficha en borrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conocimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/conocimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Crear una ficha en borrador",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"tipo\": \"plaga\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"causa\": \"texto\",\n  \"sintomas\": [\n    {\n      \"descripcion\": \"texto\",\n      \"parte\": \"texto\",\n      \"fase_o_edad\": \"texto\"\n    }\n  ],\n  \"manejos\": [\n    {\n      \"tipo\": \"prevencion\",\n      \"descripcion\": \"texto\",\n      \"producto_ica\": \"texto\",\n      \"fuente_id\": \"00000000-0000-0000-0000-000000000000\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Ficha de un problema",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conocimiento/:problema_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/conocimiento/:problema_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "problema_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Ficha de un problema"
+          }
+        },
+        {
+          "name": "PATCH Validar, retirar o reabrir una ficha",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conocimiento/:problema_id/estado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/conocimiento/:problema_id/estado"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "problema_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Validar, retirar o reabrir una ficha",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"borrador\",\n  \"observacion\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Fuentes de la biblioteca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/fuentes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/fuentes"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Fuentes de la biblioteca"
+          }
+        },
+        {
+          "name": "POST Agregar una fuente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/fuentes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/fuentes"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Agregar una fuente",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"url\": \"texto\",\n  \"fecha\": \"2026-01-31\",\n  \"licencia\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "asistente",
+      "item": [
+        {
+          "name": "GET Calidad del asistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/asistente/calidad",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/asistente/calidad"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Calidad del asistente"
+          }
+        },
+        {
+          "name": "GET Historial de consultas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consultas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/consultas"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto en la pregunta"
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Historial de consultas"
+          }
+        },
+        {
+          "name": "POST Preguntarle al asistente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consultas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/consultas"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Preguntarle al asistente",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siembra_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"texto\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Una consulta y su respuesta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consultas/:consulta_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/consultas/:consulta_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "consulta_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Una consulta y su respuesta"
+          }
+        },
+        {
+          "name": "POST Decir si la respuesta sirvió",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consultas/:consulta_id/retroalimentacion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/consultas/:consulta_id/retroalimentacion"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "consulta_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Decir si la respuesta sirvió",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valor\": \"sirvio\",\n  \"comentario\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "noticias",
+      "item": [
+        {
+          "name": "GET Noticias vigentes de mi región",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/noticias",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/noticias"
+              ],
+              "query": [
+                {
+                  "key": "region",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Código DANE; por defecto, el de sus fincas"
+                },
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Noticias vigentes de mi región"
+          }
+        },
+        {
+          "name": "POST Cargar una noticia",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/noticias",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/noticias"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Cargar una noticia",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"texto\",\n  \"resumen\": \"texto\",\n  \"enlace\": \"texto\",\n  \"fuente\": \"texto\",\n  \"region_dane\": \"texto\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"publicada\": \"2026-01-31T12:00:00Z\",\n  \"vigente_hasta\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "inicio",
+      "item": [
+        {
+          "name": "GET Avisos de riesgo según la fase de sus cultivos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/avisos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/avisos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Avisos de riesgo según la fase de sus cultivos"
+          }
+        },
+        {
+          "name": "GET Lo de hoy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/inicio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/inicio"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Lo de hoy"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reportes",
+      "item": [
+        {
+          "name": "GET Reportes que puedo ver",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reportes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/reportes"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Reportes que puedo ver"
+          }
+        },
+        {
+          "name": "GET Tiempos de mis ciclos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reportes/cronograma",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/reportes/cronograma"
+              ],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Tiempos de mis ciclos"
+          }
+        },
+        {
+          "name": "GET Eventos adversos y su costo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reportes/eventos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/reportes/eventos"
+              ],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "desde",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Eventos adversos y su costo"
+          }
+        },
+        {
+          "name": "GET Índices por planta de mis siembras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reportes/indices",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/reportes/indices"
+              ],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Índices por planta de mis siembras"
+          }
+        }
+      ]
+    },
+    {
       "name": "health",
       "item": [
         {
@@ -1289,6 +1897,28 @@
               "variable": []
             },
             "description": "Salud del servicio",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "GET El servicio está listo para trabajar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/ready",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health/ready"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "El servicio está listo para trabajar",
             "auth": {
               "type": "noauth"
             }

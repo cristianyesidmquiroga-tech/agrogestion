@@ -56,11 +56,21 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 
 | Método | Ruta | Quién entra | Pantalla | Qué hace |
 |---|---|---|---|---|
+| `GET` | `/api/v1/asistente/calidad` | admin | Calidad del asistente | Calidad del asistente |
+| `GET` | `/api/v1/avisos` | admin, agricultor, contador | Inicio (avisos) | Avisos de riesgo según la fase de sus cultivos |
 | `GET` | `/api/v1/ciclos/{ciclo_id}` | admin, agricultor, contador | Detalle de ciclo | Detalle de un ciclo |
 | `POST` | `/api/v1/ciclos/{ciclo_id}/cerrar` | admin, agricultor | Detalle de ciclo | Cerrar un ciclo |
 | `GET` | `/api/v1/ciclos/{ciclo_id}/cronograma` | admin, agricultor, contador | Detalle de siembra (Tiempos) | Cronograma planeado del ciclo |
 | `POST` | `/api/v1/ciclos/{ciclo_id}/iniciar` | admin, agricultor | Detalle de ciclo | Iniciar un ciclo |
 | `GET` | `/api/v1/ciclos/{ciclo_id}/necesidad-insumos` | admin, agricultor, contador | Detalle de ciclo | Cuánto insumo se necesita |
+| `GET` | `/api/v1/conocimiento` | cualquier usuario con sesión | Biblioteca de conocimiento | Buscar en la biblioteca |
+| `POST` | `/api/v1/conocimiento` | admin, experto | Biblioteca de conocimiento | Crear una ficha en borrador |
+| `GET` | `/api/v1/conocimiento/{problema_id}` | cualquier usuario con sesión | Ficha de problema | Ficha de un problema |
+| `PATCH` | `/api/v1/conocimiento/{problema_id}/estado` | admin, experto | Revisión de conocimiento | Validar, retirar o reabrir una ficha |
+| `GET` | `/api/v1/consultas` | admin, agricultor | Consultar e Historial de consultas | Historial de consultas |
+| `POST` | `/api/v1/consultas` | admin, agricultor | Consultar e Historial de consultas | Preguntarle al asistente |
+| `GET` | `/api/v1/consultas/{consulta_id}` | admin, agricultor | Consultar | Una consulta y su respuesta |
+| `POST` | `/api/v1/consultas/{consulta_id}/retroalimentacion` | admin, agricultor | Consultar | Decir si la respuesta sirvió |
 | `GET` | `/api/v1/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Última autorización aceptada |
 | `POST` | `/api/v1/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Aceptar el tratamiento de datos |
 | `GET` | `/api/v1/cultivos` | admin, agricultor | Catálogo de cultivos | Buscar cultivos |
@@ -76,12 +86,21 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `POST` | `/api/v1/eventos-adversos` | admin, agricultor | Eventos adversos | Registrar un evento adverso |
 | `GET` | `/api/v1/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Detalle de un evento |
 | `PATCH` | `/api/v1/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Actualizar un evento |
+| `GET` | `/api/v1/fuentes` | admin, experto | Revisión de conocimiento | Fuentes de la biblioteca |
+| `POST` | `/api/v1/fuentes` | admin, experto | Revisión de conocimiento | Agregar una fuente |
 | `GET` | `/api/v1/glosario` | cualquier usuario con sesión | Ayuda y glosario | Términos del agro explicados |
+| `GET` | `/api/v1/inicio` | cualquier usuario con sesión | Inicio | Lo de hoy |
+| `GET` | `/api/v1/noticias` | cualquier usuario con sesión | Novedades de mi región | Noticias vigentes de mi región |
+| `POST` | `/api/v1/noticias` | admin | Novedades de mi región | Cargar una noticia |
 | `GET` | `/api/v1/politica` | público | Autorización de datos | Política de tratamiento de datos |
 | `GET` | `/api/v1/propagacion` | admin, agricultor | Vivero | Lotes de vivero |
 | `POST` | `/api/v1/propagacion` | admin, agricultor | Vivero | Crear un lote de vivero |
 | `PATCH` | `/api/v1/propagacion/{lote_id}` | admin, agricultor | Vivero | Actualizar germinadas, listas y pérdidas |
 | `POST` | `/api/v1/propagacion/{lote_id}/trasplante` | admin, agricultor | Vivero | Pasar plantas listas a una siembra |
+| `GET` | `/api/v1/reportes` | cualquier usuario con sesión | Reportes | Reportes que puedo ver |
+| `GET` | `/api/v1/reportes/cronograma` | admin, agricultor, contador | Visor de reporte | Tiempos de mis ciclos |
+| `GET` | `/api/v1/reportes/eventos` | admin, agricultor | Visor de reporte | Eventos adversos y su costo |
+| `GET` | `/api/v1/reportes/indices` | admin, agricultor, contador | Visor de reporte | Índices por planta de mis siembras |
 | `GET` | `/api/v1/riesgos` | admin, agricultor | Ficha del cultivo (riesgos) | Catálogo de riesgos |
 | `POST` | `/api/v1/riesgos` | admin | Ficha del cultivo (riesgos) | Agregar un riesgo al catálogo |
 | `GET` | `/api/v1/siembras` | admin, agricultor, contador | Mis siembras | Mis siembras |
@@ -96,6 +115,7 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `POST` | `/api/v1/siembras/{siembra_id}/iniciar` | admin, agricultor | Detalle de siembra | Iniciar una siembra |
 | `POST` | `/api/v1/siembras/{siembra_id}/renovar` | admin, agricultor | Detalle de siembra | Abrir el ciclo de renovación (soqueo) |
 | `GET` | `/health` | público | Splash | Salud del servicio |
+| `GET` | `/health/ready` | público | Operación (monitoreo) | El servicio está listo para trabajar |
 
 ## Paginación
 
@@ -150,11 +170,14 @@ try {
 | `SIN_PERMISO` | 403 | No tiene permiso para esta acción. |  |
 | `CICLO_NO_ENCONTRADO` | 404 | No encontramos ese ciclo. |  |
 | `CONSENTIMIENTO_PENDIENTE` | 404 | Aún no ha aceptado el tratamiento de datos. |  |
+| `CONSULTA_NO_ENCONTRADA` | 404 | No encontramos esa consulta. |  |
 | `CULTIVO_NO_ENCONTRADO` | 404 | No encontramos ese cultivo. |  |
 | `EVENTO_NO_ENCONTRADO` | 404 | No encontramos ese evento. |  |
 | `FINCA_NO_ENCONTRADA` | 404 | No encontramos esa finca. | No existe o no está asignada al usuario. |
+| `FUENTE_NO_ENCONTRADA` | 404 | Una de las fuentes no existe. |  |
 | `LOTE_NO_ENCONTRADO` | 404 | No encontramos ese lote en la finca. |  |
 | `NO_ENCONTRADO` | 404 | No encontramos lo que busca. | La dirección no existe. |
+| `PROBLEMA_NO_ENCONTRADO` | 404 | No encontramos esa ficha. |  |
 | `PROPAGACION_NO_ENCONTRADA` | 404 | No encontramos ese lote de vivero. |  |
 | `RIESGO_NO_ENCONTRADO` | 404 | Uno de los riesgos no existe. |  |
 | `SIEMBRA_NO_ENCONTRADA` | 404 | No encontramos esa siembra. |  |
@@ -173,14 +196,20 @@ try {
 | `CONTEO_INVALIDO` | 422 | Las plantas vivas no pueden superar las … sembradas y resembradas. |  |
 | `CONTEO_NO_APLICA` | 422 | Este cultivo se trabaja por área, no por planta. |  |
 | `DATOS_INVALIDOS` | 422 | Hay datos que corregir. | Trae `details` con un mensaje por campo. |
+| `ESTADO_NO_PERMITIDO` | 422 | Una ficha … no puede pasar a …. |  |
 | `EVENTO_FECHAS_INVALIDAS` | 422 | La fecha final no puede ser anterior a la inicial. |  |
+| `FICHA_INCOMPLETA` | 422 | Para validar, la ficha necesita al menos un síntoma. |  |
+| `FICHA_SIN_FUENTE` | 422 | Para validar, cada manejo debe tener su fuente. |  |
 | `METODO_NO_VALIDO` | 422 | Este cultivo no se propaga con ese método. |  |
+| `NOTICIA_FECHAS_INVALIDAS` | 422 | La noticia debe vencer después de publicarse. |  |
 | `PLANTAS_OBLIGATORIAS` | 422 | Indique cuántas plantas va a sembrar. |  |
 | `PROPAGACION_INVALIDA` | 422 | Las germinadas no pueden superar las puestas. |  |
 | `SIEMBRA_ESTADO_INVALIDO` | 422 | La siembra ya no admite conteos. |  |
 | `SIEMBRA_NO_VALIDA` | 422 | Esa siembra no pertenece a la finca. |  |
 | `TRASPLANTE_INVALIDO` | 422 | La siembra debe ser de la misma finca y el mismo cultivo. |  |
+| `LIMITE_DE_CONSULTAS` | 429 | Llegó al máximo de consultas de hoy. Mañana podrá hacer más. |  |
 | `ERROR_INTERNO` | 500 | Algo salió mal de nuestro lado. Intente de nuevo. | Permitir reintentar. |
+| `SERVICIO_NO_LISTO` | 503 | El servicio aún no puede atender. Intente en un momento. |  |
 
 ## Formatos de los datos
 
@@ -192,7 +221,8 @@ try {
 | Campo | Valores |
 |---|---|
 | `base` | `planta`, `hectarea` |
-| `estado` | `bien`, `atencion`, `alerta`, `informativo` |
+| `coincidencia` | `alta`, `media`, `baja` |
+| `estado` | `borrador`, `validado`, `retirado` |
 | `fase` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `fase_critica` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `metodo` | `semilla`, `esqueje`, `estaca`, `injerto`, `hijuelo`, `acodo`, `in_vitro` |
@@ -203,6 +233,8 @@ try {
 | `tipo_ciclo` | `transitorio`, `semipermanente`, `permanente`, `forestal` |
 | `tipo_renovacion` | `zoca`, `soca`, `poda`, `resiembra` |
 | `unidad_conteo` | `planta`, `area` |
+| `valor` | `sirvio`, `no_sirvio`, `equivocado` |
+| `valoracion` | `sirvio`, `no_sirvio`, `equivocado` |
 
 ## Indicadores explicados
 
@@ -239,9 +271,17 @@ openapi-generator generate -i docs/openapi.json -g dart-dio -o lib/api
 
 - Sin token de refresco: la sesión caduca a los 60 minutos.
 - Sin caché en el servidor: la app debe guardar sus propios datos para trabajar sin conexión.
-- Sin carga de imágenes en esta versión (llega con el asistente).
+- Sin carga de imágenes en esta versión: el asistente trabaja con texto.
+- El asistente responde solo con fichas de la biblioteca marcadas como validadas y no usa inteligencia artificial generativa. La `coincidencia` (alta, media o baja) mide cuánto se parece la descripción a la ficha, no la probabilidad de acierto. Si no hay ficha validada, lo dice y pide asistencia técnica.
+- La biblioteca de conocimiento está vacía hasta que un experto cree y valide fichas; los expertos cargan las fuentes.
+- Las noticias vencen solas (7 días por defecto) y un proceso diario (`python -m scripts.limpiar_vencidos`) borra las vencidas. No se pueden fijar.
+- Los reportes de dinero, mano de obra y procesos aparecen con `disponible: false` y su motivo hasta que existan esos módulos; la pantalla debe mostrarlos como "próximamente".
+- El inicio trae fincas, siembras, avisos por fase y eventos recientes; las labores de hoy y los pagos pendientes llegan con los módulos de labores y dinero.
+- Los avisos de riesgo por fase necesitan la duración de las fases en el perfil del cultivo; sin ella, la respuesta trae `siembras_sin_calendario` y un aviso.
+- El límite de consultas al asistente es de 20 por usuario y día (`429` con el código `LIMITE_DE_CONSULTAS`).
+- Toda respuesta trae la cabecera `X-Request-ID`, útil para reportar un problema.
 - Los registros que envía la app con mala señal pueden duplicarse hasta que el núcleo agregue la cabecera `Idempotency-Key` (ya permitida en CORS).
 
 ## Pendiente de otros módulos
 
-Lo construye Brayan y se suma a este contrato cuando se entregue: inicio de sesión y usuarios, fincas y lotes, labores, jornales y pagos, insumos, cosechas, procesos, dinero, pecuario y alertas.
+Lo construye Brayan y se suma a este contrato cuando se entregue: inicio de sesión y usuarios, fincas y lotes, labores, jornales y pagos, insumos, cosechas, procesos, dinero, pecuario y alertas regionales automáticas.

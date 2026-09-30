@@ -38,6 +38,8 @@ CLASES_ERROR = {
     "ReglaNegocio": (422, "REGLA_DE_NEGOCIO"),
     "NoAutenticado": (401, "NO_AUTENTICADO"),
     "SinPermiso": (403, "SIN_PERMISO"),
+    "LimiteSuperado": (429, "LIMITE_SUPERADO"),
+    "ServicioNoListo": (503, "SERVICIO_NO_LISTO"),
 }
 
 ERRORES_GENERALES = [
@@ -60,6 +62,19 @@ ERRORES_GENERALES = [
 
 PANTALLAS = [
     (r"^/health$", "Splash"),
+    (r"^/health/ready$", "Operación (monitoreo)"),
+    (r"^/api/v1/inicio$", "Inicio"),
+    (r"^/api/v1/avisos$", "Inicio (avisos)"),
+    (r"^/api/v1/reportes$", "Reportes"),
+    (r"^/api/v1/reportes/", "Visor de reporte"),
+    (r"^/api/v1/conocimiento$", "Biblioteca de conocimiento"),
+    (r"^/api/v1/conocimiento/\{[a-z_]+\}/estado$", "Revisión de conocimiento"),
+    (r"^/api/v1/conocimiento/\{[a-z_]+\}$", "Ficha de problema"),
+    (r"^/api/v1/fuentes$", "Revisión de conocimiento"),
+    (r"^/api/v1/consultas$", "Consultar e Historial de consultas"),
+    (r"^/api/v1/consultas/", "Consultar"),
+    (r"^/api/v1/asistente/calidad$", "Calidad del asistente"),
+    (r"^/api/v1/noticias$", "Novedades de mi región"),
     (r"^/api/v1/politica$", "Autorización de datos"),
     (r"^/api/v1/cuenta/consentimiento$", "Autorización de datos"),
     (r"^/api/v1/glosario$", "Ayuda y glosario"),

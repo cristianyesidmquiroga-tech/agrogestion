@@ -149,9 +149,17 @@ openapi-generator generate -i docs/openapi.json -g dart-dio -o lib/api
 
 - Sin token de refresco: la sesión caduca a los 60 minutos.
 - Sin caché en el servidor: la app debe guardar sus propios datos para trabajar sin conexión.
-- Sin carga de imágenes en esta versión (llega con el asistente).
+- Sin carga de imágenes en esta versión: el asistente trabaja con texto.
+- El asistente responde solo con fichas de la biblioteca marcadas como validadas y no usa inteligencia artificial generativa. La `coincidencia` (alta, media o baja) mide cuánto se parece la descripción a la ficha, no la probabilidad de acierto. Si no hay ficha validada, lo dice y pide asistencia técnica.
+- La biblioteca de conocimiento está vacía hasta que un experto cree y valide fichas; los expertos cargan las fuentes.
+- Las noticias vencen solas (7 días por defecto) y un proceso diario (`python -m scripts.limpiar_vencidos`) borra las vencidas. No se pueden fijar.
+- Los reportes de dinero, mano de obra y procesos aparecen con `disponible: false` y su motivo hasta que existan esos módulos; la pantalla debe mostrarlos como "próximamente".
+- El inicio trae fincas, siembras, avisos por fase y eventos recientes; las labores de hoy y los pagos pendientes llegan con los módulos de labores y dinero.
+- Los avisos de riesgo por fase necesitan la duración de las fases en el perfil del cultivo; sin ella, la respuesta trae `siembras_sin_calendario` y un aviso.
+- El límite de consultas al asistente es de 20 por usuario y día (`429` con el código `LIMITE_DE_CONSULTAS`).
+- Toda respuesta trae la cabecera `X-Request-ID`, útil para reportar un problema.
 - Los registros que envía la app con mala señal pueden duplicarse hasta que el núcleo agregue la cabecera `Idempotency-Key` (ya permitida en CORS).
 
 ## Pendiente de otros módulos
 
-Lo construye Brayan y se suma a este contrato cuando se entregue: inicio de sesión y usuarios, fincas y lotes, labores, jornales y pagos, insumos, cosechas, procesos, dinero, pecuario y alertas.
+Lo construye Brayan y se suma a este contrato cuando se entregue: inicio de sesión y usuarios, fincas y lotes, labores, jornales y pagos, insumos, cosechas, procesos, dinero, pecuario y alertas regionales automáticas.
