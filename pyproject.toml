@@ -1,0 +1,60 @@
+[project]
+name = "agrogestion"
+version = "1.0.0"
+description = "API REST para la gestión de cultivos y su contabilidad"
+requires-python = ">=3.12"
+
+# ---------------------------------------------------------------------------
+# ruff · estilo y errores comunes
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = [".venv", "alembic/versions"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # isort: orden de importaciones
+    "N",    # pep8-naming
+    "UP",   # pyupgrade: sintaxis moderna de Python
+    "B",    # flake8-bugbear: errores sutiles
+    "ASYNC",# reglas específicas de código asíncrono
+    "S",    # bandit: seguridad
+    "ANN",  # anotaciones de tipo obligatorias
+    "RUF",  # reglas propias de ruff
+]
+ignore = [
+    "B008",    # Depends() en el valor por defecto es el idioma de FastAPI
+]
+
+[tool.ruff.lint.per-file-ignores]
+# En las pruebas se permiten aserciones y credenciales de fixture.
+"tests/*" = ["S101", "S105", "S106", "ANN"]
+
+# ---------------------------------------------------------------------------
+# mypy · tipado estricto
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+plugins = ["pydantic.mypy"]
+exclude = ["alembic/", "tests/"]
+
+[[tool.mypy.overrides]]
+# passlib no publica anotaciones de tipo.
+module = ["passlib.*"]
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------------------
+# cobertura
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/main.py"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true

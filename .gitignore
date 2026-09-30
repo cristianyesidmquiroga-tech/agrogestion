@@ -1,14 +1,37 @@
+# Secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# Python
 __pycache__/
 *.py[cod]
+*.egg-info/
 .venv/
 venv/
-.env
+
+# Herramientas
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .coverage
 htmlcov/
-*.egg-info/
-.idea/
+
+# Base de datos local
+*.db
+*.sqlite3
+
+# Editor y sistema
 .vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+
+# Postman: la colección se versiona, el entorno no (guarda tokens)
+*postman_environment.json
+
+# Documentos de planeación privados
 docs/
