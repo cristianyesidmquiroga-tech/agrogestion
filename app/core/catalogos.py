@@ -19,6 +19,11 @@ TipoRiesgo = Literal["clima", "plaga", "enfermedad", "otro"]
 AplicaA = Literal["cultivo", "animal", "ambos"]
 Susceptibilidad = Literal["baja", "media", "alta"]
 Severidad = Literal["leve", "moderada", "severa"]
+TipoProblema = Literal["plaga", "enfermedad", "deficiencia", "clima", "otro"]
+EstadoConocimiento = Literal["borrador", "validado", "retirado"]
+TipoManejo = Literal["prevencion", "cultural", "quimico", "veterinario"]
+Coincidencia = Literal["alta", "media", "baja"]
+ValorRetroalimentacion = Literal["sirvio", "no_sirvio", "equivocado"]
 EstadoIndicador = Literal["bien", "atencion", "alerta", "informativo"]
 
 FASES_TRANSITORIO = ("preparacion", "siembra", "mantenimiento", "cosecha", "poscosecha")

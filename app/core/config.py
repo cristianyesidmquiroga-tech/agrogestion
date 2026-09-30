@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = Field(default=60, ge=5, le=1440)
     politica_version: str = "2026-09"
+    consultas_por_dia: int = Field(default=20, ge=1, le=500)
+    noticias_dias_vigencia: int = Field(default=7, ge=1, le=60)
+    log_level: str = "INFO"
 
     # Orígenes de navegador permitidos; una app móvil nativa no envía Origin.
     cors_origins: list[str] = [

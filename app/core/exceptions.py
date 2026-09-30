@@ -38,6 +38,16 @@ class NoAutenticado(DominioError):
     codigo = "NO_AUTENTICADO"
 
 
+class LimiteSuperado(DominioError):
+    status_code = 429
+    codigo = "LIMITE_SUPERADO"
+
+
+class ServicioNoListo(DominioError):
+    status_code = 503
+    codigo = "SERVICIO_NO_LISTO"
+
+
 class SinPermiso(DominioError):
     status_code = 403
     codigo = "SIN_PERMISO"

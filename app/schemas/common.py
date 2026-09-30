@@ -30,6 +30,10 @@ class HealthResponse(BaseModel):
     version: str
 
 
+class ReadyResponse(HealthResponse):
+    base_de_datos: str
+
+
 class Page(BaseModel, Generic[T]):
     items: list[T]
     total: int

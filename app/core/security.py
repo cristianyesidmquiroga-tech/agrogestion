@@ -64,4 +64,5 @@ class RequiereRol:
 Autenticado = Annotated[UsuarioActual, Depends(get_usuario_actual)]
 EscribeProduccion = Annotated[UsuarioActual, Depends(RequiereRol("admin", "agricultor"))]
 LeeProduccion = Annotated[UsuarioActual, Depends(RequiereRol("admin", "agricultor", "contador"))]
+Revisa = Annotated[UsuarioActual, Depends(RequiereRol("admin", "experto"))]
 SoloAdmin = Annotated[UsuarioActual, Depends(RequiereRol("admin"))]

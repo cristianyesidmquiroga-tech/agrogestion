@@ -7,7 +7,20 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.core.exceptions import registrar_manejadores
-from app.routers import cuenta, cultivos, eventos, health, propagacion, siembras
+from app.core.registro import configurar_registro, instalar
+from app.routers import (
+    conocimiento,
+    consultas,
+    cuenta,
+    cultivos,
+    eventos,
+    health,
+    inicio,
+    noticias,
+    propagacion,
+    reportes,
+    siembras,
+)
 from app.schemas.common import ErrorRespuesta
 
 settings = get_settings()
@@ -27,6 +40,17 @@ ETIQUETAS = [
     {"name": "propagacion", "description": "Vivero: propagación por semilla, esqueje u otros."},
     {"name": "eventos", "description": "Heladas, sequías, granizo, plagas y otros eventos."},
     {"name": "cuenta", "description": "Glosario, política de datos y consentimiento."},
+    {
+        "name": "conocimiento",
+        "description": "Biblioteca de problemas sanitarios revisados por expertos.",
+    },
+    {
+        "name": "asistente",
+        "description": "Consultas sobre fichas validadas; no inventa diagnósticos.",
+    },
+    {"name": "noticias", "description": "Noticias de su región que vencen solas."},
+    {"name": "inicio", "description": "Lo de hoy y avisos de riesgo por fase."},
+    {"name": "reportes", "description": "Reportes con los datos disponibles."},
     {"name": "health", "description": "Salud del servicio."},
 ]
 
@@ -57,6 +81,7 @@ def create_app() -> FastAPI:
         max_age=600,
     )
     registrar_manejadores(app)
+    instalar(app, configurar_registro(settings.log_level))
     app.include_router(health.router)
     for router in (
         cultivos.router,
@@ -64,6 +89,11 @@ def create_app() -> FastAPI:
         propagacion.router,
         eventos.router,
         cuenta.router,
+        inicio.router,
+        reportes.router,
+        conocimiento.router,
+        consultas.router,
+        noticias.router,
     ):
         app.include_router(router, prefix=settings.api_prefix, responses=RESPUESTAS_ERROR)
     return app
