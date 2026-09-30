@@ -1,0 +1,1300 @@
+{
+  "info": {
+    "name": "AgroGestion API",
+    "description": "Generada por scripts/exportar_contrato.py. Pegue un token en la variable `token`; no guarde credenciales reales aquí.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8025"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "cultivos",
+      "item": [
+        {
+          "name": "GET Buscar cultivos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto a buscar en el nombre"
+                },
+                {
+                  "key": "tipo_ciclo",
+                  "value": "transitorio",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Buscar cultivos"
+          }
+        },
+        {
+          "name": "POST Crear un cultivo con su perfil",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Crear un cultivo con su perfil",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"nombre_cientifico\": \"texto\",\n  \"grupo\": \"texto\",\n  \"tipo_ciclo\": \"transitorio\",\n  \"unidad_conteo\": \"planta\",\n  \"tipo_renovacion\": \"zoca\",\n  \"unidad_cosecha\": \"texto\",\n  \"pago_cosecha_sugerido\": \"por_kilo\",\n  \"densidad_ref\": 1,\n  \"meses_primera_cosecha\": 0,\n  \"cosechas_por_anio\": 0.0,\n  \"por_validar\": true,\n  \"fuente\": \"texto\",\n  \"fases\": [\n    {\n      \"fase\": \"preparacion\",\n      \"orden\": 1,\n      \"dias_estimados\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"metodos\": [\n    {\n      \"metodo\": \"semilla\",\n      \"dias_germinacion\": 0,\n      \"dias_vivero\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"dosis\": [\n    {\n      \"insumo_tipo\": \"texto\",\n      \"dosis\": 1.0,\n      \"unidad\": \"texto\",\n      \"base\": \"planta\",\n      \"por_validar\": true\n    }\n  ],\n  \"copiar_de\": \"00000000-0000-0000-0000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Ver el perfil de un cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos/:cultivo_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos/:cultivo_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Ver el perfil de un cultivo"
+          }
+        },
+        {
+          "name": "PUT Reemplazar el perfil de un cultivo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos/:cultivo_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos/:cultivo_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Reemplazar el perfil de un cultivo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"nombre_cientifico\": \"texto\",\n  \"grupo\": \"texto\",\n  \"tipo_ciclo\": \"transitorio\",\n  \"unidad_conteo\": \"planta\",\n  \"tipo_renovacion\": \"zoca\",\n  \"unidad_cosecha\": \"texto\",\n  \"pago_cosecha_sugerido\": \"por_kilo\",\n  \"densidad_ref\": 1,\n  \"meses_primera_cosecha\": 0,\n  \"cosechas_por_anio\": 0.0,\n  \"por_validar\": true,\n  \"fuente\": \"texto\",\n  \"fases\": [\n    {\n      \"fase\": \"preparacion\",\n      \"orden\": 1,\n      \"dias_estimados\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"metodos\": [\n    {\n      \"metodo\": \"semilla\",\n      \"dias_germinacion\": 0,\n      \"dias_vivero\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"dosis\": [\n    {\n      \"insumo_tipo\": \"texto\",\n      \"dosis\": 1.0,\n      \"unidad\": \"texto\",\n      \"base\": \"planta\",\n      \"por_validar\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Dosis de referencia",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos/:cultivo_id/dosis",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos/:cultivo_id/dosis"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Dosis de referencia"
+          }
+        },
+        {
+          "name": "GET Fases del cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos/:cultivo_id/fases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos/:cultivo_id/fases"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Fases del cultivo"
+          }
+        },
+        {
+          "name": "GET Métodos de propagación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos/:cultivo_id/metodos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos/:cultivo_id/metodos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Métodos de propagación"
+          }
+        },
+        {
+          "name": "GET Riesgos del cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos/:cultivo_id/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos/:cultivo_id/riesgos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Riesgos del cultivo"
+          }
+        },
+        {
+          "name": "PUT Reemplazar los riesgos del cultivo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cultivos/:cultivo_id/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cultivos/:cultivo_id/riesgos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Reemplazar los riesgos del cultivo",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"riesgo_id\": \"00000000-0000-0000-0000-000000000000\",\n    \"fase_critica\": \"preparacion\",\n    \"susceptibilidad\": \"baja\",\n    \"medidas\": \"texto\",\n    \"por_validar\": true\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Catálogo de riesgos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/riesgos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Catálogo de riesgos"
+          }
+        },
+        {
+          "name": "POST Agregar un riesgo al catálogo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/riesgos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Agregar un riesgo al catálogo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"tipo\": \"texto\",\n  \"aplica_a\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "siembras",
+      "item": [
+        {
+          "name": "GET Detalle de un ciclo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ciclos/:ciclo_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/ciclos/:ciclo_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Detalle de un ciclo"
+          }
+        },
+        {
+          "name": "POST Cerrar un ciclo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ciclos/:ciclo_id/cerrar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/ciclos/:ciclo_id/cerrar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cerrar un ciclo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo_perdida\": \"texto\",\n  \"fecha_fin\": \"2026-01-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Cronograma planeado del ciclo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ciclos/:ciclo_id/cronograma",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/ciclos/:ciclo_id/cronograma"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cronograma planeado del ciclo"
+          }
+        },
+        {
+          "name": "POST Iniciar un ciclo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ciclos/:ciclo_id/iniciar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/ciclos/:ciclo_id/iniciar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Iniciar un ciclo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha_inicio\": \"2026-01-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Cuánto insumo se necesita",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ciclos/:ciclo_id/necesidad-insumos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/ciclos/:ciclo_id/necesidad-insumos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cuánto insumo se necesita"
+          }
+        },
+        {
+          "name": "GET Mis siembras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "planeada",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Mis siembras"
+          }
+        },
+        {
+          "name": "POST Planear una siembra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Planear una siembra",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"finca_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"lote_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"metodo\": \"semilla\",\n  \"area_ha\": 1.0,\n  \"plantas_sembradas\": 1,\n  \"fecha_plan\": \"2026-01-31\",\n  \"presupuesto\": 0.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Detalle de una siembra",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Detalle de una siembra"
+          }
+        },
+        {
+          "name": "POST Cancelar una siembra",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/cancelar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/cancelar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cancelar una siembra"
+          }
+        },
+        {
+          "name": "GET Ciclos de una siembra",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/ciclos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/ciclos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Ciclos de una siembra"
+          }
+        },
+        {
+          "name": "POST Abrir el siguiente ciclo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/ciclos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/ciclos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Abrir el siguiente ciclo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"levante\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Conteos de plantas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/conteos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/conteos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Conteos de plantas"
+          }
+        },
+        {
+          "name": "POST Registrar un conteo de plantas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/conteos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/conteos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Registrar un conteo de plantas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-01-31\",\n  \"vivas\": 0,\n  \"muertas\": 0,\n  \"resiembras\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Índices por planta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/indices",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/indices"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Índices por planta"
+          }
+        },
+        {
+          "name": "POST Iniciar una siembra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/iniciar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/iniciar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Iniciar una siembra",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha_inicio\": \"2026-01-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Abrir el ciclo de renovación (soqueo)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/siembras/:siembra_id/renovar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/siembras/:siembra_id/renovar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Abrir el ciclo de renovación (soqueo)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "propagacion",
+      "item": [
+        {
+          "name": "GET Lotes de vivero",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/propagacion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/propagacion"
+              ],
+              "query": [
+                {
+                  "key": "pendientes",
+                  "value": "True",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Lotes de vivero"
+          }
+        },
+        {
+          "name": "POST Crear un lote de vivero",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/propagacion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/propagacion"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Crear un lote de vivero",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"finca_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"metodo\": \"semilla\",\n  \"fecha_inicio\": \"2026-01-31\",\n  \"puestas\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH Actualizar germinadas, listas y pérdidas",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/propagacion/:lote_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/propagacion/:lote_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "lote_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Actualizar germinadas, listas y pérdidas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"germinadas\": 0,\n  \"listas\": 0,\n  \"perdidas\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Pasar plantas listas a una siembra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/propagacion/:lote_id/trasplante",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/propagacion/:lote_id/trasplante"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "lote_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Pasar plantas listas a una siembra",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siembra_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cantidad\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "eventos",
+      "item": [
+        {
+          "name": "GET Eventos adversos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/eventos-adversos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/eventos-adversos"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "clima",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Eventos adversos"
+          }
+        },
+        {
+          "name": "POST Registrar un evento adverso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/eventos-adversos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/eventos-adversos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Registrar un evento adverso",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"finca_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"riesgo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"siembra_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"ciclo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"inicio\": \"2026-01-31\",\n  \"fin\": \"2026-01-31\",\n  \"severidad\": \"leve\",\n  \"area_afectada\": 0.0,\n  \"perdida_pct\": 0.0,\n  \"perdida_estimada\": 0.0,\n  \"notas\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Detalle de un evento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/eventos-adversos/:evento_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/eventos-adversos/:evento_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "evento_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Detalle de un evento"
+          }
+        },
+        {
+          "name": "PATCH Actualizar un evento",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/eventos-adversos/:evento_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/eventos-adversos/:evento_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "evento_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Actualizar un evento",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fin\": \"2026-01-31\",\n  \"severidad\": \"leve\",\n  \"area_afectada\": 0.0,\n  \"perdida_pct\": 0.0,\n  \"perdida_estimada\": 0.0,\n  \"notas\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cuenta",
+      "item": [
+        {
+          "name": "GET Última autorización aceptada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cuenta/consentimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cuenta/consentimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Última autorización aceptada"
+          }
+        },
+        {
+          "name": "POST Aceptar el tratamiento de datos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cuenta/consentimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cuenta/consentimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Aceptar el tratamiento de datos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version_politica\": \"texto\",\n  \"acepta_tratamiento\": true,\n  \"acepta_transferencia_ia\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Términos del agro explicados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/glosario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/glosario"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Término a buscar"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Términos del agro explicados"
+          }
+        },
+        {
+          "name": "GET Política de tratamiento de datos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/politica",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/politica"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Política de tratamiento de datos",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "health",
+      "item": [
+        {
+          "name": "GET Salud del servicio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Salud del servicio",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

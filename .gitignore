@@ -33,5 +33,10 @@ Desktop.ini
 # Postman: la colección se versiona, el entorno no (guarda tokens)
 *postman_environment.json
 
-# Documentos de planeación privados
-docs/
+# Documentos de planeación privados; solo se versiona el contrato para Flutter
+docs/*
+!docs/openapi.json
+!docs/mobile_api_contract.md
+!docs/AgroGestion_Postman_Collection.json
+!docs/dart/
+!docs/android/
