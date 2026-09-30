@@ -1,7 +1,6 @@
 """Verificación del token y roles. El inicio de sesión lo completa el módulo de acceso."""
 
 import uuid
-from collections.abc import Awaitable, Callable
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
@@ -48,18 +47,21 @@ async def get_usuario_actual(
     return UsuarioActual(id=usuario.id, rol=usuario.rol)
 
 
-def requiere_rol(*roles: str) -> Callable[..., Awaitable[UsuarioActual]]:
-    async def dependencia(
-        usuario: Annotated[UsuarioActual, Depends(get_usuario_actual)],
+class RequiereRol:
+    """Dependencia que deja pasar solo a los roles indicados."""
+
+    def __init__(self, *roles: str) -> None:
+        self.roles = roles
+
+    async def __call__(
+        self, usuario: Annotated[UsuarioActual, Depends(get_usuario_actual)]
     ) -> UsuarioActual:
-        if usuario.rol not in roles:
+        if usuario.rol not in self.roles:
             raise SinPermiso("No tiene permiso para esta acción.")
         return usuario
 
-    return dependencia
-
 
 Autenticado = Annotated[UsuarioActual, Depends(get_usuario_actual)]
-EscribeProduccion = Annotated[UsuarioActual, Depends(requiere_rol("admin", "agricultor"))]
-LeeProduccion = Annotated[UsuarioActual, Depends(requiere_rol("admin", "agricultor", "contador"))]
-SoloAdmin = Annotated[UsuarioActual, Depends(requiere_rol("admin"))]
+EscribeProduccion = Annotated[UsuarioActual, Depends(RequiereRol("admin", "agricultor"))]
+LeeProduccion = Annotated[UsuarioActual, Depends(RequiereRol("admin", "agricultor", "contador"))]
+SoloAdmin = Annotated[UsuarioActual, Depends(RequiereRol("admin"))]

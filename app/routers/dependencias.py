@@ -34,7 +34,7 @@ def armar_pagina(items: list[T], total: int, pag: Paginacion) -> Page[T]:
     return Page[T](
         items=items,
         total=total,
-        skip=pag.skip,
-        limit=pag.limit,
+        page=pag.skip // pag.limit + 1,
+        size=pag.limit,
         has_more=pag.skip + len(items) < total,
     )

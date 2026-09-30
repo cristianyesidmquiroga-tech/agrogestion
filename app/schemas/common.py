@@ -33,9 +33,24 @@ class HealthResponse(BaseModel):
 class Page(BaseModel, Generic[T]):
     items: list[T]
     total: int
-    skip: int
-    limit: int
+    page: int
+    size: int
     has_more: bool
+
+
+class DetalleError(BaseModel):
+    campo: str
+    mensaje: str
+    tipo: str
+
+
+class ErrorRespuesta(BaseModel):
+    """Formato único de error: decida siempre con `error`, nunca con `message`."""
+
+    error: str
+    message: str
+    status_code: int
+    details: list[DetalleError] | None = None
 
 
 class Indicador(BaseModel):
