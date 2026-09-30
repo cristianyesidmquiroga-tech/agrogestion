@@ -27,11 +27,16 @@ from app.models import (
     CultivoDosis,
     CultivoFase,
     CultivoMetodo,
+    CultivoRiesgo,
     Finca,
     FincaUsuario,
+    Fuente,
     Lote,
+    Manejo,
+    ProblemaSanitario,
     Riesgo,
     Siembra,
+    Sintoma,
     Usuario,
 )
 
@@ -105,6 +110,56 @@ class Fabrica:
         )
         await self.s.commit()
         return s
+
+    async def fuente(self, nombre="Fuente de prueba"):
+        f = Fuente(nombre=nombre, url="https://ejemplo.test/fuente")
+        self.s.add(f)
+        await self.s.commit()
+        return f
+
+    async def ficha(
+        self,
+        nombre="Hongo de la hoja",
+        cultivo=None,
+        estado="validado",
+        sintomas=("manchas amarillas en las hojas",),
+        manejo=("cultural", "Retire las hojas afectadas y mejore la ventilación.", None),
+        quimico=None,
+    ):
+        """Crea una ficha; `quimico` es (descripción, producto registrado)."""
+        fuente = await self.fuente(f"Fuente de {nombre}")
+        p = ProblemaSanitario(
+            nombre=nombre,
+            tipo="enfermedad",
+            cultivo_id=cultivo.id if cultivo else None,
+            estado=estado,
+        )
+        p.sintomas = [Sintoma(descripcion=d) for d in sintomas]
+        p.manejos = [Manejo(tipo=manejo[0], descripcion=manejo[1], fuente_id=fuente.id)]
+        if quimico:
+            p.manejos.append(
+                Manejo(
+                    tipo="quimico",
+                    descripcion=quimico[0],
+                    producto_ica=quimico[1],
+                    fuente_id=fuente.id,
+                )
+            )
+        self.s.add(p)
+        await self.s.commit()
+        return p
+
+    async def riesgo_de_cultivo(self, cultivo, riesgo, fase, susceptibilidad="alta"):
+        self.s.add(
+            CultivoRiesgo(
+                cultivo_id=cultivo.id,
+                riesgo_id=riesgo.id,
+                fase_critica=fase,
+                susceptibilidad=susceptibilidad,
+                medidas="Proteja las plantas.",
+            )
+        )
+        await self.s.commit()
 
     async def riesgo(self, nombre="Helada", tipo="clima"):
         r = Riesgo(nombre=nombre, tipo=tipo, aplica_a="cultivo")
