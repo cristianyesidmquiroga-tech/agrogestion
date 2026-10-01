@@ -99,7 +99,9 @@ def test_postman_cubre_todo_y_no_trae_credenciales() -> None:
     pedidos = [p for carpeta in coleccion["item"] for p in carpeta["item"]]
     assert len(pedidos) == len(c._rutas(c.create_app()))
     assert {v["key"]: v["value"] for v in coleccion["variable"]}["token"] == ""
-    assert "password" not in texto.lower()
+    variables = {v["key"]: v["value"] for v in coleccion["variable"]}
+    assert variables["correo"] == ""
+    assert variables["clave"] == ""
     assert "secret" not in texto.lower()
     publico = next(p for p in pedidos if p["request"]["url"]["raw"].endswith("/politica"))
     assert publico["request"]["auth"] == {"type": "noauth"}

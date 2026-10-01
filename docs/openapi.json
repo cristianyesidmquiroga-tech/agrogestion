@@ -6,21 +6,91 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/health": {
-      "get": {
+    "/api/v1/auth/login": {
+      "post": {
         "tags": [
-          "health"
+          "1. Acceso"
         ],
-        "summary": "Salud del servicio",
-        "description": "No consulta la base de datos a propósito: responde si el servidor está vivo.",
-        "operationId": "health_health_get",
+        "summary": "Iniciar sesión y obtener el token",
+        "description": "Recibe un formulario (no JSON) con `username` (el correo) y `password`. Devuelve el token del perfil con el que entró: cópielo y péguelo en Authorize.",
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_api_v1_auth_login_post"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HealthResponse"
+                  "$ref": "#/components/schemas/TokenSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Demasiados intentos fallidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
                 }
               }
             }
@@ -28,31 +98,570 @@
         }
       }
     },
-    "/health/ready": {
+    "/api/v1/auth/me": {
       "get": {
         "tags": [
-          "health"
+          "1. Acceso"
         ],
-        "summary": "El servicio está listo para trabajar",
-        "operationId": "ready_health_ready_get",
+        "summary": "Quién soy y qué puedo usar con este perfil",
+        "operationId": "me_api_v1_auth_me_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReadyResponse"
+                  "$ref": "#/components/schemas/PerfilSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/glosario": {
+      "get": {
+        "tags": [
+          "2. Cuenta y ayuda"
+        ],
+        "summary": "Términos del agro explicados",
+        "operationId": "glosario_api_v1_glosario_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 60
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Término a buscar",
+              "title": "Q"
+            },
+            "description": "Término a buscar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TerminoSalida"
+                  },
+                  "title": "Response Glosario Api V1 Glosario Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
                 }
               }
             }
           }
         }
+      }
+    },
+    "/api/v1/politica": {
+      "get": {
+        "tags": [
+          "2. Cuenta y ayuda"
+        ],
+        "summary": "Política de tratamiento de datos",
+        "operationId": "politica_api_v1_politica_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoliticaSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cuenta/consentimiento": {
+      "get": {
+        "tags": [
+          "2. Cuenta y ayuda"
+        ],
+        "summary": "Última autorización aceptada",
+        "operationId": "ver_consentimiento_api_v1_cuenta_consentimiento_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsentimientoSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "2. Cuenta y ayuda"
+        ],
+        "summary": "Aceptar el tratamiento de datos",
+        "operationId": "aceptar_api_v1_cuenta_consentimiento_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsentimientoEntrada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsentimientoSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/inicio": {
+      "get": {
+        "tags": [
+          "3. Inicio"
+        ],
+        "summary": "Lo de hoy",
+        "operationId": "inicio_api_v1_inicio_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InicioSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/avisos": {
+      "get": {
+        "tags": [
+          "3. Inicio"
+        ],
+        "summary": "Avisos de riesgo según la fase de sus cultivos",
+        "operationId": "avisos_api_v1_avisos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvisosSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/api/v1/cultivos": {
       "get": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Buscar cultivos",
         "operationId": "listar_cultivos_api_v1_cultivos_get",
@@ -196,7 +805,7 @@
       },
       "post": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Crear un cultivo con su perfil",
         "operationId": "crear_cultivo_api_v1_cultivos_post",
@@ -282,7 +891,7 @@
     "/api/v1/cultivos/{cultivo_id}": {
       "get": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Ver el perfil de un cultivo",
         "operationId": "ver_cultivo_api_v1_cultivos__cultivo_id__get",
@@ -368,7 +977,7 @@
       },
       "put": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Reemplazar el perfil de un cultivo",
         "operationId": "actualizar_cultivo_api_v1_cultivos__cultivo_id__put",
@@ -466,7 +1075,7 @@
     "/api/v1/cultivos/{cultivo_id}/fases": {
       "get": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Fases del cultivo",
         "operationId": "fases_api_v1_cultivos__cultivo_id__fases_get",
@@ -558,7 +1167,7 @@
     "/api/v1/cultivos/{cultivo_id}/metodos": {
       "get": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Métodos de propagación",
         "operationId": "metodos_api_v1_cultivos__cultivo_id__metodos_get",
@@ -650,7 +1259,7 @@
     "/api/v1/cultivos/{cultivo_id}/dosis": {
       "get": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Dosis de referencia",
         "operationId": "dosis_api_v1_cultivos__cultivo_id__dosis_get",
@@ -742,7 +1351,7 @@
     "/api/v1/cultivos/{cultivo_id}/riesgos": {
       "get": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Riesgos del cultivo",
         "operationId": "riesgos_cultivo_api_v1_cultivos__cultivo_id__riesgos_get",
@@ -832,7 +1441,7 @@
       },
       "put": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Reemplazar los riesgos del cultivo",
         "operationId": "reemplazar_riesgos_cultivo_api_v1_cultivos__cultivo_id__riesgos_put",
@@ -938,7 +1547,7 @@
     "/api/v1/riesgos": {
       "get": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Catálogo de riesgos",
         "operationId": "listar_riesgos_api_v1_riesgos_get",
@@ -1016,7 +1625,7 @@
       },
       "post": {
         "tags": [
-          "cultivos"
+          "4. Cultivos"
         ],
         "summary": "Agregar un riesgo al catálogo",
         "operationId": "crear_riesgo_api_v1_riesgos_post",
@@ -1102,7 +1711,7 @@
     "/api/v1/siembras": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Mis siembras",
         "operationId": "listar_siembras_api_v1_siembras_get",
@@ -1244,7 +1853,7 @@
       },
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Planear una siembra",
         "operationId": "crear_siembra_api_v1_siembras_post",
@@ -1330,7 +1939,7 @@
     "/api/v1/siembras/{siembra_id}": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Detalle de una siembra",
         "operationId": "ver_siembra_api_v1_siembras__siembra_id__get",
@@ -1418,7 +2027,7 @@
     "/api/v1/siembras/{siembra_id}/iniciar": {
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Iniciar una siembra",
         "operationId": "iniciar_siembra_api_v1_siembras__siembra_id__iniciar_post",
@@ -1523,7 +2132,7 @@
     "/api/v1/siembras/{siembra_id}/cancelar": {
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Cancelar una siembra",
         "operationId": "cancelar_siembra_api_v1_siembras__siembra_id__cancelar_post",
@@ -1611,7 +2220,7 @@
     "/api/v1/siembras/{siembra_id}/ciclos": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Ciclos de una siembra",
         "operationId": "listar_ciclos_api_v1_siembras__siembra_id__ciclos_get",
@@ -1701,7 +2310,7 @@
       },
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Abrir el siguiente ciclo",
         "operationId": "abrir_ciclo_api_v1_siembras__siembra_id__ciclos_post",
@@ -1799,7 +2408,7 @@
     "/api/v1/siembras/{siembra_id}/renovar": {
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Abrir el ciclo de renovación (soqueo)",
         "operationId": "renovar_api_v1_siembras__siembra_id__renovar_post",
@@ -1887,7 +2496,7 @@
     "/api/v1/siembras/{siembra_id}/conteos": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Conteos de plantas",
         "operationId": "listar_conteos_api_v1_siembras__siembra_id__conteos_get",
@@ -1977,7 +2586,7 @@
       },
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Registrar un conteo de plantas",
         "operationId": "crear_conteo_api_v1_siembras__siembra_id__conteos_post",
@@ -2075,7 +2684,7 @@
     "/api/v1/siembras/{siembra_id}/indices": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Índices por planta",
         "operationId": "indices_api_v1_siembras__siembra_id__indices_get",
@@ -2163,7 +2772,7 @@
     "/api/v1/ciclos/{ciclo_id}": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Detalle de un ciclo",
         "operationId": "ver_ciclo_api_v1_ciclos__ciclo_id__get",
@@ -2251,7 +2860,7 @@
     "/api/v1/ciclos/{ciclo_id}/iniciar": {
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Iniciar un ciclo",
         "operationId": "iniciar_ciclo_api_v1_ciclos__ciclo_id__iniciar_post",
@@ -2356,7 +2965,7 @@
     "/api/v1/ciclos/{ciclo_id}/cerrar": {
       "post": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Cerrar un ciclo",
         "operationId": "cerrar_ciclo_api_v1_ciclos__ciclo_id__cerrar_post",
@@ -2461,7 +3070,7 @@
     "/api/v1/ciclos/{ciclo_id}/cronograma": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Cronograma planeado del ciclo",
         "operationId": "cronograma_api_v1_ciclos__ciclo_id__cronograma_get",
@@ -2549,7 +3158,7 @@
     "/api/v1/ciclos/{ciclo_id}/necesidad-insumos": {
       "get": {
         "tags": [
-          "siembras"
+          "5. Siembras y ciclos"
         ],
         "summary": "Cuánto insumo se necesita",
         "operationId": "necesidad_insumos_api_v1_ciclos__ciclo_id__necesidad_insumos_get",
@@ -2637,7 +3246,7 @@
     "/api/v1/propagacion": {
       "get": {
         "tags": [
-          "propagacion"
+          "6. Vivero"
         ],
         "summary": "Lotes de vivero",
         "operationId": "listar_api_v1_propagacion_get",
@@ -2756,7 +3365,7 @@
       },
       "post": {
         "tags": [
-          "propagacion"
+          "6. Vivero"
         ],
         "summary": "Crear un lote de vivero",
         "operationId": "crear_api_v1_propagacion_post",
@@ -2842,7 +3451,7 @@
     "/api/v1/propagacion/{lote_id}": {
       "patch": {
         "tags": [
-          "propagacion"
+          "6. Vivero"
         ],
         "summary": "Actualizar germinadas, listas y pérdidas",
         "operationId": "actualizar_api_v1_propagacion__lote_id__patch",
@@ -2940,7 +3549,7 @@
     "/api/v1/propagacion/{lote_id}/trasplante": {
       "post": {
         "tags": [
-          "propagacion"
+          "6. Vivero"
         ],
         "summary": "Pasar plantas listas a una siembra",
         "operationId": "trasplantar_api_v1_propagacion__lote_id__trasplante_post",
@@ -3038,7 +3647,7 @@
     "/api/v1/eventos-adversos": {
       "get": {
         "tags": [
-          "eventos"
+          "7. Eventos adversos"
         ],
         "summary": "Eventos adversos",
         "operationId": "listar_api_v1_eventos_adversos_get",
@@ -3180,7 +3789,7 @@
       },
       "post": {
         "tags": [
-          "eventos"
+          "7. Eventos adversos"
         ],
         "summary": "Registrar un evento adverso",
         "operationId": "crear_api_v1_eventos_adversos_post",
@@ -3266,7 +3875,7 @@
     "/api/v1/eventos-adversos/{evento_id}": {
       "get": {
         "tags": [
-          "eventos"
+          "7. Eventos adversos"
         ],
         "summary": "Detalle de un evento",
         "operationId": "ver_api_v1_eventos_adversos__evento_id__get",
@@ -3352,7 +3961,7 @@
       },
       "patch": {
         "tags": [
-          "eventos"
+          "7. Eventos adversos"
         ],
         "summary": "Actualizar un evento",
         "operationId": "actualizar_api_v1_eventos_adversos__evento_id__patch",
@@ -3447,494 +4056,10 @@
         }
       }
     },
-    "/api/v1/glosario": {
-      "get": {
-        "tags": [
-          "cuenta"
-        ],
-        "summary": "Términos del agro explicados",
-        "operationId": "glosario_api_v1_glosario_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 60
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Término a buscar",
-              "title": "Q"
-            },
-            "description": "Término a buscar"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TerminoSalida"
-                  },
-                  "title": "Response Glosario Api V1 Glosario Get"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Sin sesión o sesión vencida.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "El rol no tiene permiso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No existe o no pertenece al usuario.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Choca con algo que ya existe.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Datos inválidos o regla de negocio.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/politica": {
-      "get": {
-        "tags": [
-          "cuenta"
-        ],
-        "summary": "Política de tratamiento de datos",
-        "operationId": "politica_api_v1_politica_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PoliticaSalida"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Sin sesión o sesión vencida.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "El rol no tiene permiso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No existe o no pertenece al usuario.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Choca con algo que ya existe.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Datos inválidos o regla de negocio.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/cuenta/consentimiento": {
-      "get": {
-        "tags": [
-          "cuenta"
-        ],
-        "summary": "Última autorización aceptada",
-        "operationId": "ver_consentimiento_api_v1_cuenta_consentimiento_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConsentimientoSalida"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Sin sesión o sesión vencida.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "El rol no tiene permiso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No existe o no pertenece al usuario.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Choca con algo que ya existe.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Datos inválidos o regla de negocio.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "cuenta"
-        ],
-        "summary": "Aceptar el tratamiento de datos",
-        "operationId": "aceptar_api_v1_cuenta_consentimiento_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ConsentimientoEntrada"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConsentimientoSalida"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Sin sesión o sesión vencida.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "El rol no tiene permiso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No existe o no pertenece al usuario.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Choca con algo que ya existe.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Datos inválidos o regla de negocio.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/inicio": {
-      "get": {
-        "tags": [
-          "inicio"
-        ],
-        "summary": "Lo de hoy",
-        "operationId": "inicio_api_v1_inicio_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InicioSalida"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Sin sesión o sesión vencida.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "El rol no tiene permiso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No existe o no pertenece al usuario.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Choca con algo que ya existe.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Datos inválidos o regla de negocio.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/avisos": {
-      "get": {
-        "tags": [
-          "inicio"
-        ],
-        "summary": "Avisos de riesgo según la fase de sus cultivos",
-        "operationId": "avisos_api_v1_avisos_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AvisosSalida"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Sin sesión o sesión vencida.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "El rol no tiene permiso.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No existe o no pertenece al usuario.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Choca con algo que ya existe.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Datos inválidos o regla de negocio.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRespuesta"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
     "/api/v1/reportes": {
       "get": {
         "tags": [
-          "reportes"
+          "8. Reportes"
         ],
         "summary": "Reportes que puedo ver",
         "operationId": "catalogo_api_v1_reportes_get",
@@ -4014,7 +4139,7 @@
     "/api/v1/reportes/indices": {
       "get": {
         "tags": [
-          "reportes"
+          "8. Reportes"
         ],
         "summary": "Índices por planta de mis siembras",
         "operationId": "indices_api_v1_reportes_indices_get",
@@ -4109,7 +4234,7 @@
     "/api/v1/reportes/cronograma": {
       "get": {
         "tags": [
-          "reportes"
+          "8. Reportes"
         ],
         "summary": "Tiempos de mis ciclos",
         "operationId": "cronograma_api_v1_reportes_cronograma_get",
@@ -4204,7 +4329,7 @@
     "/api/v1/reportes/eventos": {
       "get": {
         "tags": [
-          "reportes"
+          "8. Reportes"
         ],
         "summary": "Eventos adversos y su costo",
         "operationId": "eventos_api_v1_reportes_eventos_get",
@@ -4333,7 +4458,7 @@
     "/api/v1/conocimiento": {
       "get": {
         "tags": [
-          "conocimiento"
+          "9. Conocimiento"
         ],
         "summary": "Buscar en la biblioteca",
         "operationId": "listar_api_v1_conocimiento_get",
@@ -4518,7 +4643,7 @@
       },
       "post": {
         "tags": [
-          "conocimiento"
+          "9. Conocimiento"
         ],
         "summary": "Crear una ficha en borrador",
         "operationId": "crear_api_v1_conocimiento_post",
@@ -4604,7 +4729,7 @@
     "/api/v1/conocimiento/{problema_id}": {
       "get": {
         "tags": [
-          "conocimiento"
+          "9. Conocimiento"
         ],
         "summary": "Ficha de un problema",
         "operationId": "ver_api_v1_conocimiento__problema_id__get",
@@ -4692,7 +4817,7 @@
     "/api/v1/conocimiento/{problema_id}/estado": {
       "patch": {
         "tags": [
-          "conocimiento"
+          "9. Conocimiento"
         ],
         "summary": "Validar, retirar o reabrir una ficha",
         "operationId": "cambiar_estado_api_v1_conocimiento__problema_id__estado_patch",
@@ -4790,7 +4915,7 @@
     "/api/v1/fuentes": {
       "get": {
         "tags": [
-          "conocimiento"
+          "9. Conocimiento"
         ],
         "summary": "Fuentes de la biblioteca",
         "operationId": "listar_fuentes_api_v1_fuentes_get",
@@ -4868,7 +4993,7 @@
       },
       "post": {
         "tags": [
-          "conocimiento"
+          "9. Conocimiento"
         ],
         "summary": "Agregar una fuente",
         "operationId": "crear_fuente_api_v1_fuentes_post",
@@ -4954,7 +5079,7 @@
     "/api/v1/consultas": {
       "post": {
         "tags": [
-          "asistente"
+          "10. Asistente"
         ],
         "summary": "Preguntarle al asistente",
         "operationId": "preguntar_api_v1_consultas_post",
@@ -5048,7 +5173,7 @@
       },
       "get": {
         "tags": [
-          "asistente"
+          "10. Asistente"
         ],
         "summary": "Historial de consultas",
         "operationId": "historial_api_v1_consultas_get",
@@ -5172,7 +5297,7 @@
     "/api/v1/consultas/{consulta_id}": {
       "get": {
         "tags": [
-          "asistente"
+          "10. Asistente"
         ],
         "summary": "Una consulta y su respuesta",
         "operationId": "ver_api_v1_consultas__consulta_id__get",
@@ -5260,7 +5385,7 @@
     "/api/v1/consultas/{consulta_id}/retroalimentacion": {
       "post": {
         "tags": [
-          "asistente"
+          "10. Asistente"
         ],
         "summary": "Decir si la respuesta sirvió",
         "operationId": "valorar_api_v1_consultas__consulta_id__retroalimentacion_post",
@@ -5358,7 +5483,7 @@
     "/api/v1/asistente/calidad": {
       "get": {
         "tags": [
-          "asistente"
+          "10. Asistente"
         ],
         "summary": "Calidad del asistente",
         "operationId": "calidad_api_v1_asistente_calidad_get",
@@ -5434,7 +5559,7 @@
     "/api/v1/noticias": {
       "get": {
         "tags": [
-          "noticias"
+          "11. Noticias"
         ],
         "summary": "Noticias vigentes de mi región",
         "operationId": "listar_api_v1_noticias_get",
@@ -5573,7 +5698,7 @@
       },
       "post": {
         "tags": [
-          "noticias"
+          "11. Noticias"
         ],
         "summary": "Cargar una noticia",
         "operationId": "crear_api_v1_noticias_post",
@@ -5649,6 +5774,49 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "12. Salud"
+        ],
+        "summary": "Salud del servicio",
+        "description": "No consulta la base de datos a propósito: responde si el servidor está vivo.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "tags": [
+          "12. Salud"
+        ],
+        "summary": "El servicio está listo para trabajar",
+        "operationId": "ready_health_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadyResponse"
                 }
               }
             }
@@ -5757,6 +5925,63 @@
           "siembras_sin_calendario"
         ],
         "title": "AvisosSalida"
+      },
+      "Body_login_api_v1_auth_login_post": {
+        "properties": {
+          "grant_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "password"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "scope": {
+            "type": "string",
+            "title": "Scope",
+            "default": ""
+          },
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_api_v1_auth_login_post"
       },
       "CalidadSalida": {
         "properties": {
@@ -8841,6 +9066,86 @@
         ],
         "title": "Page[SiembraResumen]"
       },
+      "PerfilSalida": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "correo": {
+            "type": "string",
+            "title": "Correo"
+          },
+          "rol": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "agricultor",
+              "contador",
+              "experto"
+            ],
+            "title": "Rol"
+          },
+          "fincas": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Fincas"
+          },
+          "permisos": {
+            "items": {
+              "$ref": "#/components/schemas/PermisoSalida"
+            },
+            "type": "array",
+            "title": "Permisos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "correo",
+          "rol",
+          "fincas",
+          "permisos"
+        ],
+        "title": "PerfilSalida"
+      },
+      "PermisoSalida": {
+        "properties": {
+          "grupo": {
+            "type": "string",
+            "title": "Grupo"
+          },
+          "metodo": {
+            "type": "string",
+            "title": "Metodo"
+          },
+          "ruta": {
+            "type": "string",
+            "title": "Ruta"
+          },
+          "resumen": {
+            "type": "string",
+            "title": "Resumen"
+          }
+        },
+        "type": "object",
+        "required": [
+          "grupo",
+          "metodo",
+          "ruta",
+          "resumen"
+        ],
+        "title": "PermisoSalida"
+      },
       "PoliticaSalida": {
         "properties": {
           "version": {
@@ -9939,6 +10244,46 @@
         ],
         "title": "TerminoSalida"
       },
+      "TokenSalida": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In"
+          },
+          "rol": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "agricultor",
+              "contador",
+              "experto"
+            ],
+            "title": "Rol"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "token_type",
+          "expires_in",
+          "rol",
+          "nombre"
+        ],
+        "title": "TokenSalida",
+        "description": "Respuesta del inicio de sesión. Envíe `access_token` como `Authorization: Bearer <token>`."
+      },
       "TrasplanteEntrada": {
         "properties": {
           "siembra_id": {
@@ -10047,47 +10392,51 @@
   },
   "tags": [
     {
-      "name": "cultivos",
-      "description": "Catálogo de cultivos con su perfil y catálogo de riesgos."
+      "name": "1. Acceso",
+      "description": "Paso 1. Inicie sesión con su correo y contraseña: la respuesta trae el token. Cópielo, toque Authorize y péguelo para probar el resto con ese perfil."
     },
     {
-      "name": "siembras",
-      "description": "Siembras, ciclos, conteo de plantas e indicadores."
+      "name": "2. Cuenta y ayuda",
+      "description": "Política de datos, consentimiento y glosario."
     },
     {
-      "name": "propagacion",
-      "description": "Vivero: propagación por semilla, esqueje u otros."
-    },
-    {
-      "name": "eventos",
-      "description": "Heladas, sequías, granizo, plagas y otros eventos."
-    },
-    {
-      "name": "cuenta",
-      "description": "Glosario, política de datos y consentimiento."
-    },
-    {
-      "name": "conocimiento",
-      "description": "Biblioteca de problemas sanitarios revisados por expertos."
-    },
-    {
-      "name": "asistente",
-      "description": "Consultas sobre fichas validadas; no inventa diagnósticos."
-    },
-    {
-      "name": "noticias",
-      "description": "Noticias de su región que vencen solas."
-    },
-    {
-      "name": "inicio",
+      "name": "3. Inicio",
       "description": "Lo de hoy y avisos de riesgo por fase."
     },
     {
-      "name": "reportes",
+      "name": "4. Cultivos",
+      "description": "Catálogo de cultivos con su perfil y catálogo de riesgos."
+    },
+    {
+      "name": "5. Siembras y ciclos",
+      "description": "Siembras, ciclos, conteo de plantas e indicadores."
+    },
+    {
+      "name": "6. Vivero",
+      "description": "Propagación por semilla, esqueje u otros métodos."
+    },
+    {
+      "name": "7. Eventos adversos",
+      "description": "Heladas, sequías, granizo, plagas y otros eventos."
+    },
+    {
+      "name": "8. Reportes",
       "description": "Reportes con los datos disponibles."
     },
     {
-      "name": "health",
+      "name": "9. Conocimiento",
+      "description": "Biblioteca de problemas sanitarios revisados por expertos."
+    },
+    {
+      "name": "10. Asistente",
+      "description": "Consultas sobre fichas validadas; no inventa diagnósticos."
+    },
+    {
+      "name": "11. Noticias",
+      "description": "Noticias de su región que vencen solas."
+    },
+    {
+      "name": "12. Salud",
       "description": "Salud del servicio."
     }
   ]

@@ -21,7 +21,7 @@ Arranque del servidor en desarrollo:
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8025
 ```
 
-Prefijo común de los endpoints de datos: `/api/v1`. La salud del servicio está en `/health` (sin prefijo).
+Prefijo común de los endpoints de datos: `/api/v1`. En la documentación están ordenados por pasos, empezando por **1. Acceso**. La salud del servicio está en `/health` (sin prefijo).
 
 En la app, la URL base es una constante de compilación (`dart/lib/api_config.dart`):
 
@@ -31,15 +31,27 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8025
 
 ## Autenticación
 
-La construye el módulo de acceso (Brayan). Lo previsto, por confirmar con él al entregarlo:
+Es lo primero que hace la app, y el único endpoint de datos sin candado (además de la política de datos y la salud del servicio).
 
-- `POST /api/v1/auth/login` recibe **formulario**, no JSON. Campos: `username` (el correo) y `password`.
-- Devuelve `access_token` con vigencia de 60 minutos. No hay token de refresco.
-- Todas las demás peticiones llevan `Authorization: Bearer <token>`.
-- Un `401` significa: borrar el token del almacenamiento seguro y llevar al inicio de sesión.
-- El token se guarda con `flutter_secure_storage`, nunca en `SharedPreferences`.
+1. `POST /api/v1/auth/login` recibe **formulario** (`application/x-www-form-urlencoded`), no JSON. Campos: `username` (el correo) y `password`.
+2. Responde `{ access_token, token_type, expires_in, rol, nombre }`. El token vale 60 minutos; no hay token de refresco.
+3. Todas las demás peticiones llevan `Authorization: Bearer <access_token>`.
+4. `GET /api/v1/auth/me` devuelve quién es, su rol, las fincas que tiene asignadas y `permisos`: la lista de funciones de la API que ese perfil puede usar (grupo, método, ruta y resumen), generada con las mismas reglas que las protegen. Úselo al abrir la app para decidir qué pantallas y botones mostrar; el servidor siempre vuelve a validar.
+5. Un `401` significa: borrar el token del almacenamiento seguro y llevar al inicio de sesión.
+6. El token se guarda con `flutter_secure_storage`, nunca en `SharedPreferences`.
 
-Mientras ese módulo no esté, se prueba pegando un token en la variable `token` de Postman.
+Errores del inicio de sesión:
+
+| `error` | Estado | Cuándo |
+|---|---|---|
+| `CREDENCIALES_INVALIDAS` | 401 | Correo o contraseña incorrectos. El mensaje es el mismo exista o no el correo |
+| `DEMASIADOS_INTENTOS` | 429 | 5 intentos fallidos con el mismo correo en 15 minutos; se libera solo |
+
+Para probar cada perfil en la documentación (`/docs`): arriba hay un panel **Paso 1. Inicie sesión**. Escriba el correo y la contraseña del perfil: la página queda autorizada sola, muestra el token (elija copiar solo el token o toda la respuesta) y lista lo que ese perfil puede usar. Pruebe los pasos de abajo con ese perfil y use **Cambiar de perfil** para entrar con otro. También funciona el flujo manual: `POST /auth/login`, copiar el `access_token` y pegarlo en **Authorize**.
+
+En Postman, la petición de login guarda el token sola en la variable `token`; escriba `correo` y `clave` en las variables de la colección (no suba la colección con valores reales).
+
+Es una versión mínima del acceso, suficiente para probar. La administración de usuarios, el cambio de contraseña y el registro los completa el módulo de acceso (Brayan).
 
 ## Roles
 

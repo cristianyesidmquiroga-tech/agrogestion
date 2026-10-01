@@ -5,6 +5,7 @@ from datetime import date
 
 from fastapi import APIRouter
 
+from app.core.etiquetas import REPORTES
 from app.core.security import Autenticado, EscribeProduccion, LeeProduccion
 from app.routers.dependencias import BD
 from app.schemas.inicio import (
@@ -15,7 +16,7 @@ from app.schemas.inicio import (
 )
 from app.services import reporte_service as servicio
 
-router = APIRouter(prefix="/reportes", tags=["reportes"])
+router = APIRouter(prefix="/reportes", tags=[REPORTES])
 
 
 @router.get("", response_model=list[ReporteDisponible], summary="Reportes que puedo ver")

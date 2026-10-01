@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, Uuid
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.catalogos import RolUsuario
@@ -19,6 +19,16 @@ class Usuario(ColumnasComunes, Base):
     activo: Mapped[bool] = mapped_column(Boolean, default=True)
     ultimo_acceso: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     municipio_dane: Mapped[str | None] = mapped_column(String(5))
+
+
+class IntentoAcceso(ColumnasComunes, Base):
+    """Cada intento de iniciar sesión; sirve para bloquear temporalmente la adivinanza de claves."""
+
+    __tablename__ = "intento_acceso"
+    __table_args__ = (Index("ix_intento_acceso_correo_momento", "correo", "creado_en"),)
+
+    correo: Mapped[str] = mapped_column(String(160))
+    exitoso: Mapped[bool] = mapped_column(Boolean)
 
 
 class Consentimiento(ColumnasComunes, Base):

@@ -61,6 +61,8 @@ ERRORES_GENERALES = [
 ]
 
 PANTALLAS = [
+    (r"^/api/v1/auth/login$", "Iniciar sesión"),
+    (r"^/api/v1/auth/me$", "Splash y Mi cuenta"),
     (r"^/health$", "Splash"),
     (r"^/health/ready$", "Operación (monitoreo)"),
     (r"^/api/v1/inicio$", "Inicio"),
@@ -269,6 +271,11 @@ def _cuerpo_json(operacion: dict[str, Any]) -> dict[str, Any] | None:
     return cuerpo.get("application/json", {}).get("schema")
 
 
+def _es_formulario(operacion: dict[str, Any]) -> bool:
+    contenido = operacion.get("requestBody", {}).get("content", {})
+    return "application/x-www-form-urlencoded" in contenido
+
+
 def postman(app: FastAPI, contrato: dict[str, Any]) -> dict[str, Any]:
     carpetas: dict[str, list[dict[str, Any]]] = {}
     for path, metodo, ruta in sorted(_rutas(app), key=lambda x: (x[0], x[1])):
@@ -307,6 +314,14 @@ def postman(app: FastAPI, contrato: dict[str, Any]) -> dict[str, Any]:
         }
         if roles_de(ruta) == "público":
             peticion["auth"] = {"type": "noauth"}
+        if _es_formulario(operacion):
+            peticion["body"] = {
+                "mode": "urlencoded",
+                "urlencoded": [
+                    {"key": "username", "value": "{{correo}}", "type": "text"},
+                    {"key": "password", "value": "{{clave}}", "type": "text"},
+                ],
+            }
         esquema = _cuerpo_json(operacion)
         if esquema:
             peticion["header"].append({"key": "Content-Type", "value": "application/json"})
@@ -315,9 +330,23 @@ def postman(app: FastAPI, contrato: dict[str, Any]) -> dict[str, Any]:
                 "raw": json.dumps(ejemplo(contrato, esquema), indent=2, ensure_ascii=False),
                 "options": {"raw": {"language": "json"}},
             }
-        carpetas.setdefault(etiqueta, []).append(
-            {"name": f"{metodo.upper()} {operacion.get('summary', path)}", "request": peticion}
-        )
+        pedido: dict[str, Any] = {
+            "name": f"{metodo.upper()} {operacion.get('summary', path)}",
+            "request": peticion,
+        }
+        if path.endswith("/auth/login"):
+            pedido["event"] = [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.collectionVariables.set('token', pm.response.json().access_token);"
+                        ],
+                    },
+                }
+            ]
+        carpetas.setdefault(etiqueta, []).append(pedido)
     orden = [t["name"] for t in ETIQUETAS]
     items = [
         {"name": nombre, "item": carpetas[nombre]}
@@ -337,6 +366,8 @@ def postman(app: FastAPI, contrato: dict[str, Any]) -> dict[str, Any]:
         },
         "variable": [
             {"key": "base_url", "value": "http://127.0.0.1:8025"},
+            {"key": "correo", "value": ""},
+            {"key": "clave", "value": ""},
             {"key": "token", "value": ""},
         ],
         "item": items,

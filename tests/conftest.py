@@ -6,6 +6,7 @@ from decimal import Decimal
 
 os.environ.setdefault("AGRO_SECRET_KEY", "clave-solo-para-pruebas-0123456789abcdef")
 os.environ.setdefault("AGRO_DATABASE_URL", "sqlite+aiosqlite://")
+os.environ.setdefault("AGRO_BCRYPT_COST", "4")
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
@@ -17,6 +18,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.pool import StaticPool
 
+from app.core import claves
 from app.core.database import get_db
 from app.core.security import crear_token
 from app.main import create_app
@@ -40,6 +42,8 @@ from app.models import (
     Usuario,
 )
 
+CLAVE_PRUEBA = "Clave-Prueba-123"
+
 
 class Fabrica:
     """Crea datos de prueba directamente en la base."""
@@ -48,10 +52,13 @@ class Fabrica:
         self.s = sesion
         self._n = 0
 
-    async def usuario(self, rol: str = "agricultor") -> Usuario:
+    async def usuario(self, rol: str = "agricultor", clave: str = CLAVE_PRUEBA) -> Usuario:
         self._n += 1
         u = Usuario(
-            nombre=f"Usuario {self._n}", correo=f"u{self._n}@prueba.test", clave_hash="x", rol=rol
+            nombre=f"Usuario {self._n}",
+            correo=f"u{self._n}@prueba.test",
+            clave_hash=claves.hashear(clave),
+            rol=rol,
         )
         self.s.add(u)
         await self.s.commit()
@@ -220,9 +227,15 @@ async def motor() -> AsyncIterator[AsyncEngine]:
 
 
 @pytest_asyncio.fixture
-async def sesion(motor: AsyncEngine) -> AsyncIterator[AsyncSession]:
+async def bd(motor: AsyncEngine) -> AsyncIterator[AsyncSession]:
     async with async_sessionmaker(motor, expire_on_commit=False)() as s:
         yield s
+
+
+@pytest_asyncio.fixture
+async def sesion(bd: AsyncSession) -> AsyncSession:
+    """Sesión de base de datos. En tests/roles/ se reemplaza por el cliente con sesión iniciada."""
+    return bd
 
 
 @pytest_asyncio.fixture
@@ -252,8 +265,8 @@ async def entrar_como(cliente, f):
 
 
 @pytest_asyncio.fixture
-async def f(sesion: AsyncSession) -> Fabrica:
-    return Fabrica(sesion)
+async def f(bd: AsyncSession) -> Fabrica:
+    return Fabrica(bd)
 
 
 def payload_siembra(

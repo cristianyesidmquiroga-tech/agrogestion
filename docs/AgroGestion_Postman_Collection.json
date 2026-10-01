@@ -20,13 +20,241 @@
       "value": "http://127.0.0.1:8025"
     },
     {
+      "key": "correo",
+      "value": ""
+    },
+    {
+      "key": "clave",
+      "value": ""
+    },
+    {
       "key": "token",
       "value": ""
     }
   ],
   "item": [
     {
-      "name": "cultivos",
+      "name": "1. Acceso",
+      "item": [
+        {
+          "name": "POST Iniciar sesión y obtener el token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/auth/login"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Iniciar sesión y obtener el token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{correo}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{clave}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Quién soy y qué puedo usar con este perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/auth/me"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Quién soy y qué puedo usar con este perfil"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Cuenta y ayuda",
+      "item": [
+        {
+          "name": "GET Última autorización aceptada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cuenta/consentimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cuenta/consentimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Última autorización aceptada"
+          }
+        },
+        {
+          "name": "POST Aceptar el tratamiento de datos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cuenta/consentimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/cuenta/consentimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Aceptar el tratamiento de datos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version_politica\": \"texto\",\n  \"acepta_tratamiento\": true,\n  \"acepta_transferencia_ia\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Términos del agro explicados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/glosario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/glosario"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Término a buscar"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Términos del agro explicados"
+          }
+        },
+        {
+          "name": "GET Política de tratamiento de datos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/politica",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/politica"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Política de tratamiento de datos",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Inicio",
+      "item": [
+        {
+          "name": "GET Avisos de riesgo según la fase de sus cultivos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/avisos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/avisos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Avisos de riesgo según la fase de sus cultivos"
+          }
+        },
+        {
+          "name": "GET Lo de hoy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/inicio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/inicio"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Lo de hoy"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Cultivos",
       "item": [
         {
           "name": "GET Buscar cultivos",
@@ -363,7 +591,7 @@
       ]
     },
     {
-      "name": "siembras",
+      "name": "5. Siembras y ciclos",
       "item": [
         {
           "name": "GET Detalle de un ciclo",
@@ -865,7 +1093,7 @@
       ]
     },
     {
-      "name": "propagacion",
+      "name": "6. Vivero",
       "item": [
         {
           "name": "GET Lotes de vivero",
@@ -1019,7 +1247,7 @@
       ]
     },
     {
-      "name": "eventos",
+      "name": "7. Eventos adversos",
       "item": [
         {
           "name": "GET Eventos adversos",
@@ -1165,112 +1393,121 @@
       ]
     },
     {
-      "name": "cuenta",
+      "name": "8. Reportes",
       "item": [
         {
-          "name": "GET Última autorización aceptada",
+          "name": "GET Reportes que puedo ver",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/v1/cuenta/consentimiento",
+              "raw": "{{base_url}}/api/v1/reportes",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "api/v1/cuenta/consentimiento"
+                "api/v1/reportes"
               ],
               "query": [],
               "variable": []
             },
-            "description": "Última autorización aceptada"
+            "description": "Reportes que puedo ver"
           }
         },
         {
-          "name": "POST Aceptar el tratamiento de datos",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/v1/cuenta/consentimiento",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api/v1/cuenta/consentimiento"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "description": "Aceptar el tratamiento de datos",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"version_politica\": \"texto\",\n  \"acepta_tratamiento\": true,\n  \"acepta_transferencia_ia\": false\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          }
-        },
-        {
-          "name": "GET Términos del agro explicados",
+          "name": "GET Tiempos de mis ciclos",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/v1/glosario",
+              "raw": "{{base_url}}/api/v1/reportes/cronograma",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "api/v1/glosario"
+                "api/v1/reportes/cronograma"
               ],
               "query": [
                 {
-                  "key": "q",
-                  "value": "texto",
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
                   "disabled": true,
-                  "description": "Término a buscar"
+                  "description": ""
                 }
               ],
               "variable": []
             },
-            "description": "Términos del agro explicados"
+            "description": "Tiempos de mis ciclos"
           }
         },
         {
-          "name": "GET Política de tratamiento de datos",
+          "name": "GET Eventos adversos y su costo",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/v1/politica",
+              "raw": "{{base_url}}/api/v1/reportes/eventos",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "api/v1/politica"
+                "api/v1/reportes/eventos"
               ],
-              "query": [],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "desde",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
               "variable": []
             },
-            "description": "Política de tratamiento de datos",
-            "auth": {
-              "type": "noauth"
-            }
+            "description": "Eventos adversos y su costo"
+          }
+        },
+        {
+          "name": "GET Índices por planta de mis siembras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reportes/indices",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api/v1/reportes/indices"
+              ],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Índices por planta de mis siembras"
           }
         }
       ]
     },
     {
-      "name": "conocimiento",
+      "name": "9. Conocimiento",
       "item": [
         {
           "name": "GET Buscar en la biblioteca",
@@ -1480,7 +1717,7 @@
       ]
     },
     {
-      "name": "asistente",
+      "name": "10. Asistente",
       "item": [
         {
           "name": "GET Calidad del asistente",
@@ -1639,7 +1876,7 @@
       ]
     },
     {
-      "name": "noticias",
+      "name": "11. Noticias",
       "item": [
         {
           "name": "GET Noticias vigentes de mi región",
@@ -1721,164 +1958,7 @@
       ]
     },
     {
-      "name": "inicio",
-      "item": [
-        {
-          "name": "GET Avisos de riesgo según la fase de sus cultivos",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/v1/avisos",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api/v1/avisos"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "description": "Avisos de riesgo según la fase de sus cultivos"
-          }
-        },
-        {
-          "name": "GET Lo de hoy",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/v1/inicio",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api/v1/inicio"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "description": "Lo de hoy"
-          }
-        }
-      ]
-    },
-    {
-      "name": "reportes",
-      "item": [
-        {
-          "name": "GET Reportes que puedo ver",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/v1/reportes",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api/v1/reportes"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "description": "Reportes que puedo ver"
-          }
-        },
-        {
-          "name": "GET Tiempos de mis ciclos",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/v1/reportes/cronograma",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api/v1/reportes/cronograma"
-              ],
-              "query": [
-                {
-                  "key": "finca_id",
-                  "value": "00000000-0000-0000-0000-000000000000",
-                  "disabled": true,
-                  "description": ""
-                }
-              ],
-              "variable": []
-            },
-            "description": "Tiempos de mis ciclos"
-          }
-        },
-        {
-          "name": "GET Eventos adversos y su costo",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/v1/reportes/eventos",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api/v1/reportes/eventos"
-              ],
-              "query": [
-                {
-                  "key": "finca_id",
-                  "value": "00000000-0000-0000-0000-000000000000",
-                  "disabled": true,
-                  "description": ""
-                },
-                {
-                  "key": "desde",
-                  "value": "2026-01-31",
-                  "disabled": true,
-                  "description": ""
-                },
-                {
-                  "key": "hasta",
-                  "value": "2026-01-31",
-                  "disabled": true,
-                  "description": ""
-                }
-              ],
-              "variable": []
-            },
-            "description": "Eventos adversos y su costo"
-          }
-        },
-        {
-          "name": "GET Índices por planta de mis siembras",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/v1/reportes/indices",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api/v1/reportes/indices"
-              ],
-              "query": [
-                {
-                  "key": "finca_id",
-                  "value": "00000000-0000-0000-0000-000000000000",
-                  "disabled": true,
-                  "description": ""
-                }
-              ],
-              "variable": []
-            },
-            "description": "Índices por planta de mis siembras"
-          }
-        }
-      ]
-    },
-    {
-      "name": "health",
+      "name": "12. Salud",
       "item": [
         {
           "name": "GET Salud del servicio",

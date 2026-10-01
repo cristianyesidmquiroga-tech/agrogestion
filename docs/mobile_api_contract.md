@@ -21,7 +21,7 @@ Arranque del servidor en desarrollo:
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8025
 ```
 
-Prefijo común de los endpoints de datos: `/api/v1`. La salud del servicio está en `/health` (sin prefijo).
+Prefijo común de los endpoints de datos: `/api/v1`. En la documentación están ordenados por pasos, empezando por **1. Acceso**. La salud del servicio está en `/health` (sin prefijo).
 
 En la app, la URL base es una constante de compilación (`dart/lib/api_config.dart`):
 
@@ -31,15 +31,27 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8025
 
 ## Autenticación
 
-La construye el módulo de acceso (Brayan). Lo previsto, por confirmar con él al entregarlo:
+Es lo primero que hace la app, y el único endpoint de datos sin candado (además de la política de datos y la salud del servicio).
 
-- `POST /api/v1/auth/login` recibe **formulario**, no JSON. Campos: `username` (el correo) y `password`.
-- Devuelve `access_token` con vigencia de 60 minutos. No hay token de refresco.
-- Todas las demás peticiones llevan `Authorization: Bearer <token>`.
-- Un `401` significa: borrar el token del almacenamiento seguro y llevar al inicio de sesión.
-- El token se guarda con `flutter_secure_storage`, nunca en `SharedPreferences`.
+1. `POST /api/v1/auth/login` recibe **formulario** (`application/x-www-form-urlencoded`), no JSON. Campos: `username` (el correo) y `password`.
+2. Responde `{ access_token, token_type, expires_in, rol, nombre }`. El token vale 60 minutos; no hay token de refresco.
+3. Todas las demás peticiones llevan `Authorization: Bearer <access_token>`.
+4. `GET /api/v1/auth/me` devuelve quién es, su rol, las fincas que tiene asignadas y `permisos`: la lista de funciones de la API que ese perfil puede usar (grupo, método, ruta y resumen), generada con las mismas reglas que las protegen. Úselo al abrir la app para decidir qué pantallas y botones mostrar; el servidor siempre vuelve a validar.
+5. Un `401` significa: borrar el token del almacenamiento seguro y llevar al inicio de sesión.
+6. El token se guarda con `flutter_secure_storage`, nunca en `SharedPreferences`.
 
-Mientras ese módulo no esté, se prueba pegando un token en la variable `token` de Postman.
+Errores del inicio de sesión:
+
+| `error` | Estado | Cuándo |
+|---|---|---|
+| `CREDENCIALES_INVALIDAS` | 401 | Correo o contraseña incorrectos. El mensaje es el mismo exista o no el correo |
+| `DEMASIADOS_INTENTOS` | 429 | 5 intentos fallidos con el mismo correo en 15 minutos; se libera solo |
+
+Para probar cada perfil en la documentación (`/docs`): arriba hay un panel **Paso 1. Inicie sesión**. Escriba el correo y la contraseña del perfil: la página queda autorizada sola, muestra el token (elija copiar solo el token o toda la respuesta) y lista lo que ese perfil puede usar. Pruebe los pasos de abajo con ese perfil y use **Cambiar de perfil** para entrar con otro. También funciona el flujo manual: `POST /auth/login`, copiar el `access_token` y pegarlo en **Authorize**.
+
+En Postman, la petición de login guarda el token sola en la variable `token`; escriba `correo` y `clave` en las variables de la colección (no suba la colección con valores reales).
+
+Es una versión mínima del acceso, suficiente para probar. La administración de usuarios, el cambio de contraseña y el registro los completa el módulo de acceso (Brayan).
 
 ## Roles
 
@@ -57,6 +69,8 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | Método | Ruta | Quién entra | Pantalla | Qué hace |
 |---|---|---|---|---|
 | `GET` | `/api/v1/asistente/calidad` | admin | Calidad del asistente | Calidad del asistente |
+| `POST` | `/api/v1/auth/login` | público | Iniciar sesión | Iniciar sesión y obtener el token |
+| `GET` | `/api/v1/auth/me` | cualquier usuario con sesión | Splash y Mi cuenta | Quién soy y qué puedo usar con este perfil |
 | `GET` | `/api/v1/avisos` | admin, agricultor, contador | Inicio (avisos) | Avisos de riesgo según la fase de sus cultivos |
 | `GET` | `/api/v1/ciclos/{ciclo_id}` | admin, agricultor, contador | Detalle de ciclo | Detalle de un ciclo |
 | `POST` | `/api/v1/ciclos/{ciclo_id}/cerrar` | admin, agricultor | Detalle de ciclo | Cerrar un ciclo |
@@ -166,6 +180,7 @@ try {
 
 | Código (`error`) | Estado | Mensaje de ejemplo | Nota |
 |---|---|---|---|
+| `CREDENCIALES_INVALIDAS` | 401 | Correo o contraseña incorrectos. |  |
 | `NO_AUTENTICADO` | 401 | Su sesión venció o no es válida. Inicie sesión de nuevo. |  |
 | `SIN_PERMISO` | 403 | No tiene permiso para esta acción. |  |
 | `CICLO_NO_ENCONTRADO` | 404 | No encontramos ese ciclo. |  |
@@ -207,6 +222,7 @@ try {
 | `SIEMBRA_ESTADO_INVALIDO` | 422 | La siembra ya no admite conteos. |  |
 | `SIEMBRA_NO_VALIDA` | 422 | Esa siembra no pertenece a la finca. |  |
 | `TRASPLANTE_INVALIDO` | 422 | La siembra debe ser de la misma finca y el mismo cultivo. |  |
+| `DEMASIADOS_INTENTOS` | 429 | Demasiados intentos. Intente de nuevo en … minutos. |  |
 | `LIMITE_DE_CONSULTAS` | 429 | Llegó al máximo de consultas de hoy. Mañana podrá hacer más. |  |
 | `ERROR_INTERNO` | 500 | Algo salió mal de nuestro lado. Intente de nuevo. | Permitir reintentar. |
 | `SERVICIO_NO_LISTO` | 503 | El servicio aún no puede atender. Intente en un momento. |  |
@@ -227,6 +243,7 @@ try {
 | `fase_critica` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `metodo` | `semilla`, `esqueje`, `estaca`, `injerto`, `hijuelo`, `acodo`, `in_vitro` |
 | `pago_cosecha_sugerido` | `por_kilo`, `por_jornal`, `por_destajo` |
+| `rol` | `admin`, `agricultor`, `contador`, `experto` |
 | `severidad` | `leve`, `moderada`, `severa` |
 | `susceptibilidad` | `baja`, `media`, `alta` |
 | `tipo` | `levante`, `produccion`, `renovacion` |

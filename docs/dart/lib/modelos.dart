@@ -74,6 +74,42 @@ class AvisosSalida {
       };
 }
 
+class Bodyloginapiv1authloginpost {
+  final String? grantType;
+  final String username;
+  final String password;
+  final String? scope;
+  final String? clientId;
+  final String? clientSecret;
+
+  const Bodyloginapiv1authloginpost({
+    this.grantType,
+    required this.username,
+    required this.password,
+    this.scope,
+    this.clientId,
+    this.clientSecret,
+  });
+
+  factory Bodyloginapiv1authloginpost.fromJson(Map<String, dynamic> json) => Bodyloginapiv1authloginpost(
+        grantType: json['grant_type'] == null ? null : json['grant_type'] as String,
+        username: json['username'] as String,
+        password: json['password'] as String,
+        scope: json['scope'] == null ? null : json['scope'] as String,
+        clientId: json['client_id'] == null ? null : json['client_id'] as String,
+        clientSecret: json['client_secret'] == null ? null : json['client_secret'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        if (grantType != null) 'grant_type': grantType!,
+        'username': username,
+        'password': password,
+        if (scope != null) 'scope': scope!,
+        if (clientId != null) 'client_id': clientId!,
+        if (clientSecret != null) 'client_secret': clientSecret!,
+      };
+}
+
 class CalidadSalida {
   final int consultas;
   final int conValoracion;
@@ -2022,6 +2058,70 @@ class PageSiembraResumen {
       };
 }
 
+class PerfilSalida {
+  final String id;
+  final String nombre;
+  final String correo;
+  final String rol;
+  final List<String> fincas;
+  final List<PermisoSalida> permisos;
+
+  const PerfilSalida({
+    required this.id,
+    required this.nombre,
+    required this.correo,
+    required this.rol,
+    required this.fincas,
+    required this.permisos,
+  });
+
+  factory PerfilSalida.fromJson(Map<String, dynamic> json) => PerfilSalida(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+        correo: json['correo'] as String,
+        rol: json['rol'] as String,
+        fincas: (json['fincas'] as List<dynamic>).map((x) => x as String).toList(),
+        permisos: (json['permisos'] as List<dynamic>).map((x) => PermisoSalida.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        'correo': correo,
+        'rol': rol,
+        'fincas': fincas.map((x) => x).toList(),
+        'permisos': permisos.map((x) => x.toJson()).toList(),
+      };
+}
+
+class PermisoSalida {
+  final String grupo;
+  final String metodo;
+  final String ruta;
+  final String resumen;
+
+  const PermisoSalida({
+    required this.grupo,
+    required this.metodo,
+    required this.ruta,
+    required this.resumen,
+  });
+
+  factory PermisoSalida.fromJson(Map<String, dynamic> json) => PermisoSalida(
+        grupo: json['grupo'] as String,
+        metodo: json['metodo'] as String,
+        ruta: json['ruta'] as String,
+        resumen: json['resumen'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'grupo': grupo,
+        'metodo': metodo,
+        'ruta': ruta,
+        'resumen': resumen,
+      };
+}
+
 class PoliticaSalida {
   final String version;
   final String estado;
@@ -2783,6 +2883,38 @@ class TerminoSalida {
         'termino': termino,
         'explicacion': explicacion,
         'categoria': categoria,
+      };
+}
+
+class TokenSalida {
+  final String accessToken;
+  final String tokenType;
+  final int expiresIn;
+  final String rol;
+  final String nombre;
+
+  const TokenSalida({
+    required this.accessToken,
+    required this.tokenType,
+    required this.expiresIn,
+    required this.rol,
+    required this.nombre,
+  });
+
+  factory TokenSalida.fromJson(Map<String, dynamic> json) => TokenSalida(
+        accessToken: json['access_token'] as String,
+        tokenType: json['token_type'] as String,
+        expiresIn: json['expires_in'] as int,
+        rol: json['rol'] as String,
+        nombre: json['nombre'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'access_token': accessToken,
+        'token_type': tokenType,
+        'expires_in': expiresIn,
+        'rol': rol,
+        'nombre': nombre,
       };
 }
 

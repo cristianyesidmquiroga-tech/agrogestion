@@ -5,11 +5,12 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.core.config import get_settings
+from app.core.etiquetas import SALUD
 from app.core.exceptions import ServicioNoListo
 from app.routers.dependencias import BD
 from app.schemas.common import HealthResponse, ReadyResponse
 
-router = APIRouter(tags=["health"])
+router = APIRouter(tags=[SALUD])
 settings = get_settings()
 
 

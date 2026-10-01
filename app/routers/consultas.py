@@ -5,6 +5,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query, status
 
+from app.core.etiquetas import ASISTENTE
 from app.core.security import EscribeProduccion, SoloAdmin
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.asistente import (
@@ -18,7 +19,7 @@ from app.schemas.asistente import (
 from app.schemas.common import ErrorRespuesta, Page
 from app.services import asistente_service as servicio
 
-router = APIRouter(tags=["asistente"])
+router = APIRouter(tags=[ASISTENTE])
 
 
 @router.post(

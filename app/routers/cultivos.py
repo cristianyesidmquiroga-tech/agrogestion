@@ -6,6 +6,7 @@ from typing import Annotated
 from fastapi import APIRouter, Query, status
 
 from app.core.catalogos import TipoCiclo
+from app.core.etiquetas import CULTIVOS
 from app.core.security import EscribeProduccion, SoloAdmin
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
@@ -24,7 +25,7 @@ from app.schemas.cultivo import (
 )
 from app.services import cultivo_service
 
-router = APIRouter(tags=["cultivos"])
+router = APIRouter(tags=[CULTIVOS])
 
 
 @router.get("/cultivos", response_model=Page[CultivoResumen], summary="Buscar cultivos")

@@ -28,6 +28,11 @@ class Settings(BaseSettings):
     consultas_por_dia: int = Field(default=20, ge=1, le=500)
     noticias_dias_vigencia: int = Field(default=7, ge=1, le=60)
     log_level: str = "INFO"
+    bcrypt_cost: int = Field(default=12, ge=4, le=15)
+    intentos_maximos: int = Field(default=5, ge=1, le=50)
+    minutos_bloqueo: int = Field(default=15, ge=1, le=1440)
+    # Solo para las cuentas de ejemplo de desarrollo (scripts/demo.py); sin valor por defecto.
+    seed_password: str | None = None
 
     # Orígenes de navegador permitidos; una app móvil nativa no envía Origin.
     cors_origins: list[str] = [

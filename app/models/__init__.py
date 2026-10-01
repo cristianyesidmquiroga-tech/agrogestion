@@ -7,7 +7,7 @@ from app.models.glosario import GlosarioTermino
 from app.models.noticia import Noticia
 from app.models.riesgo import CultivoRiesgo, EventoAdverso, Riesgo
 from app.models.siembra import Ciclo, ConteoPlanta, Cosecha, LotePropagacion, Siembra
-from app.models.usuario import Consentimiento, Usuario
+from app.models.usuario import Consentimiento, IntentoAcceso, Usuario
 
 __all__ = [
     "Base",
@@ -26,6 +26,7 @@ __all__ = [
     "FincaUsuario",
     "Fuente",
     "GlosarioTermino",
+    "IntentoAcceso",
     "Lote",
     "LotePropagacion",
     "Manejo",

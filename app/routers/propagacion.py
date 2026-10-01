@@ -4,6 +4,7 @@ import uuid
 
 from fastapi import APIRouter, status
 
+from app.core.etiquetas import VIVERO
 from app.core.security import EscribeProduccion
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
@@ -15,7 +16,7 @@ from app.schemas.propagacion import (
 )
 from app.services import propagacion_service
 
-router = APIRouter(prefix="/propagacion", tags=["propagacion"])
+router = APIRouter(prefix="/propagacion", tags=[VIVERO])
 
 
 @router.get("", response_model=Page[PropagacionSalida], summary="Lotes de vivero")

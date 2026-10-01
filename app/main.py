@@ -6,9 +6,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
+from app.core.etiquetas import ETIQUETAS
 from app.core.exceptions import registrar_manejadores
 from app.core.registro import configurar_registro, instalar
 from app.routers import (
+    acceso,
     conocimiento,
     consultas,
     cuenta,
@@ -32,28 +34,6 @@ DESCRIPCION = (
     "siempre con el campo `error`, nunca con `message`."
 )
 
-ETIQUETAS = [
-    {
-        "name": "cultivos",
-        "description": "Catálogo de cultivos con su perfil y catálogo de riesgos.",
-    },
-    {"name": "siembras", "description": "Siembras, ciclos, conteo de plantas e indicadores."},
-    {"name": "propagacion", "description": "Vivero: propagación por semilla, esqueje u otros."},
-    {"name": "eventos", "description": "Heladas, sequías, granizo, plagas y otros eventos."},
-    {"name": "cuenta", "description": "Glosario, política de datos y consentimiento."},
-    {
-        "name": "conocimiento",
-        "description": "Biblioteca de problemas sanitarios revisados por expertos.",
-    },
-    {
-        "name": "asistente",
-        "description": "Consultas sobre fichas validadas; no inventa diagnósticos.",
-    },
-    {"name": "noticias", "description": "Noticias de su región que vencen solas."},
-    {"name": "inicio", "description": "Lo de hoy y avisos de riesgo por fase."},
-    {"name": "reportes", "description": "Reportes con los datos disponibles."},
-    {"name": "health", "description": "Salud del servicio."},
-]
 
 RESPUESTAS_ERROR: dict[int | str, dict[str, Any]] = {
     401: {"model": ErrorRespuesta, "description": "Sin sesión o sesión vencida."},
@@ -84,21 +64,22 @@ def create_app() -> FastAPI:
     )
     registrar_manejadores(app)
     instalar(app, configurar_registro(settings.log_level))
-    app.include_router(health.router)
     app.include_router(documentacion.router)
     for router in (
+        acceso.router,
+        cuenta.router,
+        inicio.router,
         cultivos.router,
         siembras.router,
         propagacion.router,
         eventos.router,
-        cuenta.router,
-        inicio.router,
         reportes.router,
         conocimiento.router,
         consultas.router,
         noticias.router,
     ):
         app.include_router(router, prefix=settings.api_prefix, responses=RESPUESTAS_ERROR)
+    app.include_router(health.router)
     return app
 
 

@@ -1,4 +1,6 @@
-"""Documentación interactiva (/docs) siempre con fondo blanco, sin importar el modo del sistema."""
+"""Documentación interactiva (/docs): fondo blanco siempre y un panel para iniciar sesión."""
+
+from pathlib import Path
 
 from fastapi import APIRouter
 from fastapi.openapi.docs import get_swagger_ui_html
@@ -14,6 +16,7 @@ ESTILO_CLARO = (
     "<style>:root{color-scheme:light only}"
     "html,body{background:#fff!important;color:#3b4151}</style>"
 )
+PANEL_ACCESO = (Path(__file__).parent / "docs_acceso.html").read_text(encoding="utf-8")
 
 
 @router.get("/docs", include_in_schema=False)
@@ -23,5 +26,7 @@ async def documentacion() -> HTMLResponse:
         title=f"{settings.app_name} - Documentación",
         swagger_ui_parameters={"persistAuthorization": True, "displayRequestDuration": True},
     )
-    html = bytes(pagina.body).decode("utf-8").replace("</head>", ESTILO_CLARO + "</head>", 1)
+    html = bytes(pagina.body).decode("utf-8")
+    html = html.replace("</head>", ESTILO_CLARO + "</head>", 1)
+    html = html.replace("</body>", PANEL_ACCESO + "</body>", 1)
     return HTMLResponse(html)

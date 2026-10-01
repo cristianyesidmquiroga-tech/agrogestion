@@ -5,13 +5,14 @@ import uuid
 from fastapi import APIRouter, status
 
 from app.core.catalogos import TipoRiesgo
+from app.core.etiquetas import EVENTOS
 from app.core.security import EscribeProduccion
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
 from app.schemas.evento import EventoActualizar, EventoCrear, EventoSalida
 from app.services import evento_service
 
-router = APIRouter(prefix="/eventos-adversos", tags=["eventos"])
+router = APIRouter(prefix="/eventos-adversos", tags=[EVENTOS])
 
 
 @router.get("", response_model=Page[EventoSalida], summary="Eventos adversos")

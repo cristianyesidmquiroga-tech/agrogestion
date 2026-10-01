@@ -1,0 +1,192 @@
+<style>
+#panel-acceso{background:#fff;border:1px solid #d4d9e1;border-radius:8px;padding:18px 20px;margin:0 0 16px;font-family:sans-serif;color:#3b4151}
+#panel-acceso h3{margin:0 0 4px;font-size:20px}
+#panel-acceso p{margin:4px 0 12px;font-size:14px;line-height:1.5}
+#panel-acceso form,#panel-acceso .fila{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+#panel-acceso label{display:flex;flex-direction:column;font-size:13px;font-weight:600;gap:4px;flex:1 1 220px}
+#panel-acceso input{border:1px solid #b9c0cc;border-radius:4px;padding:9px 10px;font-size:14px;background:#fff;color:#3b4151;min-width:0}
+#panel-acceso input[readonly]{background:#f4f6f9;font-family:monospace;font-size:12px;flex:1 1 260px}
+#panel-acceso button{border:2px solid #49cc90;background:#fff;color:#1f8a5f;border-radius:4px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer;position:relative}
+#panel-acceso button:hover,#panel-acceso button:focus-visible{background:#49cc90;color:#fff;outline:none}
+#panel-acceso button.suave{border-color:#b9c0cc;color:#3b4151}
+#panel-acceso button.suave:hover,#panel-acceso button.suave:focus-visible{background:#3b4151;border-color:#3b4151;color:#fff}
+#panel-acceso .tip:hover::after,#panel-acceso .tip:focus-visible::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#3b4151;color:#fff;padding:5px 9px;border-radius:4px;font-size:12px;font-weight:400;white-space:nowrap;z-index:20}
+#panel-acceso textarea{border:1px solid #b9c0cc;border-radius:4px;padding:9px 10px;background:#f4f6f9;color:#3b4151;font-family:monospace;font-size:12px;width:100%;box-sizing:border-box;resize:vertical}
+#panel-acceso fieldset{border:0;padding:0;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+#panel-acceso legend{font-size:13px;font-weight:600;padding:0;margin-bottom:6px}
+#panel-acceso .opcion{display:flex;flex-direction:row;align-items:center;gap:6px;flex:0 0 auto;font-weight:400;font-size:14px;cursor:pointer}
+#panel-acceso .opcion input{min-width:0;margin:0;accent-color:#49cc90}
+#panel-acceso details{margin-top:12px;border-top:1px solid #e3e7ee;padding-top:10px}
+#panel-acceso summary{cursor:pointer;font-weight:600;font-size:14px}
+#panel-acceso details h4{margin:12px 0 4px;font-size:13px}
+#panel-acceso details ul{margin:0;padding-left:18px;font-size:13px;line-height:1.7}
+#panel-acceso details code{background:#f4f6f9;border-radius:3px;padding:1px 5px;font-size:12px}
+#acceso-error{color:#a32d2d;font-weight:600}
+#acceso-copiado{color:#1f8a5f;font-weight:600;margin:8px 0 0}
+</style>
+<script>
+(function () {
+  var ESQUEMA = 'OAuth2PasswordBearer';
+  var panel = document.createElement('section');
+  panel.id = 'panel-acceso';
+  panel.innerHTML =
+    '<h3>Paso 1. Inicie sesión</h3>' +
+    '<p>Escriba el correo y la contraseña del perfil con el que quiere probar. ' +
+    'Esta página queda autorizada sola y el token queda listo para copiar.</p>' +
+    '<form id="form-acceso">' +
+    '<label>Correo<input name="correo" type="email" autocomplete="username" required></label>' +
+    '<label>Contraseña<input name="clave" type="password" autocomplete="current-password" required></label>' +
+    '<button type="submit" class="tip" data-tip="Entra y autoriza esta página">Iniciar sesión</button>' +
+    '</form>' +
+    '<p id="acceso-error" role="alert" hidden></p>' +
+    '<div id="acceso-ok" hidden>' +
+    '<p>Entró como <b id="acceso-rol"></b>. Ya quedó autorizado: pruebe los pasos de abajo.</p>' +
+    '<fieldset><legend>Qué quiere copiar</legend>' +
+    '<label class="opcion tip" data-tip="Solo el texto que se pega en Authorize">' +
+    '<input type="radio" name="que" value="token" checked> Solo el token</label>' +
+    '<label class="opcion tip" data-tip="El JSON completo que devuelve el inicio de sesión">' +
+    '<input type="radio" name="que" value="todo"> Toda la respuesta</label>' +
+    '</fieldset>' +
+    '<textarea id="acceso-texto" readonly rows="3" aria-label="Texto a copiar"></textarea>' +
+    '<div class="fila" style="margin-top:10px">' +
+    '<button type="button" id="acceso-copiar" class="tip" data-tip="Copiar solo el token">Copiar token</button>' +
+    '<button type="button" id="acceso-salir" class="tip suave" data-tip="Cerrar sesión y entrar con otro perfil">Cambiar de perfil</button>' +
+    '</div>' +
+    '<p id="acceso-copiado" hidden>Token copiado.</p>' +
+    '<details id="acceso-permisos"><summary>Qué puede usar este perfil (<span id="acceso-n"></span>)</summary>' +
+    '<div id="acceso-lista"></div></details>' +
+    '</div>';
+
+  var form = panel.querySelector('#form-acceso');
+  var error = panel.querySelector('#acceso-error');
+  var ok = panel.querySelector('#acceso-ok');
+  var campoTexto = panel.querySelector('#acceso-texto');
+  var botonCopiar = panel.querySelector('#acceso-copiar');
+  var respuesta = null;
+  var copiado = panel.querySelector('#acceso-copiado');
+
+  function sistema() { return typeof ui !== 'undefined' && ui.getSystem ? ui.getSystem() : null; }
+
+  function autorizar(token) {
+    var s = sistema();
+    if (!s) { return; }
+    var defs = s.specSelectors.securityDefinitions();
+    var esquema = defs && defs.get(ESQUEMA);
+    var carga = {
+      auth: { name: ESQUEMA, schema: esquema, token: { access_token: token, token_type: 'bearer' } },
+      token: { access_token: token, token_type: 'bearer' }
+    };
+    if (s.authActions.authorizeOauth2WithPersistOption) {
+      s.authActions.authorizeOauth2WithPersistOption(carga);
+    } else {
+      s.authActions.authorizeOauth2(carga);
+    }
+  }
+
+  function pintarPermisos(permisos) {
+    var lista = panel.querySelector('#acceso-lista');
+    lista.textContent = '';
+    panel.querySelector('#acceso-n').textContent = permisos.length;
+    var grupo = null;
+    var ul = null;
+    permisos.forEach(function (p) {
+      if (p.grupo !== grupo) {
+        grupo = p.grupo;
+        var h = document.createElement('h4');
+        h.textContent = p.grupo;
+        lista.appendChild(h);
+        ul = document.createElement('ul');
+        lista.appendChild(ul);
+      }
+      var li = document.createElement('li');
+      var c = document.createElement('code');
+      c.textContent = p.metodo + ' ' + p.ruta;
+      li.appendChild(c);
+      li.appendChild(document.createTextNode(' ' + p.resumen));
+      ul.appendChild(li);
+    });
+  }
+
+  function cargarPermisos(token) {
+    fetch('/api/v1/auth/me', { headers: { Authorization: 'Bearer ' + token } })
+      .then(function (r) { return r.json(); })
+      .then(function (perfil) { if (perfil.permisos) { pintarPermisos(perfil.permisos); } });
+  }
+
+  function queCopiar() { return panel.querySelector('input[name="que"]:checked').value; }
+
+  function mostrar() {
+    if (!respuesta) { return; }
+    var todo = queCopiar() === 'todo';
+    campoTexto.value = todo ? JSON.stringify(respuesta, null, 2) : respuesta.access_token;
+    campoTexto.rows = todo ? 8 : 3;
+    botonCopiar.textContent = todo ? 'Copiar respuesta' : 'Copiar token';
+    botonCopiar.setAttribute('data-tip', todo ? 'Copiar toda la respuesta' : 'Copiar solo el token');
+    copiado.hidden = true;
+  }
+
+  panel.querySelectorAll('input[name="que"]').forEach(function (r) { r.addEventListener('change', mostrar); });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    error.hidden = true;
+    copiado.hidden = true;
+    var datos = new URLSearchParams({ username: form.correo.value, password: form.clave.value });
+    fetch('/api/v1/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: datos
+    }).then(function (r) {
+      return r.json().then(function (cuerpo) { return { ok: r.ok, cuerpo: cuerpo }; });
+    }).then(function (res) {
+      if (!res.ok) {
+        error.textContent = res.cuerpo.message || 'No se pudo iniciar sesión.';
+        error.hidden = false;
+        ok.hidden = true;
+        return;
+      }
+      form.clave.value = '';
+      respuesta = res.cuerpo;
+      mostrar();
+      panel.querySelector('#acceso-rol').textContent = res.cuerpo.rol + ' (' + res.cuerpo.nombre + ')';
+      ok.hidden = false;
+      autorizar(res.cuerpo.access_token);
+      cargarPermisos(res.cuerpo.access_token);
+    }).catch(function () {
+      error.textContent = 'No pudimos conectar con el servidor.';
+      error.hidden = false;
+    });
+  });
+
+  botonCopiar.addEventListener('click', function () {
+    campoTexto.select();
+    var listo = function () { copiado.textContent = queCopiar() === 'todo' ? 'Respuesta copiada.' : 'Token copiado.'; copiado.hidden = false; };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(campoTexto.value).then(listo, function () {
+        document.execCommand('copy');
+        listo();
+      });
+    } else {
+      document.execCommand('copy');
+      listo();
+    }
+  });
+
+  panel.querySelector('#acceso-salir').addEventListener('click', function () {
+    var s = sistema();
+    if (s) { s.authActions.logout([ESQUEMA]); }
+    ok.hidden = true;
+    respuesta = null;
+    campoTexto.value = '';
+    panel.querySelector('#acceso-lista').textContent = '';
+    form.correo.focus();
+  });
+
+  function asegurar() {
+    var caja = document.querySelector('.scheme-container');
+    if (caja && !caja.contains(panel)) { caja.prepend(panel); }
+  }
+  new MutationObserver(asegurar).observe(document.body, { childList: true, subtree: true });
+  asegurar();
+})();
+</script>

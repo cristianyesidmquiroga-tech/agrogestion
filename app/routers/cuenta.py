@@ -4,6 +4,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query, status
 
+from app.core.etiquetas import CUENTA
 from app.core.security import Autenticado
 from app.routers.dependencias import BD
 from app.schemas.cuenta import (
@@ -14,7 +15,7 @@ from app.schemas.cuenta import (
 )
 from app.services import cuenta_service
 
-router = APIRouter(tags=["cuenta"])
+router = APIRouter(tags=[CUENTA])
 
 
 @router.get("/glosario", response_model=list[TerminoSalida], summary="Términos del agro explicados")
