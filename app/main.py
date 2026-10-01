@@ -13,6 +13,7 @@ from app.routers import (
     consultas,
     cuenta,
     cultivos,
+    documentacion,
     eventos,
     health,
     inicio,
@@ -69,7 +70,8 @@ def create_app() -> FastAPI:
         version="1.0.0",
         description=DESCRIPCION,
         openapi_tags=ETIQUETAS,
-        docs_url="/docs",
+        docs_url=None,
+        redoc_url=None,
         openapi_url="/openapi.json",
     )
     app.add_middleware(
@@ -83,6 +85,7 @@ def create_app() -> FastAPI:
     registrar_manejadores(app)
     instalar(app, configurar_registro(settings.log_level))
     app.include_router(health.router)
+    app.include_router(documentacion.router)
     for router in (
         cultivos.router,
         siembras.router,

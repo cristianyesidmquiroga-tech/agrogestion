@@ -133,7 +133,7 @@ def pantalla_de(path: str) -> str:
 def _rutas(app: FastAPI) -> list[tuple[str, str, APIRoute]]:
     filas = []
     for r in app.routes:
-        if isinstance(r, APIRoute):
+        if isinstance(r, APIRoute) and r.include_in_schema:
             for metodo in sorted(r.methods):
                 filas.append((r.path, metodo.lower(), r))
     return filas
