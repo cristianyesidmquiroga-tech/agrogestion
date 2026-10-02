@@ -1,15 +1,15 @@
 services:
   agrogestion:
     build: .
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     environment:
       APP_ENV: production
       DATABASE_URL: sqlite+aiosqlite:////data/agrogestion.db
-      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET en el entorno}
-      FIELD_ENCRYPTION_KEY: ${FIELD_ENCRYPTION_KEY:?Define FIELD_ENCRYPTION_KEY en el entorno}
-      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
-      ALERT_ALLOWED_HOSTS: ${ALERT_ALLOWED_HOSTS:-}
+      JWT_SECRET: "${JWT_SECRET:?Define JWT_SECRET en las variables runtime de Coolify}"
+      FIELD_ENCRYPTION_KEY: "${FIELD_ENCRYPTION_KEY:?Define FIELD_ENCRYPTION_KEY en las variables runtime de Coolify}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000}"
+      ALERT_ALLOWED_HOSTS: "${ALERT_ALLOWED_HOSTS:-}"
     volumes:
       - agrogestion_data:/data
     restart: unless-stopped
