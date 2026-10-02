@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import Depends, Header
@@ -29,15 +30,27 @@ async def current_user(
     return user
 
 
-def require_role(*roles: str):  # type: ignore[no-untyped-def]
-    async def dependency(user: Usuario = Depends(current_user)) -> Usuario:
-        if user.rol not in roles:
+class RequiereRol:
+    def __init__(self, *roles: str) -> None:
+        self.roles = roles
+
+    async def __call__(self, user: Usuario = Depends(current_user)) -> Usuario:
+        if user.rol not in self.roles:
             raise AppError(
                 403, "PERMISO_DENEGADO", "No tiene permisos para realizar esta operación."
             )
         return user
 
-    return dependency
+
+def require_role(*roles: str) -> RequiereRol:
+    return RequiereRol(*roles)
+
+
+Autenticado = Annotated[Usuario, Depends(current_user)]
+EscribeProduccion = Annotated[Usuario, Depends(RequiereRol("admin", "agricultor"))]
+LeeProduccion = Annotated[Usuario, Depends(RequiereRol("admin", "agricultor", "contador"))]
+Revisa = Annotated[Usuario, Depends(RequiereRol("admin", "experto"))]
+SoloAdmin = Annotated[Usuario, Depends(RequiereRol("admin"))]
 
 
 async def idempotency_key(

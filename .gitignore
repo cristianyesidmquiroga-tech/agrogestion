@@ -1,17 +1,42 @@
+# Secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# Python
 __pycache__/
 *.py[cod]
+*.egg-info/
 .venv/
 venv/
-.env
+
+# Herramientas
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .coverage
 htmlcov/
-*.egg-info/
-.idea/
-.vscode/
-.env.*
-!.env.example
+
+# Base de datos local
 *.db
-docs/ai-log.md
+*.sqlite3
+
+# Editor y sistema
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+
+# Postman: la colección se versiona, el entorno no (guarda tokens)
+*postman_environment.json
+
+# Documentos de planeación privados; solo se versiona el contrato para Flutter
+docs/*
+!docs/openapi.json
+!docs/mobile_api_contract.md
+!docs/AgroGestion_Postman_Collection.json
+!docs/dart/
+!docs/android/
