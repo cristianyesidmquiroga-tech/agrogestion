@@ -9,7 +9,8 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
-      - run: pip install -e ".[dev]"
+      - run: pip install -r requirements.txt
+      - run: pip install -e . --no-deps
       - run: pytest --cov=app --cov-report=term-missing
       - run: python -m scripts.exportar_contrato --verificar
       - run: ruff check .
