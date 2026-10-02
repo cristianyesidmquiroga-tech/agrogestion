@@ -11,4 +11,7 @@ htmlcov/
 *.egg-info/
 .idea/
 .vscode/
-docs/
+.env.*
+!.env.example
+*.db
+docs/ai-log.md
