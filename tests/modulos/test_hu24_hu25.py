@@ -8,10 +8,9 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.core.exceptions import AppError
-from app.models import Auditoria, Base, Gasto, IdempotencyKey
+from app.models import Auditoria, Base, Finca, FincaUsuario, Gasto, IdempotencyKey, Usuario
 from app.schemas.phase2 import ActividadCreate, CicloCreate, JornalCreate
 from app.services.phase2 import create_activity, create_cycle, create_jornal, pay_jornal
-from tests.modulos.test_pecuario_sqlite import setup_farm
 
 
 @pytest.fixture
@@ -23,6 +22,20 @@ async def session():  # type: ignore[no-untyped-def]
     async with factory() as db:
         yield db
     await engine.dispose()
+
+
+async def setup_farm(session, user_id, name):  # type: ignore[no-untyped-def]
+    user = Usuario(
+        id=user_id,
+        email=f"{user_id}@example.com",
+        nombre="Test",
+        password_hash="x",
+        rol="agricultor",
+    )
+    farm = Finca(id=uuid4(), nombre=name, creado_por=user_id)
+    session.add_all([user, farm, FincaUsuario(finca_id=farm.id, usuario_id=user_id)])
+    await session.commit()
+    return farm
 
 
 async def _references(session, user_id, farm_id):  # type: ignore[no-untyped-def]
