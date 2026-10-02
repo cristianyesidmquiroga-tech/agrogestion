@@ -6,16 +6,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-COPY pyproject.toml README.md ./
+COPY requirements.txt ./requirements.txt
 COPY app ./app
 COPY alembic ./alembic
 COPY alembic.ini ./alembic.ini
 COPY docs ./docs
 COPY docker-entrypoint.sh ./docker-entrypoint.sh
 
-RUN python -m pip install --no-cache-dir --upgrade pip \
-    && python -m pip install --no-cache-dir . \
-    && useradd --create-home --shell /usr/sbin/nologin appuser \
+RUN python -m pip install --no-cache-dir -r requirements.txt
+
+RUN useradd --create-home --shell /usr/sbin/nologin appuser \
     && mkdir -p /data \
     && chown -R appuser:appuser /app /data \
     && chmod +x /app/docker-entrypoint.sh
