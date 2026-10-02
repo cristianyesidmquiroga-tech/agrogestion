@@ -36,3 +36,18 @@ class UsuarioResponse(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    expires_in: int
+    rol: str
+    nombre: str
+
+
+class PermisoResponse(BaseModel):
+    grupo: str
+    metodo: str
+    ruta: str
+    resumen: str
+
+
+class PerfilResponse(UsuarioResponse):
+    fincas: list[UUID]
+    permisos: list[PermisoResponse]

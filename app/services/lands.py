@@ -9,7 +9,13 @@ from app.schemas.land import FincaCreate, LoteCreate
 
 
 async def create_finca(db: AsyncSession, user_id: UUID, data: FincaCreate) -> Finca:
-    finca = Finca(nombre=data.nombre, creado_por=user_id)
+    finca = Finca(
+        nombre=data.nombre,
+        departamento_dane=data.departamento_dane,
+        municipio_dane=data.municipio_dane,
+        area_ha=data.area_ha,
+        creado_por=user_id,
+    )
     db.add(finca)
     await db.flush()
     db.add(FincaUsuario(finca_id=finca.id, usuario_id=user_id))
@@ -33,7 +39,9 @@ async def user_finca(db: AsyncSession, user_id: UUID, finca_id: UUID) -> Finca:
 
 async def create_lote(db: AsyncSession, user_id: UUID, finca_id: UUID, data: LoteCreate) -> Lote:
     await user_finca(db, user_id, finca_id)
-    lote = Lote(finca_id=finca_id, nombre=data.nombre, area=data.area, creado_por=user_id)
+    lote = Lote(
+        finca_id=finca_id, nombre=data.nombre, area=data.area, notas=data.notas, creado_por=user_id
+    )
     db.add(lote)
     await db.commit()
     await db.refresh(lote)

@@ -1,3 +1,6 @@
+from app.models.asistente import Consulta, Mensaje, Retroalimentacion
+from app.models.conocimiento import Fuente, Manejo, ProblemaSanitario, Sintoma, Validacion
+from app.models.cultivo import Cultivo, CultivoDosis, CultivoFase, CultivoMetodo
 from app.models.entities import (
     Actividad,
     AlertaRegional,
@@ -29,6 +32,11 @@ from app.models.entities import (
     Usuario,
     Venta,
 )
+from app.models.glosario import GlosarioTermino
+from app.models.noticia import Noticia
+from app.models.riesgo import CultivoRiesgo, EventoAdverso, Riesgo
+from app.models.siembra import ConteoPlanta, LotePropagacion, Siembra
+from app.models.usuario import Consentimiento
 
 __all__ = [
     "Actividad",
@@ -60,4 +68,25 @@ __all__ = [
     "Trabajador",
     "Usuario",
     "Venta",
+    "Consentimiento",
+    "Consulta",
+    "ConteoPlanta",
+    "Cultivo",
+    "CultivoDosis",
+    "CultivoFase",
+    "CultivoMetodo",
+    "CultivoRiesgo",
+    "EventoAdverso",
+    "Fuente",
+    "GlosarioTermino",
+    "LotePropagacion",
+    "Manejo",
+    "Mensaje",
+    "Noticia",
+    "ProblemaSanitario",
+    "Retroalimentacion",
+    "Riesgo",
+    "Siembra",
+    "Sintoma",
+    "Validacion",
 ]

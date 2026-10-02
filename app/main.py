@@ -1,11 +1,34 @@
+from typing import Any
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
 from app.core.config import get_settings
-from app.core.exceptions import AppError, app_error_handler
-from app.routers import auth, lands, pecuario, phase2, users
+from app.core.etiquetas import ETIQUETAS
+from app.core.exceptions import registrar_manejadores
+from app.core.registro import configurar_registro, instalar
+from app.routers import (
+    auth,
+    conocimiento,
+    consultas,
+    cuenta,
+    cultivos,
+    documentacion,
+    eventos,
+    health,
+    inicio,
+    lands,
+    noticias,
+    pecuario,
+    phase2,
+    propagacion,
+    reportes,
+    siembras,
+    users,
+)
+from app.schemas.common import ErrorRespuesta
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
@@ -31,35 +54,73 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-app = FastAPI(title="AgroGestion", version="0.1.0")
 settings = get_settings()
-app.add_exception_handler(AppError, app_error_handler)  # type: ignore[arg-type]
-app.add_middleware(RateLimitMiddleware, limit=120 if settings.app_env == "development" else 60)  # type: ignore[arg-type]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.origins,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
+DESCRIPCION = (
+    "API para gestionar cultivos de principio a fin: siembras, ciclos, conteo de plantas, "
+    "vivero, riesgos, labores, insumos, cosechas, dinero y pecuario. Todos los errores usan "
+    "el mismo formato: decida siempre con `error.code`, nunca con `error.message`."
 )
+RESPUESTAS_ERROR: dict[int | str, dict[str, Any]] = {
+    401: {"model": ErrorRespuesta, "description": "Sin sesión o sesión vencida."},
+    403: {"model": ErrorRespuesta, "description": "El rol no tiene permiso."},
+    404: {"model": ErrorRespuesta, "description": "No existe o no pertenece al usuario."},
+    409: {"model": ErrorRespuesta, "description": "Choca con algo que ya existe."},
+    422: {"model": ErrorRespuesta, "description": "Datos inválidos o regla de negocio."},
+}
 
 
-@app.middleware("http")
-async def security_headers(request: Request, call_next):  # type: ignore[no-untyped-def]
-    response = await call_next(request)
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["Referrer-Policy"] = "no-referrer"
-    return response
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title=settings.app_name,
+        version="1.0.0",
+        description=DESCRIPCION,
+        openapi_tags=ETIQUETAS,
+        docs_url=None,
+        redoc_url=None,
+        openapi_url="/openapi.json",
+    )
+    registrar_manejadores(app)
+    instalar(app, configurar_registro(settings.log_level))
+    limite = settings.rate_limit or (120 if settings.app_env == "development" else 60)
+    app.add_middleware(RateLimitMiddleware, limit=limite)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.origins,
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+        allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
+        max_age=600,
+    )
+
+    @app.middleware("http")
+    async def security_headers(request: Request, call_next):  # type: ignore[no-untyped-def]
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        return response
+
+    app.include_router(documentacion.router)
+    for router in (
+        auth.router,
+        users.router,
+        lands.router,
+        cuenta.router,
+        inicio.router,
+        cultivos.router,
+        siembras.router,
+        propagacion.router,
+        eventos.router,
+        reportes.router,
+        conocimiento.router,
+        consultas.router,
+        noticias.router,
+        phase2.router,
+        pecuario.router,
+    ):
+        app.include_router(router, responses=RESPUESTAS_ERROR)
+    app.include_router(health.router)
+    return app
 
 
-@app.get("/health", tags=["sistema"])
-async def health() -> dict[str, str]:
-    return {"status": "ok"}
-
-
-app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(lands.router)
-app.include_router(phase2.router)
-app.include_router(pecuario.router)
+app = create_app()
