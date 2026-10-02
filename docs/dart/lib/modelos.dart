@@ -2133,40 +2133,64 @@ class FaseSalida {
 class FincaCreate {
   final String nombre;
   final String? ubicacion;
+  final String? departamentoDane;
+  final String? municipioDane;
+  final double? areaHa;
 
   const FincaCreate({
     required this.nombre,
     this.ubicacion,
+    this.departamentoDane,
+    this.municipioDane,
+    this.areaHa,
   });
 
   factory FincaCreate.fromJson(Map<String, dynamic> json) => FincaCreate(
         nombre: json['nombre'] as String,
         ubicacion: json['ubicacion'] == null ? null : json['ubicacion'] as String,
+        departamentoDane: json['departamento_dane'] == null ? null : json['departamento_dane'] as String,
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        areaHa: json['area_ha'] == null ? null : (json['area_ha'] as num).toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
         'nombre': nombre,
         if (ubicacion != null) 'ubicacion': ubicacion!,
+        if (departamentoDane != null) 'departamento_dane': departamentoDane!,
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        if (areaHa != null) 'area_ha': areaHa!,
       };
 }
 
 class FincaResponse {
   final String id;
   final String nombre;
+  final String? departamentoDane;
+  final String? municipioDane;
+  final String? areaHa;
 
   const FincaResponse({
     required this.id,
     required this.nombre,
+    this.departamentoDane,
+    this.municipioDane,
+    this.areaHa,
   });
 
   factory FincaResponse.fromJson(Map<String, dynamic> json) => FincaResponse(
         id: json['id'] as String,
         nombre: json['nombre'] as String,
+        departamentoDane: json['departamento_dane'] == null ? null : json['departamento_dane'] as String,
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        areaHa: json['area_ha'] == null ? null : json['area_ha'] as String,
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'nombre': nombre,
+        if (departamentoDane != null) 'departamento_dane': departamentoDane!,
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        if (areaHa != null) 'area_ha': areaHa!,
       };
 }
 
@@ -2821,20 +2845,24 @@ class LoteAnimalResponse {
 class LoteCreate {
   final String nombre;
   final double area;
+  final String? notas;
 
   const LoteCreate({
     required this.nombre,
     required this.area,
+    this.notas,
   });
 
   factory LoteCreate.fromJson(Map<String, dynamic> json) => LoteCreate(
         nombre: json['nombre'] as String,
         area: (json['area'] as num).toDouble(),
+        notas: json['notas'] == null ? null : json['notas'] as String,
       );
 
   Map<String, dynamic> toJson() => {
         'nombre': nombre,
         'area': area,
+        if (notas != null) 'notas': notas!,
       };
 }
 
@@ -2843,12 +2871,14 @@ class LoteResponse {
   final String fincaId;
   final String nombre;
   final String area;
+  final String? notas;
 
   const LoteResponse({
     required this.id,
     required this.fincaId,
     required this.nombre,
     required this.area,
+    this.notas,
   });
 
   factory LoteResponse.fromJson(Map<String, dynamic> json) => LoteResponse(
@@ -2856,6 +2886,7 @@ class LoteResponse {
         fincaId: json['finca_id'] as String,
         nombre: json['nombre'] as String,
         area: json['area'] as String,
+        notas: json['notas'] == null ? null : json['notas'] as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -2863,6 +2894,7 @@ class LoteResponse {
         'finca_id': fincaId,
         'nombre': nombre,
         'area': area,
+        if (notas != null) 'notas': notas!,
       };
 }
 

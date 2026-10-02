@@ -14489,6 +14489,45 @@
               }
             ],
             "title": "Ubicacion"
+          },
+          "departamento_dane": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departamento Dane"
+          },
+          "municipio_dane": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{5}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Municipio Dane"
+          },
+          "area_ha": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Ha"
           }
         },
         "type": "object",
@@ -14507,6 +14546,39 @@
           "nombre": {
             "type": "string",
             "title": "Nombre"
+          },
+          "departamento_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departamento Dane"
+          },
+          "municipio_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Municipio Dane"
+          },
+          "area_ha": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Ha"
           }
         },
         "type": "object",
@@ -15512,6 +15584,18 @@
               }
             ],
             "title": "Area"
+          },
+          "notas": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notas"
           }
         },
         "type": "object",
@@ -15540,6 +15624,17 @@
           "area": {
             "type": "string",
             "title": "Area"
+          },
+          "notas": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notas"
           }
         },
         "type": "object",

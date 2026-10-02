@@ -2051,7 +2051,7 @@
             "description": "Create",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"texto\",\n  \"ubicacion\": \"texto\"\n}",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"ubicacion\": \"texto\",\n  \"departamento_dane\": \"texto\",\n  \"municipio_dane\": \"texto\",\n  \"area_ha\": 1.0\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2115,7 +2115,7 @@
             "description": "Create Lot",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"texto\",\n  \"area\": 1.0\n}",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"area\": 1.0,\n  \"notas\": \"texto\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
