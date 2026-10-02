@@ -5,12 +5,13 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.etiquetas import FINCAS
 from app.dependencies import current_user
 from app.models import Finca, FincaUsuario, Lote, Usuario
 from app.schemas.land import FincaCreate, FincaResponse, LoteCreate, LoteResponse
 from app.services.lands import create_finca, create_lote
 
-router = APIRouter(prefix="/fincas", tags=["fincas"])
+router = APIRouter(prefix="/fincas", tags=[FINCAS])
 
 
 @router.post("", response_model=FincaResponse, status_code=status.HTTP_201_CREATED)

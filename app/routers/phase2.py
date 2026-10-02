@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.etiquetas import OPERACION
 from app.core.exceptions import AppError
 from app.dependencies import current_user
 from app.models import (
@@ -87,7 +88,7 @@ from app.services.phase2 import (
     update_worker,
 )
 
-router = APIRouter(tags=["fase 2"])
+router = APIRouter(tags=[OPERACION])
 
 
 @router.post(

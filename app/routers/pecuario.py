@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.etiquetas import PECUARIO
 from app.core.exceptions import AppError
 from app.dependencies import current_user, require_role
 from app.models import (
@@ -49,7 +50,7 @@ from app.services.pecuario import (
     validate_external_url,
 )
 
-router = APIRouter(tags=["pecuario"])
+router = APIRouter(tags=[PECUARIO])
 
 
 @router.get("/fincas/{finca_id}/especies", response_model=list[EspecieResponse])

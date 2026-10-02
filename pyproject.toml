@@ -1,7 +1,7 @@
 [project]
 name = "agrogestion"
 version = "0.1.0"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115,<1",
   "uvicorn[standard]>=0.30,<1",
@@ -12,13 +12,13 @@ dependencies = [
   "pydantic-settings>=2.6,<3",
   "email-validator>=2.2,<3",
   "PyJWT>=2.9,<3",
-  "bcrypt>=4.2,<5",
+  "bcrypt>=4.2,<6",
   "cryptography>=43,<45",
   "httpx>=0.27,<1",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pytest-asyncio>=0.24", "httpx>=0.27", "ruff>=0.8", "mypy>=1.13", "bandit>=1.7", "pip-audit>=2.7"]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "pytest-cov>=6", "httpx>=0.27", "ruff>=0.8", "mypy>=1.13", "bandit>=1.7", "pip-audit>=2.7"]
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -29,7 +29,8 @@ include = ["app*"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py312"
+exclude = [".venv", "alembic/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
@@ -40,7 +41,18 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+exclude = ["alembic/", "tests/"]
 strict = true
 ignore_missing_imports = true
 disallow_untyped_decorators = false
+
+[tool.coverage.run]
+source = ["app"]
+concurrency = ["greenlet", "thread"]
+omit = ["app/main.py"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true

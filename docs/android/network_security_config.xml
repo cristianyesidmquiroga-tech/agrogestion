@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+  <!-- Solo estas direcciones aceptan HTTP sin cifrar. Cambie la segunda por la IP de su equipo. -->
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="false">10.0.2.2</domain>
+    <domain includeSubdomains="false">192.168.1.15</domain>
+  </domain-config>
+  <!-- Todo lo demás exige TLS. -->
+  <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

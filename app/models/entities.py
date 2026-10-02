@@ -1,18 +1,25 @@
 from datetime import datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
+    Index,
     Numeric,
+    SmallInteger,
     String,
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from app.models.siembra import Siembra
 
 
 class Base(DeclarativeBase):
@@ -36,6 +43,8 @@ class Usuario(TimestampMixin, Base):
     activo: Mapped[bool] = mapped_column(Boolean, default=True)
     intentos_fallidos: Mapped[int] = mapped_column(default=0)
     bloqueado_hasta: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    ultimo_acceso: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    municipio_dane: Mapped[str | None] = mapped_column(String(5), nullable=True)
     fincas: Mapped[list["FincaUsuario"]] = relationship(back_populates="usuario")
 
 
@@ -44,6 +53,9 @@ class Finca(TimestampMixin, Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     nombre: Mapped[str] = mapped_column(String(150))
     ubicacion_cifrada: Mapped[str | None] = mapped_column(Text, nullable=True)
+    departamento_dane: Mapped[str | None] = mapped_column(String(2), nullable=True)
+    municipio_dane: Mapped[str | None] = mapped_column(String(5), nullable=True)
+    area_ha: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
     creado_por: Mapped[UUID] = mapped_column(ForeignKey("usuario.id"))
     usuarios: Mapped[list["FincaUsuario"]] = relationship(back_populates="finca")
     lotes: Mapped[list["Lote"]] = relationship(back_populates="finca")
@@ -67,6 +79,7 @@ class Lote(TimestampMixin, Base):
     finca_id: Mapped[UUID] = mapped_column(ForeignKey("finca.id", ondelete="CASCADE"), index=True)
     nombre: Mapped[str] = mapped_column(String(150))
     area: Mapped[Decimal] = mapped_column(Numeric(10, 4))
+    notas: Mapped[str | None] = mapped_column(String(500), nullable=True)
     creado_por: Mapped[UUID] = mapped_column(ForeignKey("usuario.id"))
     finca: Mapped[Finca] = relationship(back_populates="lotes")
     __table_args__ = (UniqueConstraint("finca_id", "nombre"),)
@@ -97,8 +110,24 @@ class Ciclo(TimestampMixin, Base):
     finca_id: Mapped[UUID] = mapped_column(ForeignKey("finca.id", ondelete="CASCADE"), index=True)
     nombre: Mapped[str] = mapped_column(String(150))
     estado: Mapped[str] = mapped_column(String(20), default="abierto")
-    fecha_inicio: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    fecha_inicio: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     fecha_fin: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    siembra_id: Mapped[UUID | None] = mapped_column(ForeignKey("siembra.id"), index=True)
+    tipo: Mapped[str | None] = mapped_column(String(12), nullable=True)
+    numero: Mapped[int | None] = mapped_column(SmallInteger, nullable=True)
+    motivo_perdida: Mapped[str | None] = mapped_column(Text, nullable=True)
+    creado_por: Mapped[UUID | None] = mapped_column(ForeignKey("usuario.id"), nullable=True)
+    siembra: Mapped["Siembra | None"] = relationship(back_populates="ciclos")
+    __table_args__ = (
+        UniqueConstraint("siembra_id", "numero"),
+        Index(
+            "ix_ciclo_uno_abierto_por_siembra",
+            "siembra_id",
+            unique=True,
+            postgresql_where=text("estado = 'abierto' AND siembra_id IS NOT NULL"),
+            sqlite_where=text("estado = 'abierto' AND siembra_id IS NOT NULL"),
+        ),
+    )
 
 
 class Actividad(TimestampMixin, Base):

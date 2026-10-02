@@ -1,0 +1,3804 @@
+{
+  "info": {
+    "name": "AgroGestion API",
+    "description": "Generada por scripts/exportar_contrato.py. Pegue un token en la variable `token`; no guarde credenciales reales aquí.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8025"
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "clave",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Acceso",
+      "item": [
+        {
+          "name": "POST Iniciar sesión y obtener el token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth/login"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Iniciar sesión y obtener el token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"texto\",\n  \"password\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Quién soy y qué puedo usar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth/me"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Quién soy y qué puedo usar"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Cuenta y ayuda",
+      "item": [
+        {
+          "name": "GET Última autorización aceptada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cuenta/consentimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cuenta/consentimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Última autorización aceptada"
+          }
+        },
+        {
+          "name": "POST Aceptar el tratamiento de datos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cuenta/consentimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cuenta/consentimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Aceptar el tratamiento de datos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version_politica\": \"texto\",\n  \"acepta_tratamiento\": true,\n  \"acepta_transferencia_ia\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Términos del agro explicados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/glosario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "glosario"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Término a buscar"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Términos del agro explicados"
+          }
+        },
+        {
+          "name": "GET Política de tratamiento de datos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/politica",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "politica"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Política de tratamiento de datos",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Inicio",
+      "item": [
+        {
+          "name": "GET Avisos de riesgo según la fase de sus cultivos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/avisos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "avisos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Avisos de riesgo según la fase de sus cultivos"
+          }
+        },
+        {
+          "name": "GET Lo de hoy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/inicio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "inicio"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Lo de hoy"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Cultivos",
+      "item": [
+        {
+          "name": "GET Buscar cultivos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cultivos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto a buscar en el nombre"
+                },
+                {
+                  "key": "tipo_ciclo",
+                  "value": "transitorio",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Buscar cultivos"
+          }
+        },
+        {
+          "name": "POST Crear un cultivo con su perfil",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cultivos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Crear un cultivo con su perfil",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"nombre_cientifico\": \"texto\",\n  \"grupo\": \"texto\",\n  \"tipo_ciclo\": \"transitorio\",\n  \"unidad_conteo\": \"planta\",\n  \"tipo_renovacion\": \"zoca\",\n  \"unidad_cosecha\": \"texto\",\n  \"pago_cosecha_sugerido\": \"por_kilo\",\n  \"densidad_ref\": 1,\n  \"meses_primera_cosecha\": 0,\n  \"cosechas_por_anio\": 0.0,\n  \"por_validar\": true,\n  \"fuente\": \"texto\",\n  \"fases\": [\n    {\n      \"fase\": \"preparacion\",\n      \"orden\": 1,\n      \"dias_estimados\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"metodos\": [\n    {\n      \"metodo\": \"semilla\",\n      \"dias_germinacion\": 0,\n      \"dias_vivero\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"dosis\": [\n    {\n      \"insumo_tipo\": \"texto\",\n      \"dosis\": 1.0,\n      \"unidad\": \"texto\",\n      \"base\": \"planta\",\n      \"por_validar\": true\n    }\n  ],\n  \"copiar_de\": \"00000000-0000-0000-0000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Ver el perfil de un cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cultivos/:cultivo_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos/:cultivo_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Ver el perfil de un cultivo"
+          }
+        },
+        {
+          "name": "PUT Reemplazar el perfil de un cultivo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cultivos/:cultivo_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos/:cultivo_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Reemplazar el perfil de un cultivo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"nombre_cientifico\": \"texto\",\n  \"grupo\": \"texto\",\n  \"tipo_ciclo\": \"transitorio\",\n  \"unidad_conteo\": \"planta\",\n  \"tipo_renovacion\": \"zoca\",\n  \"unidad_cosecha\": \"texto\",\n  \"pago_cosecha_sugerido\": \"por_kilo\",\n  \"densidad_ref\": 1,\n  \"meses_primera_cosecha\": 0,\n  \"cosechas_por_anio\": 0.0,\n  \"por_validar\": true,\n  \"fuente\": \"texto\",\n  \"fases\": [\n    {\n      \"fase\": \"preparacion\",\n      \"orden\": 1,\n      \"dias_estimados\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"metodos\": [\n    {\n      \"metodo\": \"semilla\",\n      \"dias_germinacion\": 0,\n      \"dias_vivero\": 0,\n      \"por_validar\": true\n    }\n  ],\n  \"dosis\": [\n    {\n      \"insumo_tipo\": \"texto\",\n      \"dosis\": 1.0,\n      \"unidad\": \"texto\",\n      \"base\": \"planta\",\n      \"por_validar\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Dosis de referencia",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cultivos/:cultivo_id/dosis",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos/:cultivo_id/dosis"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Dosis de referencia"
+          }
+        },
+        {
+          "name": "GET Fases del cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cultivos/:cultivo_id/fases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos/:cultivo_id/fases"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Fases del cultivo"
+          }
+        },
+        {
+          "name": "GET Métodos de propagación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cultivos/:cultivo_id/metodos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos/:cultivo_id/metodos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Métodos de propagación"
+          }
+        },
+        {
+          "name": "GET Riesgos del cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cultivos/:cultivo_id/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos/:cultivo_id/riesgos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Riesgos del cultivo"
+          }
+        },
+        {
+          "name": "PUT Reemplazar los riesgos del cultivo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cultivos/:cultivo_id/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cultivos/:cultivo_id/riesgos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Reemplazar los riesgos del cultivo",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"riesgo_id\": \"00000000-0000-0000-0000-000000000000\",\n    \"fase_critica\": \"preparacion\",\n    \"susceptibilidad\": \"baja\",\n    \"medidas\": \"texto\",\n    \"por_validar\": true\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Catálogo de riesgos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "riesgos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Catálogo de riesgos"
+          }
+        },
+        {
+          "name": "POST Agregar un riesgo al catálogo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/riesgos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "riesgos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Agregar un riesgo al catálogo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"tipo\": \"texto\",\n  \"aplica_a\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Siembras y ciclos",
+      "item": [
+        {
+          "name": "GET Detalle de un ciclo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ciclos/:ciclo_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ciclos/:ciclo_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Detalle de un ciclo"
+          }
+        },
+        {
+          "name": "POST Cerrar un ciclo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ciclos/:ciclo_id/cerrar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ciclos/:ciclo_id/cerrar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cerrar un ciclo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo_perdida\": \"texto\",\n  \"fecha_fin\": \"2026-01-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Cronograma planeado del ciclo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ciclos/:ciclo_id/cronograma",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ciclos/:ciclo_id/cronograma"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cronograma planeado del ciclo"
+          }
+        },
+        {
+          "name": "POST Iniciar un ciclo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ciclos/:ciclo_id/iniciar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ciclos/:ciclo_id/iniciar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Iniciar un ciclo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha_inicio\": \"2026-01-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Cuánto insumo se necesita",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ciclos/:ciclo_id/necesidad-insumos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ciclos/:ciclo_id/necesidad-insumos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cuánto insumo se necesita"
+          }
+        },
+        {
+          "name": "GET Mis siembras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/siembras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "planeada",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Mis siembras"
+          }
+        },
+        {
+          "name": "POST Planear una siembra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/siembras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Planear una siembra",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"finca_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"lote_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"metodo\": \"semilla\",\n  \"area_ha\": 1.0,\n  \"plantas_sembradas\": 1,\n  \"fecha_plan\": \"2026-01-31\",\n  \"presupuesto\": 0.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Detalle de una siembra",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Detalle de una siembra"
+          }
+        },
+        {
+          "name": "POST Cancelar una siembra",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/cancelar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/cancelar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cancelar una siembra"
+          }
+        },
+        {
+          "name": "GET Ciclos de una siembra",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/ciclos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/ciclos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Ciclos de una siembra"
+          }
+        },
+        {
+          "name": "POST Abrir el siguiente ciclo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/ciclos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/ciclos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Abrir el siguiente ciclo",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"levante\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Conteos de plantas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/conteos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/conteos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Conteos de plantas"
+          }
+        },
+        {
+          "name": "POST Registrar un conteo de plantas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/conteos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/conteos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Registrar un conteo de plantas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-01-31\",\n  \"vivas\": 0,\n  \"muertas\": 0,\n  \"resiembras\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Índices por planta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/indices",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/indices"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Índices por planta"
+          }
+        },
+        {
+          "name": "POST Iniciar una siembra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/iniciar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/iniciar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Iniciar una siembra",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha_inicio\": \"2026-01-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Abrir el ciclo de renovación (soqueo)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/siembras/:siembra_id/renovar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "siembras/:siembra_id/renovar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "siembra_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Abrir el ciclo de renovación (soqueo)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Vivero",
+      "item": [
+        {
+          "name": "GET Lotes de vivero",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/propagacion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "propagacion"
+              ],
+              "query": [
+                {
+                  "key": "pendientes",
+                  "value": "True",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Lotes de vivero"
+          }
+        },
+        {
+          "name": "POST Crear un lote de vivero",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/propagacion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "propagacion"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Crear un lote de vivero",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"finca_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"metodo\": \"semilla\",\n  \"fecha_inicio\": \"2026-01-31\",\n  \"puestas\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH Actualizar germinadas, listas y pérdidas",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/propagacion/:lote_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "propagacion/:lote_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "lote_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Actualizar germinadas, listas y pérdidas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"germinadas\": 0,\n  \"listas\": 0,\n  \"perdidas\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Pasar plantas listas a una siembra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/propagacion/:lote_id/trasplante",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "propagacion/:lote_id/trasplante"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "lote_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Pasar plantas listas a una siembra",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siembra_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cantidad\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Eventos adversos",
+      "item": [
+        {
+          "name": "GET Eventos adversos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/eventos-adversos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "eventos-adversos"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "clima",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Eventos adversos"
+          }
+        },
+        {
+          "name": "POST Registrar un evento adverso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/eventos-adversos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "eventos-adversos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Registrar un evento adverso",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"finca_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"riesgo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"siembra_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"ciclo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"inicio\": \"2026-01-31\",\n  \"fin\": \"2026-01-31\",\n  \"severidad\": \"leve\",\n  \"area_afectada\": 0.0,\n  \"perdida_pct\": 0.0,\n  \"perdida_estimada\": 0.0,\n  \"notas\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Detalle de un evento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/eventos-adversos/:evento_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "eventos-adversos/:evento_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "evento_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Detalle de un evento"
+          }
+        },
+        {
+          "name": "PATCH Actualizar un evento",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/eventos-adversos/:evento_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "eventos-adversos/:evento_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "evento_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Actualizar un evento",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fin\": \"2026-01-31\",\n  \"severidad\": \"leve\",\n  \"area_afectada\": 0.0,\n  \"perdida_pct\": 0.0,\n  \"perdida_estimada\": 0.0,\n  \"notas\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Reportes",
+      "item": [
+        {
+          "name": "GET Reportes que puedo ver",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Reportes que puedo ver"
+          }
+        },
+        {
+          "name": "GET Tiempos de mis ciclos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes/cronograma",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes/cronograma"
+              ],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Tiempos de mis ciclos"
+          }
+        },
+        {
+          "name": "GET Eventos adversos y su costo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes/eventos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes/eventos"
+              ],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "desde",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Eventos adversos y su costo"
+          }
+        },
+        {
+          "name": "GET Índices por planta de mis siembras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes/indices",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes/indices"
+              ],
+              "query": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Índices por planta de mis siembras"
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Conocimiento",
+      "item": [
+        {
+          "name": "GET Buscar en la biblioteca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/conocimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "conocimiento"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto en el nombre o los síntomas"
+                },
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "tipo",
+                  "value": "plaga",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "estado",
+                  "value": "borrador",
+                  "disabled": true,
+                  "description": "Solo lo usan administradores y expertos"
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Buscar en la biblioteca"
+          }
+        },
+        {
+          "name": "POST Crear una ficha en borrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/conocimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "conocimiento"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Crear una ficha en borrador",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"tipo\": \"plaga\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"causa\": \"texto\",\n  \"sintomas\": [\n    {\n      \"descripcion\": \"texto\",\n      \"parte\": \"texto\",\n      \"fase_o_edad\": \"texto\"\n    }\n  ],\n  \"manejos\": [\n    {\n      \"tipo\": \"prevencion\",\n      \"descripcion\": \"texto\",\n      \"producto_ica\": \"texto\",\n      \"fuente_id\": \"00000000-0000-0000-0000-000000000000\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Ficha de un problema",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/conocimiento/:problema_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "conocimiento/:problema_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "problema_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Ficha de un problema"
+          }
+        },
+        {
+          "name": "PATCH Validar, retirar o reabrir una ficha",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/conocimiento/:problema_id/estado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "conocimiento/:problema_id/estado"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "problema_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Validar, retirar o reabrir una ficha",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"borrador\",\n  \"observacion\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Fuentes de la biblioteca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fuentes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fuentes"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Fuentes de la biblioteca"
+          }
+        },
+        {
+          "name": "POST Agregar una fuente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fuentes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fuentes"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Agregar una fuente",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"url\": \"texto\",\n  \"fecha\": \"2026-01-31\",\n  \"licencia\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Asistente",
+      "item": [
+        {
+          "name": "GET Calidad del asistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/asistente/calidad",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "asistente/calidad"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Calidad del asistente"
+          }
+        },
+        {
+          "name": "GET Historial de consultas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/consultas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "consultas"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto en la pregunta"
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Historial de consultas"
+          }
+        },
+        {
+          "name": "POST Preguntarle al asistente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/consultas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "consultas"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Preguntarle al asistente",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siembra_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"texto\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Una consulta y su respuesta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/consultas/:consulta_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "consultas/:consulta_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "consulta_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Una consulta y su respuesta"
+          }
+        },
+        {
+          "name": "POST Decir si la respuesta sirvió",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/consultas/:consulta_id/retroalimentacion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "consultas/:consulta_id/retroalimentacion"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "consulta_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Decir si la respuesta sirvió",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valor\": \"sirvio\",\n  \"comentario\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Noticias",
+      "item": [
+        {
+          "name": "GET Noticias vigentes de mi región",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/noticias",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "noticias"
+              ],
+              "query": [
+                {
+                  "key": "region",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Código DANE; por defecto, el de sus fincas"
+                },
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Noticias vigentes de mi región"
+          }
+        },
+        {
+          "name": "POST Cargar una noticia",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/noticias",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "noticias"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Cargar una noticia",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"texto\",\n  \"resumen\": \"texto\",\n  \"enlace\": \"texto\",\n  \"fuente\": \"texto\",\n  \"region_dane\": \"texto\",\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"publicada\": \"2026-01-31T12:00:00Z\",\n  \"vigente_hasta\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Salud",
+      "item": [
+        {
+          "name": "GET Salud del servicio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Salud del servicio",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "GET El servicio está listo para trabajar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/ready",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health/ready"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "El servicio está listo para trabajar",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. Fincas y lotes",
+      "item": [
+        {
+          "name": "GET List Owned",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "List Owned"
+          }
+        },
+        {
+          "name": "POST Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"ubicacion\": \"texto\",\n  \"departamento_dane\": \"texto\",\n  \"municipio_dane\": \"texto\",\n  \"area_ha\": 1.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET List Lots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/lotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/lotes"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "List Lots"
+          }
+        },
+        {
+          "name": "POST Create Lot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/lotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/lotes"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Create Lot",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"area\": 1.0,\n  \"notas\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. Usuarios",
+      "item": [
+        {
+          "name": "POST Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"texto\",\n  \"nombre\": \"texto\",\n  \"password\": \"texto\",\n  \"rol\": \"agricultor\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "15. Labores, insumos y dinero",
+      "item": [
+        {
+          "name": "GET Activity List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/actividades",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/actividades"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Activity List"
+          }
+        },
+        {
+          "name": "POST Activity Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/actividades",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/actividades"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Activity Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ciclo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"nombre\": \"texto\",\n  \"fase\": \"texto\",\n  \"fecha_inicio\": \"2026-01-31T12:00:00Z\",\n  \"fecha_fin\": \"2026-01-31T12:00:00Z\",\n  \"area_trabajada\": 1.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE Activity Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/actividades/:activity_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/actividades/:activity_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "activity_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Activity Delete"
+          }
+        },
+        {
+          "name": "PATCH Activity Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/actividades/:activity_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/actividades/:activity_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "activity_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Activity Update",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"fase\": \"texto\",\n  \"fecha_fin\": \"2026-01-31T12:00:00Z\",\n  \"area_trabajada\": 1.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Cycle Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/ciclos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/ciclos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cycle Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"fecha_inicio\": \"2026-01-31T12:00:00Z\",\n  \"fecha_fin\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Harvest Total",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/ciclos/:cycle_id/cosechas/acumulado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/ciclos/:cycle_id/cosechas/acumulado"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "cycle_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Harvest Total"
+          }
+        },
+        {
+          "name": "POST Harvest Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/cosechas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/cosechas"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Harvest Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ciclo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cantidad\": 1.0,\n  \"unidad\": \"texto\",\n  \"calidad\": \"texto\",\n  \"fecha\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Stage Transition",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/etapas/:stage_id/:action",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/etapas/:stage_id/:action"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "stage_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "action",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Stage Transition"
+          }
+        },
+        {
+          "name": "GET Cash Flow Route",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/flujo-caja",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/flujo-caja"
+              ],
+              "query": [
+                {
+                  "key": "anio",
+                  "value": "1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "mes",
+                  "value": "1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cash Flow Route"
+          }
+        },
+        {
+          "name": "GET Expense List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/gastos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/gastos"
+              ],
+              "query": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Expense List"
+          }
+        },
+        {
+          "name": "POST Expense Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/gastos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/gastos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Expense Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoria\": \"texto\",\n  \"monto\": 1.0,\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"ciclo_id\": \"00000000-0000-0000-0000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Cancel Expense Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/gastos/:expense_id/anular",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/gastos/:expense_id/anular"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "expense_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cancel Expense Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Income List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/ingresos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/ingresos"
+              ],
+              "query": [
+                {
+                  "key": "ciclo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Income List"
+          }
+        },
+        {
+          "name": "POST Income Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/ingresos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/ingresos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Income Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoria\": \"texto\",\n  \"cantidad\": 1.0,\n  \"precio_unitario\": 1.0,\n  \"total\": 1,\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"ciclo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"comprador\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Cancel Income Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/ingresos/:income_id/anular",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/ingresos/:income_id/anular"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "income_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Cancel Income Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Supply Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/insumos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/insumos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Supply Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"unidad\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Output Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/insumos/consumo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/insumos/consumo"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Output Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"insumo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cantidad\": 1.0,\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"costo\": \"0\",\n  \"actividad_id\": \"00000000-0000-0000-0000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Input Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/insumos/entrada",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/insumos/entrada"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Input Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"insumo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"cantidad\": 1.0,\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"costo\": \"0\",\n  \"actividad_id\": \"00000000-0000-0000-0000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Jornal Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/jornales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/jornales"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Jornal Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trabajador_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"actividad_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"ciclo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"obreros\": 1.0,\n  \"dias\": 1.0,\n  \"valor_jornal\": 1.0,\n  \"modalidad\": \"jornal\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Pay Route",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/jornales/:jornal_id/pagar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/jornales/:jornal_id/pagar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "jornal_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Pay Route"
+          }
+        },
+        {
+          "name": "GET Movement List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/movimientos-insumo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/movimientos-insumo"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Movement List"
+          }
+        },
+        {
+          "name": "GET Price List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/precios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/precios"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Price List"
+          }
+        },
+        {
+          "name": "POST Price Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/precios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/precios"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Price Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoria\": \"texto\",\n  \"unidad\": \"texto\",\n  \"precio\": 1.0,\n  \"vigente_desde\": \"2026-01-31T12:00:00Z\",\n  \"vigente_hasta\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Process Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/procesos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/procesos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Process Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"producto\": \"texto\",\n  \"materia_prima\": \"texto\",\n  \"origen_materia\": \"texto\",\n  \"fecha_inicio\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Stage Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/procesos/:process_id/etapas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/procesos/:process_id/etapas"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "process_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Stage Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"dias_estimados\": 1.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Stage Metrics Route",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/procesos/:process_id/etapas/metricas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/procesos/:process_id/etapas/metricas"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "process_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Stage Metrics Route"
+          }
+        },
+        {
+          "name": "GET Worker List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/trabajadores",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/trabajadores"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Worker List"
+          }
+        },
+        {
+          "name": "POST Worker Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/trabajadores",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/trabajadores"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Worker Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"tipo\": \"texto\",\n  \"jornal_habitual\": 0.0,\n  \"documento\": \"texto\",\n  \"telefono\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE Worker Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/trabajadores/:worker_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/trabajadores/:worker_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "worker_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Worker Delete"
+          }
+        },
+        {
+          "name": "PATCH Worker Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/trabajadores/:worker_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/trabajadores/:worker_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "worker_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Worker Update",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"tipo\": \"texto\",\n  \"jornal_habitual\": 0.0,\n  \"documento\": \"texto\",\n  \"telefono\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Sale Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/ventas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/ventas"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Sale Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comprador\": \"texto\",\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"lineas\": [\n    {\n      \"cosecha_id\": \"00000000-0000-0000-0000-000000000000\",\n      \"categoria\": \"texto\",\n      \"unidad\": \"texto\",\n      \"cantidad\": 1.0,\n      \"merma\": \"0\",\n      \"precio_unitario\": 1.0\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "16. Pecuario",
+      "item": [
+        {
+          "name": "POST Source Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/alertas/fuentes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "alertas/fuentes"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Source Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"url\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Sync Route",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/alertas/fuentes/:source_id/sincronizar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "alertas/fuentes/:source_id/sincronizar"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "source_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Sync Route"
+          }
+        },
+        {
+          "name": "GET Alerts Route",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/alertas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/alertas"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Alerts Route"
+          }
+        },
+        {
+          "name": "POST Alert Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/alertas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/alertas"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Alert Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fuente_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"tipo\": \"texto\",\n  \"region_dane\": \"texto\",\n  \"titulo\": \"texto\",\n  \"resumen\": \"texto\",\n  \"vigente_desde\": \"2026-01-31T12:00:00Z\",\n  \"vigente_hasta\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Feed List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/alimentacion-animal",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/alimentacion-animal"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Feed List"
+          }
+        },
+        {
+          "name": "POST Feed Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/alimentacion-animal",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/alimentacion-animal"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Feed Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lote_animal_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"alimento\": \"texto\",\n  \"cantidad\": 1.0,\n  \"costo\": 0.0,\n  \"fecha\": \"2026-01-31T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Animal List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/animales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/animales"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Animal List"
+          }
+        },
+        {
+          "name": "POST Animal Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/animales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/animales"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Animal Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"especie_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"lote_animal_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"arete\": \"texto\",\n  \"nombre\": \"texto\",\n  \"sexo\": \"texto\",\n  \"raza\": \"texto\",\n  \"nacimiento\": \"2026-01-31T12:00:00Z\",\n  \"madre_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"padre_id\": \"00000000-0000-0000-0000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Species List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/especies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/especies"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Species List"
+          }
+        },
+        {
+          "name": "POST Species Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/especies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/especies"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Species Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"texto\",\n  \"descripcion\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Event List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/eventos-animales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/eventos-animales"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Event List"
+          }
+        },
+        {
+          "name": "POST Event Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/eventos-animales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/eventos-animales"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Event Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"animal_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"lote_animal_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"tipo\": \"texto\",\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"producto\": \"texto\",\n  \"dosis\": 1.0,\n  \"retiro_hasta\": \"2026-01-31T12:00:00Z\",\n  \"notas\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Lot List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/lotes-animales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/lotes-animales"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Lot List"
+          }
+        },
+        {
+          "name": "POST Lot Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/lotes-animales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/lotes-animales"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Lot Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"especie_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"nombre\": \"texto\",\n  \"cantidad\": 1.0,\n  \"ubicacion\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Production List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/produccion-animal",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/produccion-animal"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Production List"
+          }
+        },
+        {
+          "name": "POST Production Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/produccion-animal",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/produccion-animal"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Production Route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lote_animal_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"tipo\": \"texto\",\n  \"cantidad\": 1.0,\n  \"unidad\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
