@@ -5,5 +5,5 @@ async def test_carga_noticias(sesion):
         "enlace": "https://ejemplo.test/n",
         "fuente": "Fuente",
     }
-    assert (await sesion.post("/api/v1/noticias", json=cuerpo)).status_code == 201
-    assert (await sesion.get("/api/v1/noticias")).json()["total"] == 1
+    assert (await sesion.post("/noticias", json=cuerpo)).status_code == 201
+    assert (await sesion.get("/noticias")).json()["total"] == 1

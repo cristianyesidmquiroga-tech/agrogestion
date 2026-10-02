@@ -1,12 +1,13 @@
 import os
 import uuid
 from collections.abc import AsyncIterator
-from datetime import date
+from datetime import UTC, date, datetime
 from decimal import Decimal
 
-os.environ.setdefault("AGRO_SECRET_KEY", "clave-solo-para-pruebas-0123456789abcdef")
-os.environ.setdefault("AGRO_DATABASE_URL", "sqlite+aiosqlite://")
-os.environ.setdefault("AGRO_BCRYPT_COST", "4")
+os.environ.setdefault("JWT_SECRET", "clave-solo-para-pruebas-0123456789abcdef")
+os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite://")
+os.environ.setdefault("BCRYPT_COST", "4")
+os.environ.setdefault("RATE_LIMIT", "1000000")
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
@@ -18,9 +19,8 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.pool import StaticPool
 
-from app.core import claves
 from app.core.database import get_db
-from app.core.security import crear_token
+from app.core.security import create_access_token, hash_password
 from app.main import create_app
 from app.models import (
     Base,
@@ -56,8 +56,8 @@ class Fabrica:
         self._n += 1
         u = Usuario(
             nombre=f"Usuario {self._n}",
-            correo=f"u{self._n}@prueba.test",
-            clave_hash=claves.hashear(clave),
+            email=f"u{self._n}@prueba.com",
+            password_hash=hash_password(clave),
             rol=rol,
         )
         self.s.add(u)
@@ -65,10 +65,12 @@ class Fabrica:
         return u
 
     def cabecera(self, usuario: Usuario) -> dict[str, str]:
-        return {"Authorization": f"Bearer {crear_token(usuario.id)}"}
+        return {"Authorization": f"Bearer {create_access_token(usuario.id)}"}
 
     async def finca(self, *usuarios: Usuario, area: str = "10") -> Finca:
+        creador = usuarios[0] if usuarios else await self.usuario("admin")
         f = Finca(
+            creado_por=creador.id,
             nombre="Finca de prueba",
             departamento_dane="05",
             municipio_dane="05001",
@@ -82,7 +84,9 @@ class Fabrica:
         return f
 
     async def lote(self, finca: Finca, area: str = "5", nombre: str = "Lote 1") -> Lote:
-        lote = Lote(finca_id=finca.id, nombre=nombre, area_ha=Decimal(area))
+        lote = Lote(
+            finca_id=finca.id, nombre=nombre, area=Decimal(area), creado_por=finca.creado_por
+        )
         self.s.add(lote)
         await self.s.commit()
         return lote
@@ -108,11 +112,14 @@ class Fabrica:
         en_curso = estado == "en_curso"
         self.s.add(
             Ciclo(
+                finca_id=finca.id,
                 siembra_id=s.id,
+                nombre="levante 1",
                 tipo="levante",
                 numero=1,
-                estado="en_curso" if en_curso else "planeado",
-                fecha_inicio=date.today() if en_curso else None,
+                estado="abierto" if en_curso else "planeado",
+                creado_por=finca.creado_por,
+                fecha_inicio=datetime.now(UTC) if en_curso else None,
             )
         )
         await self.s.commit()

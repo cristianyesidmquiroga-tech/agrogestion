@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 from tests.conftest import Fabrica, payload_siembra
 
-URL = "/api/v1/siembras"
+URL = "/siembras"
 
 
 async def preparar(f: Fabrica, area_lote: str = "5", **cultivo):  # type: ignore[no-untyped-def]
@@ -45,7 +45,7 @@ async def test_el_area_no_puede_superar_lo_libre_del_lote(cliente: AsyncClient, 
         URL, json=payload_siembra(finca.id, lote.id, cultivo.id, area_ha=0.5), headers=h
     )
     assert tres.status_code == 422
-    assert tres.json()["error"] == "AREA_SUPERA_LOTE"
+    assert tres.json()["error"]["code"] == "AREA_SUPERA_LOTE"
 
 
 async def test_cancelar_libera_el_area(cliente: AsyncClient, f: Fabrica) -> None:
@@ -76,7 +76,7 @@ async def test_cultivo_por_planta_exige_cuantas_plantas(cliente: AsyncClient, f:
         headers=f.cabecera(u),
     )
     assert r.status_code == 422
-    assert r.json()["error"] == "PLANTAS_OBLIGATORIAS"
+    assert r.json()["error"]["code"] == "PLANTAS_OBLIGATORIAS"
 
 
 async def test_cultivo_por_area_no_exige_plantas(cliente: AsyncClient, f: Fabrica) -> None:
@@ -97,7 +97,7 @@ async def test_metodo_fuera_del_perfil_se_rechaza(cliente: AsyncClient, f: Fabri
         headers=f.cabecera(u),
     )
     assert r.status_code == 422
-    assert r.json()["error"] == "METODO_NO_VALIDO"
+    assert r.json()["error"]["code"] == "METODO_NO_VALIDO"
 
 
 async def test_lote_de_otra_finca_no_se_encuentra(cliente: AsyncClient, f: Fabrica) -> None:
@@ -108,7 +108,7 @@ async def test_lote_de_otra_finca_no_se_encuentra(cliente: AsyncClient, f: Fabri
         URL, json=payload_siembra(finca.id, lote_ajeno.id, cultivo.id), headers=f.cabecera(u)
     )
     assert r.status_code == 404
-    assert r.json()["error"] == "LOTE_NO_ENCONTRADO"
+    assert r.json()["error"]["code"] == "LOTE_NO_ENCONTRADO"
 
 
 async def test_iniciar_la_siembra_inicia_su_primer_ciclo(cliente: AsyncClient, f: Fabrica) -> None:
@@ -120,7 +120,7 @@ async def test_iniciar_la_siembra_inicia_su_primer_ciclo(cliente: AsyncClient, f
     r = await cliente.post(f"{URL}/{creada['id']}/iniciar", headers=h)
     assert r.status_code == 200
     assert r.json()["estado"] == "en_curso"
-    assert r.json()["ciclos"][0]["estado"] == "en_curso"
+    assert r.json()["ciclos"][0]["estado"] == "abierto"
     assert r.json()["ciclos"][0]["fecha_inicio"] is not None
     otra_vez = await cliente.post(f"{URL}/{creada['id']}/iniciar", headers=h)
     assert otra_vez.status_code == 422
@@ -159,4 +159,4 @@ async def test_siembra_inexistente_responde_404(cliente: AsyncClient, f: Fabrica
     u = await f.usuario()
     r = await cliente.get(f"{URL}/{uuid.uuid4()}", headers=f.cabecera(u))
     assert r.status_code == 404
-    assert r.json()["error"] == "SIEMBRA_NO_ENCONTRADA"
+    assert r.json()["error"]["code"] == "SIEMBRA_NO_ENCONTRADA"

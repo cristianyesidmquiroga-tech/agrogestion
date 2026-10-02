@@ -5,20 +5,20 @@ from decimal import Decimal
 from sqlalchemy import ColumnElement, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.contexto import UsuarioActual
 from app.core.exceptions import Conflicto, NoEncontrado, ReglaNegocio
-from app.models.finca import Lote
-from app.models.siembra import Ciclo, Cosecha, Siembra
+from app.models.entities import Ciclo, Cosecha, Lote, Usuario
+from app.models.siembra import Siembra
 from app.schemas.siembra import CerrarCicloEntrada, SiembraCrear
 from app.services import cultivo_service
 from app.services.acceso_service import exigir_finca, ids_fincas
+from app.utils.fechas import a_fecha_hora
 
 ESTADOS_ACTIVOS = ("planeada", "en_curso")
 
 
 async def listar(
     db: AsyncSession,
-    usuario: UsuarioActual,
+    usuario: Usuario,
     estado: str | None,
     finca_id: uuid.UUID | None,
     skip: int,
@@ -37,7 +37,7 @@ async def listar(
     return list(filas), total
 
 
-async def obtener(db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUID) -> Siembra:
+async def obtener(db: AsyncSession, usuario: Usuario, siembra_id: uuid.UUID) -> Siembra:
     siembra = await db.get(Siembra, siembra_id)
     if siembra is None:
         raise NoEncontrado("No encontramos esa siembra.", "SIEMBRA_NO_ENCONTRADA")
@@ -56,7 +56,7 @@ async def area_ocupada(db: AsyncSession, lote_id: uuid.UUID) -> Decimal:
     return Decimal(str(suma or 0))
 
 
-async def crear(db: AsyncSession, usuario: UsuarioActual, datos: SiembraCrear) -> Siembra:
+async def crear(db: AsyncSession, usuario: Usuario, datos: SiembraCrear) -> Siembra:
     await exigir_finca(db, usuario, datos.finca_id)
     lote = await db.scalar(
         select(Lote)
@@ -71,7 +71,7 @@ async def crear(db: AsyncSession, usuario: UsuarioActual, datos: SiembraCrear) -
         raise ReglaNegocio("Este cultivo no se propaga con ese método.", "METODO_NO_VALIDO")
     if cultivo.unidad_conteo == "planta" and datos.plantas_sembradas is None:
         raise ReglaNegocio("Indique cuántas plantas va a sembrar.", "PLANTAS_OBLIGATORIAS")
-    libre = lote.area_ha - await area_ocupada(db, lote.id)
+    libre = lote.area - await area_ocupada(db, lote.id)
     if datos.area_ha > libre:
         raise ReglaNegocio(f"El lote solo tiene {libre:.4f} hectáreas libres.", "AREA_SUPERA_LOTE")
     siembra = Siembra(
@@ -90,7 +90,9 @@ async def crear(db: AsyncSession, usuario: UsuarioActual, datos: SiembraCrear) -
     await db.flush()
     db.add(
         Ciclo(
+            finca_id=siembra.finca_id,
             siembra_id=siembra.id,
+            nombre="levante 1",
             tipo="levante",
             numero=1,
             estado="planeado",
@@ -103,7 +105,7 @@ async def crear(db: AsyncSession, usuario: UsuarioActual, datos: SiembraCrear) -
 
 
 async def iniciar(
-    db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUID, fecha: date | None
+    db: AsyncSession, usuario: Usuario, siembra_id: uuid.UUID, fecha: date | None
 ) -> Siembra:
     siembra = await obtener(db, usuario, siembra_id)
     if siembra.estado != "planeada":
@@ -111,13 +113,13 @@ async def iniciar(
     siembra.estado = "en_curso"
     primero = next((c for c in siembra.ciclos if c.estado == "planeado"), None)
     if primero:
-        primero.estado = "en_curso"
-        primero.fecha_inicio = fecha or date.today()
+        primero.estado = "abierto"
+        primero.fecha_inicio = a_fecha_hora(fecha or date.today())
     await db.commit()
     return siembra
 
 
-async def cancelar(db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUID) -> Siembra:
+async def cancelar(db: AsyncSession, usuario: Usuario, siembra_id: uuid.UUID) -> Siembra:
     siembra = await obtener(db, usuario, siembra_id)
     if siembra.estado not in ESTADOS_ACTIVOS:
         raise ReglaNegocio("Esta siembra ya está cerrada o cancelada.", "SIEMBRA_ESTADO_INVALIDO")
@@ -125,29 +127,27 @@ async def cancelar(db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UU
     for ciclo in siembra.ciclos:
         if ciclo.estado != "cerrado":
             ciclo.estado = "cerrado"
-            ciclo.fecha_fin = date.today()
+            ciclo.fecha_fin = a_fecha_hora(date.today())
             ciclo.motivo_perdida = "Siembra cancelada"
     await db.commit()
     return siembra
 
 
-async def _ciclo(
-    db: AsyncSession, usuario: UsuarioActual, ciclo_id: uuid.UUID
-) -> tuple[Ciclo, Siembra]:
+async def _ciclo(db: AsyncSession, usuario: Usuario, ciclo_id: uuid.UUID) -> tuple[Ciclo, Siembra]:
     ciclo = await db.get(Ciclo, ciclo_id)
-    if ciclo is None:
+    if ciclo is None or ciclo.siembra_id is None:
         raise NoEncontrado("No encontramos ese ciclo.", "CICLO_NO_ENCONTRADO")
     return ciclo, await obtener(db, usuario, ciclo.siembra_id)
 
 
 async def obtener_ciclo(
-    db: AsyncSession, usuario: UsuarioActual, ciclo_id: uuid.UUID
+    db: AsyncSession, usuario: Usuario, ciclo_id: uuid.UUID
 ) -> tuple[Ciclo, Siembra]:
     return await _ciclo(db, usuario, ciclo_id)
 
 
 async def crear_ciclo(
-    db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUID, tipo: str
+    db: AsyncSession, usuario: Usuario, siembra_id: uuid.UUID, tipo: str
 ) -> Ciclo:
     siembra = await obtener(db, usuario, siembra_id)
     cultivo = siembra.cultivo
@@ -164,10 +164,13 @@ async def crear_ciclo(
         raise ReglaNegocio("Este cultivo no tiene renovación.", "CICLO_TIPO_NO_VALIDO")
     if tipo == "levante" and (ultimo is None or ultimo.tipo != "renovacion"):
         raise ReglaNegocio("Un nuevo levante solo sigue a una renovación.", "CICLO_TIPO_NO_VALIDO")
+    numero = (ultimo.numero + 1) if ultimo and ultimo.numero else 1
     ciclo = Ciclo(
+        finca_id=siembra.finca_id,
         siembra_id=siembra.id,
+        nombre=f"{tipo} {numero}",
         tipo=tipo,
-        numero=(ultimo.numero + 1) if ultimo else 1,
+        numero=numero,
         estado="planeado",
         creado_por=usuario.id,
     )
@@ -177,29 +180,31 @@ async def crear_ciclo(
 
 
 async def iniciar_ciclo(
-    db: AsyncSession, usuario: UsuarioActual, ciclo_id: uuid.UUID, fecha: date | None
+    db: AsyncSession, usuario: Usuario, ciclo_id: uuid.UUID, fecha: date | None
 ) -> Ciclo:
     ciclo, siembra = await _ciclo(db, usuario, ciclo_id)
     if siembra.estado != "en_curso":
         raise ReglaNegocio("La siembra debe estar en curso.", "SIEMBRA_ESTADO_INVALIDO")
     if ciclo.estado != "planeado":
         raise ReglaNegocio("Solo se puede iniciar un ciclo planeado.", "CICLO_ESTADO_INVALIDO")
-    if any(c.estado == "en_curso" for c in siembra.ciclos):
+    if any(c.estado == "abierto" for c in siembra.ciclos):
         raise Conflicto("Ya hay un ciclo en curso en esta siembra.", "CICLO_ACTIVO")
-    ciclo.estado = "en_curso"
-    ciclo.fecha_inicio = fecha or date.today()
+    ciclo.estado = "abierto"
+    ciclo.fecha_inicio = a_fecha_hora(fecha or date.today())
     await db.commit()
     return ciclo
 
 
 async def cerrar_ciclo(
-    db: AsyncSession, usuario: UsuarioActual, ciclo_id: uuid.UUID, datos: CerrarCicloEntrada
+    db: AsyncSession, usuario: Usuario, ciclo_id: uuid.UUID, datos: CerrarCicloEntrada
 ) -> Ciclo:
     ciclo, siembra = await _ciclo(db, usuario, ciclo_id)
-    if ciclo.estado != "en_curso":
+    if ciclo.estado != "abierto":
         raise ReglaNegocio("Solo se puede cerrar un ciclo en curso.", "CICLO_ESTADO_INVALIDO")
     hay_cosecha = await db.scalar(
-        select(func.count()).select_from(Cosecha).where(Cosecha.ciclo_id == ciclo.id)
+        select(func.count())
+        .select_from(Cosecha)
+        .where(Cosecha.ciclo_id == ciclo.id, Cosecha.estado == "activa")
     )
     if not hay_cosecha and not datos.motivo_perdida:
         raise ReglaNegocio(
@@ -207,7 +212,7 @@ async def cerrar_ciclo(
             "CICLO_SIN_COSECHA",
         )
     ciclo.estado = "cerrado"
-    ciclo.fecha_fin = datos.fecha_fin or date.today()
+    ciclo.fecha_fin = a_fecha_hora(datos.fecha_fin or date.today())
     ciclo.motivo_perdida = datos.motivo_perdida
     if siembra.cultivo.tipo_ciclo == "transitorio":
         siembra.estado = "cerrada"

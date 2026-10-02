@@ -6,7 +6,7 @@ from datetime import date
 from fastapi import APIRouter
 
 from app.core.etiquetas import REPORTES
-from app.core.security import Autenticado, EscribeProduccion, LeeProduccion
+from app.dependencies import Autenticado, EscribeProduccion, LeeProduccion
 from app.routers.dependencias import BD
 from app.schemas.inicio import (
     ReporteCronograma,

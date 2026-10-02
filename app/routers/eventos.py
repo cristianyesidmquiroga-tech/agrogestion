@@ -6,7 +6,7 @@ from fastapi import APIRouter, status
 
 from app.core.catalogos import TipoRiesgo
 from app.core.etiquetas import EVENTOS
-from app.core.security import EscribeProduccion
+from app.dependencies import EscribeProduccion
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
 from app.schemas.evento import EventoActualizar, EventoCrear, EventoSalida

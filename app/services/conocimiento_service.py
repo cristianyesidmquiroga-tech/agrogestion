@@ -5,9 +5,9 @@ import uuid
 from sqlalchemy import ColumnElement, exists, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.contexto import UsuarioActual
 from app.core.exceptions import NoEncontrado, ReglaNegocio
 from app.models.conocimiento import Fuente, Manejo, ProblemaSanitario, Sintoma, Validacion
+from app.models.entities import Usuario
 from app.schemas.conocimiento import CambiarEstado, FuenteCrear, ProblemaCrear
 from app.services import cultivo_service
 
@@ -20,13 +20,13 @@ TRANSICIONES = {
 }
 
 
-def _revisa(usuario: UsuarioActual) -> bool:
+def _revisa(usuario: Usuario) -> bool:
     return usuario.rol in REVISORES
 
 
 async def listar(
     db: AsyncSession,
-    usuario: UsuarioActual,
+    usuario: Usuario,
     q: str | None,
     cultivo_id: uuid.UUID | None,
     tipo: str | None,
@@ -62,9 +62,7 @@ async def listar(
     return list(filas), total
 
 
-async def obtener(
-    db: AsyncSession, usuario: UsuarioActual, problema_id: uuid.UUID
-) -> ProblemaSanitario:
+async def obtener(db: AsyncSession, usuario: Usuario, problema_id: uuid.UUID) -> ProblemaSanitario:
     problema = await db.get(ProblemaSanitario, problema_id)
     if problema is None or (not _revisa(usuario) and problema.estado != "validado"):
         raise NoEncontrado("No encontramos esa ficha.", "PROBLEMA_NO_ENCONTRADO")

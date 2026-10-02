@@ -4,7 +4,7 @@ from datetime import date
 
 from app.models import EventoAdverso
 
-URL = "/api/v1/eventos-adversos"
+URL = "/eventos-adversos"
 ENTRAN = {"admin", "agricultor"}
 
 
@@ -59,4 +59,4 @@ async def test_la_fecha_final_no_puede_ser_anterior(cliente, entrar_como, f):
     evento = await crear(cliente, await f.finca(yo), await f.riesgo())
     r = await cliente.patch(f"{URL}/{evento}", json={"fin": "2000-01-01"})
     assert r.status_code == 422
-    assert r.json()["error"] == "EVENTO_FECHAS_INVALIDAS"
+    assert r.json()["error"]["code"] == "EVENTO_FECHAS_INVALIDAS"

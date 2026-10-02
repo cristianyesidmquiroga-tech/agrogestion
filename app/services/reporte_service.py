@@ -8,7 +8,7 @@ from decimal import Decimal
 from sqlalchemy import ColumnElement, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.contexto import UsuarioActual
+from app.models.entities import Usuario
 from app.models.riesgo import EventoAdverso, Riesgo
 from app.models.siembra import Siembra
 from app.schemas.inicio import (
@@ -22,6 +22,7 @@ from app.schemas.inicio import (
 )
 from app.services import calendario, conteo_service
 from app.services.acceso_service import exigir_finca, ids_fincas
+from app.utils.fechas import a_dia
 
 PRODUCCION = ["admin", "agricultor"]
 CON_CONTADOR = ["admin", "agricultor", "contador"]
@@ -95,7 +96,7 @@ CATALOGO = [
 ]
 
 
-def catalogo(usuario: UsuarioActual) -> list[ReporteDisponible]:
+def catalogo(usuario: Usuario) -> list[ReporteDisponible]:
     return [
         ReporteDisponible(id=i, titulo=t, descripcion=d, disponible=ok, motivo=motivo, roles=roles)
         for i, t, d, ok, motivo, roles in CATALOGO
@@ -104,7 +105,7 @@ def catalogo(usuario: UsuarioActual) -> list[ReporteDisponible]:
 
 
 async def _siembras_activas(
-    db: AsyncSession, usuario: UsuarioActual, finca_id: uuid.UUID | None
+    db: AsyncSession, usuario: Usuario, finca_id: uuid.UUID | None
 ) -> list[Siembra]:
     if finca_id:
         await exigir_finca(db, usuario, finca_id)
@@ -119,9 +120,7 @@ async def _siembras_activas(
     return list(filas)
 
 
-async def indices(
-    db: AsyncSession, usuario: UsuarioActual, finca_id: uuid.UUID | None
-) -> ReporteIndices:
+async def indices(db: AsyncSession, usuario: Usuario, finca_id: uuid.UUID | None) -> ReporteIndices:
     salida = []
     for siembra in await _siembras_activas(db, usuario, finca_id):
         detalle = await conteo_service.indices(db, usuario, siembra.id)
@@ -139,7 +138,7 @@ async def indices(
 
 
 async def cronograma(
-    db: AsyncSession, usuario: UsuarioActual, finca_id: uuid.UUID | None, hoy: date | None = None
+    db: AsyncSession, usuario: Usuario, finca_id: uuid.UUID | None, hoy: date | None = None
 ) -> ReporteCronograma:
     hoy = hoy or date.today()
     salida = []
@@ -151,8 +150,8 @@ async def cronograma(
                     siembra_id=siembra.id,
                     ciclo_id=ciclo.id,
                     cultivo=siembra.cultivo.nombre,
-                    tipo=ciclo.tipo,
-                    fecha_inicio=ciclo.fecha_inicio,
+                    tipo=ciclo.tipo or "levante",
+                    fecha_inicio=a_dia(ciclo.fecha_inicio),
                     fase_actual=avance.fase_actual,
                     fases_planeadas=avance.fases_planeadas,
                     fecha_fin_planeada=avance.fecha_fin_planeada,
@@ -164,7 +163,7 @@ async def cronograma(
 
 async def eventos(
     db: AsyncSession,
-    usuario: UsuarioActual,
+    usuario: Usuario,
     finca_id: uuid.UUID | None,
     desde: date | None,
     hasta: date | None,

@@ -8,7 +8,7 @@ class ApiConfig {
     defaultValue: 'http://10.0.2.2:8025',
   );
 
-  static const String prefijo = '/api/v1';
+  static const String prefijo = '';
 
   static String get api => '$baseUrl$prefijo';
 }

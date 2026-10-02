@@ -5,7 +5,7 @@ from typing import Self
 from pydantic import Field, model_validator
 
 from app.core.catalogos import MetodoPropagacion, TipoCicloSiembra
-from app.schemas.common import Decimal2, Entrada, Indicador, Salida
+from app.schemas.common import Decimal2, Dia, Entrada, Indicador, Salida
 
 
 class SiembraCrear(Entrada):
@@ -24,8 +24,8 @@ class CicloSalida(Salida):
     tipo: str
     numero: int
     estado: str
-    fecha_inicio: date | None
-    fecha_fin: date | None
+    fecha_inicio: Dia | None
+    fecha_fin: Dia | None
     motivo_perdida: str | None
 
 

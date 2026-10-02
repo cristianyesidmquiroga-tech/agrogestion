@@ -1,5 +1,3 @@
-"""Errores de dominio y el único lugar donde se convierten en respuesta JSON."""
-
 from typing import Any, cast
 
 from fastapi import FastAPI, Request
@@ -8,15 +6,21 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
-class DominioError(Exception):
+class AppError(Exception):
+    def __init__(
+        self, status_code: int, code: str, message: str, action: str | None = None
+    ) -> None:
+        super().__init__(message)
+        self.status_code, self.code, self.message, self.action = status_code, code, message, action
+
+
+class DominioError(AppError):
     status_code = 422
     codigo = "REGLA_DE_NEGOCIO"
 
     def __init__(self, mensaje: str, codigo: str | None = None) -> None:
-        super().__init__(mensaje)
+        super().__init__(self.status_code, codigo or self.codigo, mensaje)
         self.mensaje = mensaje
-        if codigo:
-            self.codigo = codigo
 
 
 class NoEncontrado(DominioError):
@@ -50,26 +54,28 @@ class ServicioNoListo(DominioError):
 
 class SinPermiso(DominioError):
     status_code = 403
-    codigo = "SIN_PERMISO"
+    codigo = "PERMISO_DENEGADO"
 
 
 def _respuesta(
-    error: str,
-    mensaje: str,
+    code: str,
+    message: str,
     status: int,
-    detalles: list[dict[str, str]] | None = None,
-    cabeceras: dict[str, str] | None = None,
+    action: str | None = None,
+    details: list[dict[str, str]] | None = None,
+    headers: dict[str, str] | None = None,
 ) -> JSONResponse:
-    cuerpo: dict[str, Any] = {"error": error, "message": mensaje, "status_code": status}
-    if detalles is not None:
-        cuerpo["details"] = detalles
-    return JSONResponse(cuerpo, status_code=status, headers=cabeceras)
+    error: dict[str, Any] = {"code": code, "message": message}
+    if action:
+        error["action"] = action
+    if details is not None:
+        error["details"] = details
+    return JSONResponse({"error": error}, status_code=status, headers=headers)
 
 
-async def _dominio(_: Request, exc: Exception) -> JSONResponse:
-    exc = cast(DominioError, exc)
-    cabeceras = {"WWW-Authenticate": "Bearer"} if exc.status_code == 401 else None
-    return _respuesta(exc.codigo, exc.mensaje, exc.status_code, cabeceras=cabeceras)
+async def app_error_handler(_: Request, exc: AppError) -> JSONResponse:
+    headers = {"WWW-Authenticate": "Bearer"} if exc.status_code == 401 else None
+    return _respuesta(exc.code, exc.message, exc.status_code, exc.action, headers=headers)
 
 
 async def _validacion(_: Request, exc: Exception) -> JSONResponse:
@@ -82,7 +88,7 @@ async def _validacion(_: Request, exc: Exception) -> JSONResponse:
         }
         for e in exc.errors()
     ]
-    return _respuesta("DATOS_INVALIDOS", "Hay datos que corregir.", 422, detalles)
+    return _respuesta("DATOS_INVALIDOS", "Hay datos que corregir.", 422, details=detalles)
 
 
 _TEXTOS_HTTP = {
@@ -104,7 +110,7 @@ async def _inesperado(_: Request, __: Exception) -> JSONResponse:
 
 
 def registrar_manejadores(app: FastAPI) -> None:
-    app.add_exception_handler(DominioError, _dominio)
+    app.add_exception_handler(AppError, app_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(RequestValidationError, _validacion)
     app.add_exception_handler(StarletteHTTPException, _http)
     app.add_exception_handler(Exception, _inesperado)

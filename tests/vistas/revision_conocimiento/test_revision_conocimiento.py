@@ -1,6 +1,6 @@
 """Vista 33: Revisión de conocimiento."""
 
-URL = "/api/v1/conocimiento"
+URL = "/conocimiento"
 ENTRAN = {"admin", "experto"}
 FICHA = {
     "nombre": "Mancha",
@@ -14,7 +14,7 @@ async def test_acceso_segun_el_rol(cliente, entrar_como, clave):
     await entrar_como(clave)
     r = await cliente.post(URL, json=FICHA)
     assert r.status_code == (201 if clave in ENTRAN else 403)
-    fuentes = await cliente.get("/api/v1/fuentes")
+    fuentes = await cliente.get("/fuentes")
     assert fuentes.status_code == (200 if clave in ENTRAN else 403)
 
 
@@ -38,7 +38,7 @@ async def test_lista_por_estado(cliente, entrar_como, f):
 
 async def test_validar_y_retirar(cliente, entrar_como, f):
     await entrar_como("experto")
-    fuente = (await cliente.post("/api/v1/fuentes", json={"nombre": "Fuente A"})).json()
+    fuente = (await cliente.post("/fuentes", json={"nombre": "Fuente A"})).json()
     manejo = {"tipo": "cultural", "descripcion": "Retirar hojas", "fuente_id": fuente["id"]}
     ficha = (await cliente.post(URL, json={**FICHA, "manejos": [manejo]})).json()
     validada = await cliente.patch(f"{URL}/{ficha['id']}/estado", json={"estado": "validado"})
@@ -55,7 +55,7 @@ async def test_no_se_valida_una_ficha_incompleta(cliente, entrar_como):
     ficha = (await cliente.post(URL, json={**FICHA, "sintomas": []})).json()
     r = await cliente.patch(f"{URL}/{ficha['id']}/estado", json={"estado": "validado"})
     assert r.status_code == 422
-    assert r.json()["error"] == "FICHA_INCOMPLETA"
+    assert r.json()["error"]["code"] == "FICHA_INCOMPLETA"
 
 
 async def test_un_manejo_quimico_sin_producto_no_se_guarda(cliente, entrar_como):

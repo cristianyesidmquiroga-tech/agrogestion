@@ -6,7 +6,7 @@ from fastapi import APIRouter, status
 
 from app.core.catalogos import EstadoSiembra
 from app.core.etiquetas import SIEMBRAS
-from app.core.security import EscribeProduccion, LeeProduccion
+from app.dependencies import EscribeProduccion, LeeProduccion
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
 from app.schemas.siembra import (

@@ -8,8 +8,8 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.catalogos import fases_del_ciclo
-from app.core.contexto import UsuarioActual
 from app.core.exceptions import ReglaNegocio
+from app.models.entities import Usuario
 from app.models.siembra import ConteoPlanta
 from app.schemas.siembra import (
     ConteoCrear,
@@ -20,6 +20,7 @@ from app.schemas.siembra import (
     NecesidadSalida,
 )
 from app.services import explicacion_service, siembra_service
+from app.utils.fechas import a_dia
 
 
 async def _ultimo(
@@ -34,9 +35,7 @@ async def _ultimo(
     return fila
 
 
-async def listar(
-    db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUID
-) -> list[ConteoPlanta]:
+async def listar(db: AsyncSession, usuario: Usuario, siembra_id: uuid.UUID) -> list[ConteoPlanta]:
     await siembra_service.obtener(db, usuario, siembra_id)
     filas = await db.scalars(
         select(ConteoPlanta)
@@ -47,7 +46,7 @@ async def listar(
 
 
 async def crear(
-    db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUID, datos: ConteoCrear
+    db: AsyncSession, usuario: Usuario, siembra_id: uuid.UUID, datos: ConteoCrear
 ) -> ConteoPlanta:
     siembra = await siembra_service.obtener(db, usuario, siembra_id)
     if siembra.cultivo.unidad_conteo != "planta":
@@ -78,7 +77,7 @@ async def crear(
     return conteo
 
 
-async def indices(db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUID) -> IndicesSalida:
+async def indices(db: AsyncSession, usuario: Usuario, siembra_id: uuid.UUID) -> IndicesSalida:
     siembra = await siembra_service.obtener(db, usuario, siembra_id)
     if siembra.cultivo.unidad_conteo != "planta":
         return IndicesSalida(
@@ -115,13 +114,11 @@ async def indices(db: AsyncSession, usuario: UsuarioActual, siembra_id: uuid.UUI
     )
 
 
-async def cronograma(
-    db: AsyncSession, usuario: UsuarioActual, ciclo_id: uuid.UUID
-) -> CronogramaSalida:
+async def cronograma(db: AsyncSession, usuario: Usuario, ciclo_id: uuid.UUID) -> CronogramaSalida:
     ciclo, siembra = await siembra_service.obtener_ciclo(db, usuario, ciclo_id)
-    validas = fases_del_ciclo(siembra.cultivo.tipo_ciclo, ciclo.tipo)
+    validas = fases_del_ciclo(siembra.cultivo.tipo_ciclo, ciclo.tipo or "levante")
     fases = [f for f in siembra.cultivo.fases if f.fase in validas]
-    cursor = ciclo.fecha_inicio
+    cursor = a_dia(ciclo.fecha_inicio)
     salida: list[FaseCronograma] = []
     for f in fases:
         inicio = cursor
@@ -148,15 +145,15 @@ async def cronograma(
         aviso = "Las fechas se calculan cuando el ciclo inicia."
     return CronogramaSalida(
         ciclo_id=ciclo_id,
-        tipo=ciclo.tipo,
-        fecha_inicio=ciclo.fecha_inicio,
+        tipo=ciclo.tipo or "levante",
+        fecha_inicio=a_dia(ciclo.fecha_inicio),
         fases=salida,
         aviso=aviso,
     )
 
 
 async def necesidad_insumos(
-    db: AsyncSession, usuario: UsuarioActual, ciclo_id: uuid.UUID
+    db: AsyncSession, usuario: Usuario, ciclo_id: uuid.UUID
 ) -> NecesidadSalida:
     _, siembra = await siembra_service.obtener_ciclo(db, usuario, ciclo_id)
     cultivo = siembra.cultivo

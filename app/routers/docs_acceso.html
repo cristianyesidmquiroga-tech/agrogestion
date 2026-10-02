@@ -26,7 +26,7 @@
 </style>
 <script>
 (function () {
-  var ESQUEMA = 'OAuth2PasswordBearer';
+  var ESQUEMA = 'HTTPBearer';
   var panel = document.createElement('section');
   panel.id = 'panel-acceso';
   panel.innerHTML =
@@ -108,7 +108,7 @@
   }
 
   function cargarPermisos(token) {
-    fetch('/api/v1/auth/me', { headers: { Authorization: 'Bearer ' + token } })
+    fetch('/auth/me', { headers: { Authorization: 'Bearer ' + token } })
       .then(function (r) { return r.json(); })
       .then(function (perfil) { if (perfil.permisos) { pintarPermisos(perfil.permisos); } });
   }
@@ -131,16 +131,16 @@
     e.preventDefault();
     error.hidden = true;
     copiado.hidden = true;
-    var datos = new URLSearchParams({ username: form.correo.value, password: form.clave.value });
-    fetch('/api/v1/auth/login', {
+    var datos = JSON.stringify({ email: form.correo.value, password: form.clave.value });
+    fetch('/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: { 'Content-Type': 'application/json' },
       body: datos
     }).then(function (r) {
       return r.json().then(function (cuerpo) { return { ok: r.ok, cuerpo: cuerpo }; });
     }).then(function (res) {
       if (!res.ok) {
-        error.textContent = res.cuerpo.message || 'No se pudo iniciar sesión.';
+        error.textContent = (res.cuerpo.error && res.cuerpo.error.message) || 'No se pudo iniciar sesión.';
         error.hidden = false;
         ok.hidden = true;
         return;

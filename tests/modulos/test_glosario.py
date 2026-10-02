@@ -21,9 +21,9 @@ async def test_glosario_requiere_sesion_y_busca(
         ]
     )
     await sesion.commit()
-    assert (await cliente.get("/api/v1/glosario")).status_code == 401
+    assert (await cliente.get("/glosario")).status_code == 401
     h = f.cabecera(await f.usuario("contador"))
-    todos = await cliente.get("/api/v1/glosario", headers=h)
+    todos = await cliente.get("/glosario", headers=h)
     assert [t["termino"] for t in todos.json()] == ["Jornal", "Zoca"]
-    uno = await cliente.get("/api/v1/glosario", params={"q": "zoc"}, headers=h)
+    uno = await cliente.get("/glosario", params={"q": "zoc"}, headers=h)
     assert [t["termino"] for t in uno.json()] == ["Zoca"]

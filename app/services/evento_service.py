@@ -3,17 +3,17 @@ import uuid
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.contexto import UsuarioActual
 from app.core.exceptions import NoEncontrado, ReglaNegocio
+from app.models.entities import Ciclo, Usuario
 from app.models.riesgo import EventoAdverso, Riesgo
-from app.models.siembra import Ciclo, Siembra
+from app.models.siembra import Siembra
 from app.schemas.evento import EventoActualizar, EventoCrear
 from app.services.acceso_service import exigir_finca, ids_fincas
 
 
 async def listar(
     db: AsyncSession,
-    usuario: UsuarioActual,
+    usuario: Usuario,
     tipo: str | None,
     finca_id: uuid.UUID | None,
     skip: int,
@@ -29,7 +29,7 @@ async def listar(
     return list(filas), total
 
 
-async def obtener(db: AsyncSession, usuario: UsuarioActual, evento_id: uuid.UUID) -> EventoAdverso:
+async def obtener(db: AsyncSession, usuario: Usuario, evento_id: uuid.UUID) -> EventoAdverso:
     evento = await db.get(EventoAdverso, evento_id)
     if evento is None:
         raise NoEncontrado("No encontramos ese evento.", "EVENTO_NO_ENCONTRADO")
@@ -39,7 +39,7 @@ async def obtener(db: AsyncSession, usuario: UsuarioActual, evento_id: uuid.UUID
     return evento
 
 
-async def crear(db: AsyncSession, usuario: UsuarioActual, datos: EventoCrear) -> EventoAdverso:
+async def crear(db: AsyncSession, usuario: Usuario, datos: EventoCrear) -> EventoAdverso:
     await exigir_finca(db, usuario, datos.finca_id)
     if await db.get(Riesgo, datos.riesgo_id) is None:
         raise NoEncontrado("No encontramos ese riesgo.", "RIESGO_NO_ENCONTRADO")
@@ -59,7 +59,7 @@ async def crear(db: AsyncSession, usuario: UsuarioActual, datos: EventoCrear) ->
 
 
 async def actualizar(
-    db: AsyncSession, usuario: UsuarioActual, evento_id: uuid.UUID, datos: EventoActualizar
+    db: AsyncSession, usuario: Usuario, evento_id: uuid.UUID, datos: EventoActualizar
 ) -> EventoAdverso:
     evento = await obtener(db, usuario, evento_id)
     cambios = datos.model_dump(exclude_unset=True)

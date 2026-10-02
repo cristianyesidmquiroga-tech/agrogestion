@@ -2,7 +2,7 @@
 
 from tests.conftest import payload_siembra
 
-URL = "/api/v1/siembras"
+URL = "/siembras"
 ENTRAN = {"admin", "agricultor", "contador"}
 
 
@@ -56,4 +56,4 @@ async def test_no_cabe_mas_de_lo_que_tiene_el_lote(cliente, entrar_como, f):
     yo = await entrar_como("agricultor")
     finca, lote, cultivo = await f.escenario(yo, area_lote="1")
     r = await cliente.post(URL, json=payload_siembra(finca.id, lote.id, cultivo.id, area_ha=2))
-    assert r.json()["error"] == "AREA_SUPERA_LOTE"
+    assert r.json()["error"]["code"] == "AREA_SUPERA_LOTE"

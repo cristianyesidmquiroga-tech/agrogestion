@@ -1,6 +1,6 @@
 """Vista 31: Biblioteca de conocimiento."""
 
-URL = "/api/v1/conocimiento"
+URL = "/conocimiento"
 
 
 async def test_todos_los_roles_entran(cliente, entrar_como, clave):

@@ -1,6 +1,6 @@
 """Vista 4: Inicio."""
 
-URL = "/api/v1/inicio"
+URL = "/inicio"
 
 
 async def test_todos_los_roles_entran(cliente, entrar_como, clave):

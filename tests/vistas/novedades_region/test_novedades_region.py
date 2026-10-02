@@ -4,7 +4,7 @@ from datetime import UTC, datetime, timedelta
 
 from app.models import Noticia
 
-URL = "/api/v1/noticias"
+URL = "/noticias"
 
 
 def nueva(f, titulo, region=None, dias=3):

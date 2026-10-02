@@ -1,58 +1,53 @@
 [project]
 name = "agrogestion"
-version = "1.0.0"
-description = "API REST para la gestión de cultivos y su contabilidad"
+version = "0.1.0"
 requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn[standard]>=0.30,<1",
+  "sqlalchemy[asyncio]>=2.0,<3",
+  "alembic>=1.14,<2",
+  "asyncpg>=0.29,<1",
+  "aiosqlite>=0.20,<1",
+  "pydantic-settings>=2.6,<3",
+  "email-validator>=2.2,<3",
+  "PyJWT>=2.9,<3",
+  "bcrypt>=4.2,<5",
+  "cryptography>=43,<45",
+  "httpx>=0.27,<1",
+]
 
-# ---------------------------------------------------------------------------
-# ruff · estilo y errores comunes
-# ---------------------------------------------------------------------------
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "pytest-cov>=6", "httpx>=0.27", "ruff>=0.8", "mypy>=1.13", "bandit>=1.7", "pip-audit>=2.7"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
 exclude = [".venv", "alembic/versions"]
 
 [tool.ruff.lint]
-select = [
-    "E",    # pycodestyle
-    "F",    # pyflakes
-    "I",    # isort: orden de importaciones
-    "N",    # pep8-naming
-    "UP",   # pyupgrade: sintaxis moderna de Python
-    "B",    # flake8-bugbear: errores sutiles
-    "ASYNC",# reglas específicas de código asíncrono
-    "S",    # bandit: seguridad
-    "ANN",  # anotaciones de tipo obligatorias
-    "RUF",  # reglas propias de ruff
-]
-ignore = [
-    "B008",    # Depends() en el valor por defecto es el idioma de FastAPI
-]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B008", "E501"]
 
-[tool.ruff.lint.per-file-ignores]
-# En las pruebas se permiten aserciones y credenciales de fixture.
-"tests/*" = ["S101", "S105", "S106", "ANN"]
-# Los errores de dominio llevan nombres en español sin sufijo Error.
-"app/core/exceptions.py" = ["N818"]
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
 
-# ---------------------------------------------------------------------------
-# mypy · tipado estricto
-# ---------------------------------------------------------------------------
 [tool.mypy]
 python_version = "3.12"
-strict = true
-warn_unreachable = true
 plugins = ["pydantic.mypy"]
 exclude = ["alembic/", "tests/"]
-
-[[tool.mypy.overrides]]
-# passlib no publica anotaciones de tipo.
-module = ["passlib.*"]
+strict = true
 ignore_missing_imports = true
+disallow_untyped_decorators = false
 
-# ---------------------------------------------------------------------------
-# cobertura
-# ---------------------------------------------------------------------------
 [tool.coverage.run]
 source = ["app"]
 concurrency = ["greenlet", "thread"]

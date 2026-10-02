@@ -1,10 +1,10 @@
 """Respuestas y tipos compartidos por todos los esquemas."""
 
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Annotated, Generic, TypeVar
 
-from pydantic import BaseModel, ConfigDict, PlainSerializer
+from pydantic import BaseModel, BeforeValidator, ConfigDict, PlainSerializer
 
 from app.core.catalogos import EstadoIndicador
 
@@ -12,6 +12,13 @@ T = TypeVar("T")
 
 # Los decimales se calculan exactos en el servidor y salen como número para el cliente móvil.
 Decimal2 = Annotated[Decimal, PlainSerializer(float, return_type=float, when_used="json")]
+
+
+def _a_dia(valor: object) -> object:
+    return valor.date() if isinstance(valor, datetime) else valor
+
+
+Dia = Annotated[date, BeforeValidator(_a_dia)]
 
 
 class Entrada(BaseModel):
@@ -48,13 +55,17 @@ class DetalleError(BaseModel):
     tipo: str
 
 
-class ErrorRespuesta(BaseModel):
-    """Formato único de error: decida siempre con `error`, nunca con `message`."""
-
-    error: str
+class ErrorDetalle(BaseModel):
+    code: str
     message: str
-    status_code: int
+    action: str | None = None
     details: list[DetalleError] | None = None
+
+
+class ErrorRespuesta(BaseModel):
+    """Formato único de error: decida siempre con `error.code`, nunca con `error.message`."""
+
+    error: ErrorDetalle
 
 
 class Indicador(BaseModel):

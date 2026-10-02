@@ -5,7 +5,7 @@ from datetime import date
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.contexto import UsuarioActual
+from app.models.entities import Usuario
 from app.models.riesgo import CultivoRiesgo, Riesgo
 from app.models.siembra import Siembra
 from app.schemas.inicio import AvisoRiesgo, AvisosSalida
@@ -22,7 +22,7 @@ FASES_LEGIBLES = {
 }
 
 
-async def avisos(db: AsyncSession, usuario: UsuarioActual, hoy: date | None = None) -> AvisosSalida:
+async def avisos(db: AsyncSession, usuario: Usuario, hoy: date | None = None) -> AvisosSalida:
     hoy = hoy or date.today()
     siembras = await db.scalars(
         select(Siembra).where(
@@ -32,7 +32,7 @@ async def avisos(db: AsyncSession, usuario: UsuarioActual, hoy: date | None = No
     salida: list[AvisoRiesgo] = []
     sin_calendario = 0
     for siembra in siembras:
-        for ciclo in (c for c in siembra.ciclos if c.estado == "en_curso"):
+        for ciclo in (c for c in siembra.ciclos if c.estado == "abierto"):
             avance = calendario.avance_del_ciclo(siembra, ciclo, hoy)
             if avance.fase_actual is None:
                 sin_calendario += 1

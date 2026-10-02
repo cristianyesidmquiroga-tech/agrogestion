@@ -5,12 +5,11 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.contexto import UsuarioActual
 from app.core.exceptions import NoEncontrado
-from app.models.finca import Finca, FincaUsuario
+from app.models.entities import Finca, FincaUsuario, Usuario
 
 
-async def ids_fincas(db: AsyncSession, usuario: UsuarioActual) -> list[uuid.UUID]:
+async def ids_fincas(db: AsyncSession, usuario: Usuario) -> list[uuid.UUID]:
     filas = await db.scalars(
         select(FincaUsuario.finca_id).where(FincaUsuario.usuario_id == usuario.id)
     )
@@ -19,7 +18,7 @@ async def ids_fincas(db: AsyncSession, usuario: UsuarioActual) -> list[uuid.UUID
 
 async def exigir_finca(
     db: AsyncSession,
-    usuario: UsuarioActual,
+    usuario: Usuario,
     finca_id: uuid.UUID,
     mensaje: str = "No encontramos esa finca.",
     codigo: str = "FINCA_NO_ENCONTRADA",

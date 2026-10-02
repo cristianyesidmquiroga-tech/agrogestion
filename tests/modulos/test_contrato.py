@@ -5,7 +5,7 @@ ORIGEN_PERMITIDO = "http://localhost:3000"
 
 async def test_cors_deja_pasar_un_origen_permitido(cliente: AsyncClient) -> None:
     r = await cliente.options(
-        "/api/v1/cultivos",
+        "/cultivos",
         headers={
             "Origin": ORIGEN_PERMITIDO,
             "Access-Control-Request-Method": "GET",
@@ -18,7 +18,7 @@ async def test_cors_deja_pasar_un_origen_permitido(cliente: AsyncClient) -> None
 
 async def test_cors_no_deja_pasar_otros_origenes(cliente: AsyncClient) -> None:
     r = await cliente.options(
-        "/api/v1/cultivos",
+        "/cultivos",
         headers={
             "Origin": "https://sitio-malicioso.example",
             "Access-Control-Request-Method": "GET",
@@ -31,9 +31,7 @@ async def test_la_paginacion_responde_como_pide_la_guia(cliente: AsyncClient, f)
     usuario = await f.usuario()
     for n in range(3):
         await f.cultivo(f"Cultivo {n}")
-    r = await cliente.get(
-        "/api/v1/cultivos", params={"skip": 2, "limit": 2}, headers=f.cabecera(usuario)
-    )
+    r = await cliente.get("/cultivos", params={"skip": 2, "limit": 2}, headers=f.cabecera(usuario))
     assert set(r.json()) == {"items", "total", "page", "size", "has_more"}
     assert r.json()["page"] == 2
     assert r.json()["size"] == 2
@@ -45,7 +43,7 @@ async def test_todo_endpoint_documenta_sus_errores_y_tiene_resumen(cliente: Asyn
     for ruta, metodos in contrato["paths"].items():
         for metodo, operacion in metodos.items():
             assert operacion.get("summary"), f"{metodo} {ruta} sin resumen"
-            if ruta.startswith("/api/v1"):
+            if not ruta.startswith("/health"):
                 assert {"401", "403", "404", "409", "422"} <= set(operacion["responses"]), ruta
 
 
@@ -73,10 +71,10 @@ def test_el_contrato_movil_lista_cada_endpoint_con_su_rol() -> None:
     texto = (c.DOCS / "mobile_api_contract.md").read_text(encoding="utf-8")
     for path, metodo, _ruta in c._rutas(app):
         assert f"| `{metodo.upper()}` | `{path}` |" in texto, (metodo, path)
-    assert "| `POST` | `/api/v1/riesgos` | admin |" in texto
-    assert "| `GET` | `/api/v1/glosario` | cualquier usuario con sesión |" in texto
+    assert "| `POST` | `/riesgos` | admin |" in texto
+    assert "| `GET` | `/glosario` | cualquier usuario con sesión |" in texto
     assert "| `GET` | `/health` | público |" in texto
-    assert "| `GET` | `/api/v1/siembras` | admin, agricultor, contador |" in texto
+    assert "| `GET` | `/siembras` | admin, agricultor, contador |" in texto
 
 
 def test_hay_una_clase_dart_por_esquema() -> None:
@@ -100,7 +98,7 @@ def test_postman_cubre_todo_y_no_trae_credenciales() -> None:
     assert len(pedidos) == len(c._rutas(c.create_app()))
     assert {v["key"]: v["value"] for v in coleccion["variable"]}["token"] == ""
     variables = {v["key"]: v["value"] for v in coleccion["variable"]}
-    assert variables["correo"] == ""
+    assert variables["email"] == ""
     assert variables["clave"] == ""
     assert "secret" not in texto.lower()
     publico = next(p for p in pedidos if p["request"]["url"]["raw"].endswith("/politica"))

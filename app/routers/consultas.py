@@ -6,7 +6,7 @@ from typing import Annotated
 from fastapi import APIRouter, Query, status
 
 from app.core.etiquetas import ASISTENTE
-from app.core.security import EscribeProduccion, SoloAdmin
+from app.dependencies import EscribeProduccion, SoloAdmin
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.asistente import (
     CalidadSalida,

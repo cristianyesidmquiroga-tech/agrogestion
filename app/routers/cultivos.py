@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query, status
 
 from app.core.catalogos import TipoCiclo
 from app.core.etiquetas import CULTIVOS
-from app.core.security import EscribeProduccion, SoloAdmin
+from app.dependencies import EscribeProduccion, SoloAdmin
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
 from app.schemas.cultivo import (

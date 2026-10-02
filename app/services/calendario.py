@@ -4,7 +4,9 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 
 from app.core.catalogos import fases_del_ciclo
-from app.models.siembra import Ciclo, Siembra
+from app.models.entities import Ciclo
+from app.models.siembra import Siembra
+from app.utils.fechas import a_dia
 
 
 @dataclass(frozen=True)
@@ -16,13 +18,14 @@ class Avance:
 
 
 def avance_del_ciclo(siembra: Siembra, ciclo: Ciclo, hoy: date) -> Avance:
-    validas = fases_del_ciclo(siembra.cultivo.tipo_ciclo, ciclo.tipo)
+    validas = fases_del_ciclo(siembra.cultivo.tipo_ciclo, ciclo.tipo or "levante")
     fases = [f for f in siembra.cultivo.fases if f.fase in validas]
     if not fases:
         return Avance(None, None, 0, "El perfil del cultivo aún no tiene fases cargadas.")
     if ciclo.fecha_inicio is None:
         return Avance(None, None, len(fases), "El ciclo aún no inicia.")
-    cursor = ciclo.fecha_inicio
+    cursor = a_dia(ciclo.fecha_inicio)
+    assert cursor is not None
     actual: str | None = None
     for fase in fases:
         if fase.dias_estimados is None:

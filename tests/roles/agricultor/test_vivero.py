@@ -1,6 +1,6 @@
 from datetime import date
 
-URL = "/api/v1/propagacion"
+URL = "/propagacion"
 
 
 async def test_lleva_un_lote_de_vivero(sesion, yo, f):

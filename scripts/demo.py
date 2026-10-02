@@ -1,7 +1,7 @@
 """Crea una base SQLite de ejemplo para probar la API en local, con un usuario por perfil.
 
 Reinicia la base cada vez. Se niega a correr contra cualquier base que no sea SQLite.
-La clave de las cuentas sale de AGRO_SEED_PASSWORD (archivo .env); no hay valor por defecto.
+La clave de las cuentas sale de SEED_PASSWORD (archivo .env); no hay valor por defecto.
 
 Uso: python -m scripts.demo
 """
@@ -14,8 +14,8 @@ from decimal import Decimal
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-from app.core import claves
 from app.core.config import get_settings
+from app.core.security import hash_password
 from app.models import (
     Base,
     Ciclo,
@@ -44,10 +44,10 @@ DIAS_DE_EJEMPLO = (30, 15, 120, 60, 20, 30)
 async def main() -> int:
     ajustes = get_settings()
     if not ajustes.database_url.startswith("sqlite"):
-        print("Este script solo corre contra SQLite. Cambie AGRO_DATABASE_URL a una base sqlite.")
+        print("Este script solo corre contra SQLite. Cambie DATABASE_URL a una base sqlite.")
         return 1
     if not ajustes.seed_password:
-        print("Defina AGRO_SEED_PASSWORD en su .env (clave de las cuentas de ejemplo).")
+        print("Defina SEED_PASSWORD en su .env (clave de las cuentas de ejemplo).")
         return 1
 
     motor = create_async_engine(ajustes.database_url)
@@ -57,15 +57,17 @@ async def main() -> int:
 
     async with async_sessionmaker(motor, expire_on_commit=False)() as db:
         await cargar(db)
-        clave_hash = claves.hashear(ajustes.seed_password)
+        clave_hash = hash_password(ajustes.seed_password)
         usuarios = {
             rol: Usuario(
-                nombre=f"Usuario {rol}", correo=f"{rol}@demo.test", clave_hash=clave_hash, rol=rol
+                nombre=f"Usuario {rol}", email=f"{rol}@demo.com", password_hash=clave_hash, rol=rol
             )
             for rol in ROLES
         }
         db.add_all(usuarios.values())
+        await db.flush()
         finca = Finca(
+            creado_por=usuarios["admin"].id,
             nombre="Finca de ejemplo",
             departamento_dane="05",
             municipio_dane="05001",
@@ -75,8 +77,11 @@ async def main() -> int:
         await db.flush()
         for rol in ("admin", "agricultor", "contador"):
             db.add(FincaUsuario(finca_id=finca.id, usuario_id=usuarios[rol].id))
-        lote = Lote(finca_id=finca.id, nombre="Lote 1", area_ha=Decimal("5"))
-        db.add_all([lote, Lote(finca_id=finca.id, nombre="Lote 2", area_ha=Decimal("3"))])
+        creador = usuarios["admin"].id
+        lote = Lote(finca_id=finca.id, nombre="Lote 1", area=Decimal("5"), creado_por=creador)
+        db.add_all(
+            [lote, Lote(finca_id=finca.id, nombre="Lote 2", area=Decimal("3"), creado_por=creador)]
+        )
         await db.flush()
 
         cafe = await db.scalar(select(Cultivo).where(Cultivo.nombre == "Café"))
@@ -99,11 +104,13 @@ async def main() -> int:
         await db.flush()
         db.add(
             Ciclo(
+                finca_id=finca.id,
                 siembra_id=siembra.id,
+                nombre="levante 1",
                 tipo="levante",
                 numero=1,
-                estado="en_curso",
-                fecha_inicio=date.today() - timedelta(days=40),
+                estado="abierto",
+                fecha_inicio=datetime.now(UTC) - timedelta(days=40),
             )
         )
         db.add(
@@ -170,9 +177,9 @@ async def main() -> int:
         )
         await db.commit()
     await motor.dispose()
-    print("Base de ejemplo lista. Cuentas (la clave es AGRO_SEED_PASSWORD de su .env):")
+    print("Base de ejemplo lista. Cuentas (la clave es SEED_PASSWORD de su .env):")
     for rol in ROLES:
-        print(f"  {rol:11} {rol}@demo.test")
+        print(f"  {rol:11} {rol}@demo.com")
     return 0
 
 

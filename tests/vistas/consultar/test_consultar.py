@@ -1,6 +1,6 @@
 """Vista 38: Consultar."""
 
-URL = "/api/v1/consultas"
+URL = "/consultas"
 ENTRAN = {"admin", "agricultor"}
 
 

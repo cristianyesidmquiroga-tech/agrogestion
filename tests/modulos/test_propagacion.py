@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 from tests.conftest import Fabrica, payload_siembra
 
-URL = "/api/v1/propagacion"
+URL = "/propagacion"
 
 
 def nuevo(finca_id: object, cultivo_id: object, **extra: object) -> dict[str, object]:
@@ -64,7 +64,7 @@ async def test_trasplante_suma_plantas_a_la_siembra(cliente: AsyncClient, f: Fab
     h = f.cabecera(u)
     siembra = (
         await cliente.post(
-            "/api/v1/siembras",
+            "/siembras",
             json=payload_siembra(finca.id, lote_tierra.id, cultivo.id, plantas_sembradas=10),
             headers=h,
         )
@@ -81,7 +81,7 @@ async def test_trasplante_suma_plantas_a_la_siembra(cliente: AsyncClient, f: Fab
     )
     assert ok.status_code == 200
     assert ok.json()["trasplantadas"] == 40
-    leida = await cliente.get(f"/api/v1/siembras/{siembra['id']}", headers=h)
+    leida = await cliente.get(f"/siembras/{siembra['id']}", headers=h)
     assert leida.json()["plantas_sembradas"] == 50
     resto = await cliente.post(
         f"{URL}/{vivero}/trasplante", json={"siembra_id": siembra["id"], "cantidad": 21}, headers=h

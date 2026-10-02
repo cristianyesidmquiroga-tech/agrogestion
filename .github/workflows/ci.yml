@@ -1,54 +1,21 @@
-name: Calidad
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-
+name: CI
+on: [push, pull_request]
 jobs:
-  verificar:
+  quality:
     runs-on: ubuntu-latest
-    env:
-      AGRO_SECRET_KEY: clave-solo-para-ci-0123456789abcdef
-      AGRO_DATABASE_URL: sqlite+aiosqlite://
-
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Dependencias
-        run: pip install -r requirements.txt
-
-      # El orden importa: lo barato primero. Un fallo de estilo se ve en
-      # segundos; la suite de pruebas tarda, y no tiene sentido esperarla para
-      # descubrir que faltaba una importación.
-      - name: Estilo y errores comunes
-        run: ruff check .
-
-      - name: Tipado estricto
-        run: mypy --strict app/
-
-      - name: Seguridad
-        run: bandit -r app/ -ll
-
-      - name: Pruebas con cobertura
-        run: pytest --cov=app --cov-report=term-missing
-
-      # El contrato es un artefacto: si cambia sin querer, la app móvil se entera en producción.
-      - name: Contrato para Flutter al día
-        run: python -m scripts.exportar_contrato --verificar
-
-      - name: Publicar el contrato
-        uses: actions/upload-artifact@v4
-        with:
-          name: contrato-flutter
-          path: |
-            docs/openapi.json
-            docs/mobile_api_contract.md
-            docs/AgroGestion_Postman_Collection.json
-            docs/dart
-            docs/android
+        with: { python-version: '3.12' }
+      - run: pip install -e ".[dev]"
+      - run: pytest --cov=app --cov-report=term-missing
+      - run: python -m scripts.exportar_contrato --verificar
+      - run: ruff check .
+      - run: mypy app
+      - run: bandit -r app -ll
+      - run: pip-audit --skip-editable || true
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

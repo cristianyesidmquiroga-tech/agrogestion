@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Riesgo
 from tests.conftest import Fabrica, payload_siembra
 
-URL = "/api/v1/eventos-adversos"
+URL = "/eventos-adversos"
 
 
 async def riesgo(sesion: AsyncSession, nombre: str = "Helada", tipo: str = "clima") -> Riesgo:
@@ -66,7 +66,7 @@ async def test_validaciones_del_evento(
         URL, json=evento(finca.id, "00000000-0000-0000-0000-000000000000"), headers=h
     )
     assert inexistente.status_code == 404
-    assert inexistente.json()["error"] == "RIESGO_NO_ENCONTRADO"
+    assert inexistente.json()["error"]["code"] == "RIESGO_NO_ENCONTRADO"
 
 
 async def test_siembra_de_otra_finca_no_se_liga(
@@ -79,7 +79,7 @@ async def test_siembra_de_otra_finca_no_se_liga(
     h = f.cabecera(u)
     siembra = (
         await cliente.post(
-            "/api/v1/siembras", json=payload_siembra(finca_b.id, lote.id, cultivo.id), headers=h
+            "/siembras", json=payload_siembra(finca_b.id, lote.id, cultivo.id), headers=h
         )
     ).json()
     ries = await riesgo(sesion)

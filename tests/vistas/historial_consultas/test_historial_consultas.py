@@ -1,6 +1,6 @@
 """Vista 39: Historial de consultas."""
 
-URL = "/api/v1/consultas"
+URL = "/consultas"
 ENTRAN = {"admin", "agricultor"}
 
 
@@ -41,12 +41,12 @@ async def test_la_lista_pagina(cliente, entrar_como, f):
 async def test_otro_no_ve_mis_consultas(cliente, entrar_como, f):
     dueno = await f.usuario()
     siembra = await f.siembra(*await f.escenario(dueno))
-    from app.core.security import crear_token
+    from app.core.security import create_access_token
 
     await cliente.post(
         URL,
         json={"siembra_id": str(siembra.id), "texto": "Las hojas se ven mal"},
-        headers={"Authorization": f"Bearer {crear_token(dueno.id)}"},
+        headers={"Authorization": f"Bearer {create_access_token(dueno.id)}"},
     )
     await entrar_como("agricultor")
     assert (await cliente.get(URL)).json()["total"] == 0

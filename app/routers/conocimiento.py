@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query, status
 
 from app.core.catalogos import EstadoConocimiento, TipoProblema
 from app.core.etiquetas import CONOCIMIENTO
-from app.core.security import Autenticado, Revisa
+from app.dependencies import Autenticado, Revisa
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
 from app.schemas.conocimiento import (

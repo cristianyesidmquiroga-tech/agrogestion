@@ -2,7 +2,7 @@
 
 from datetime import date
 
-URL = "/api/v1/reportes"
+URL = "/reportes"
 ENTRAN = {
     "indices": {"admin", "agricultor", "contador"},
     "cronograma": {"admin", "agricultor", "contador"},
@@ -26,7 +26,7 @@ async def test_los_indices_traen_explicacion_y_fecha(cliente, entrar_como, f):
     finca, lote, cultivo = await f.escenario(yo)
     siembra = await f.siembra(finca, lote, cultivo, area="2", plantas=100)
     await cliente.post(
-        f"/api/v1/siembras/{siembra.id}/conteos",
+        f"/siembras/{siembra.id}/conteos",
         json={"fecha": date.today().isoformat(), "vivas": 90},
     )
     indicadores = (await cliente.get(f"{URL}/indices")).json()["siembras"][0]["indicadores"]

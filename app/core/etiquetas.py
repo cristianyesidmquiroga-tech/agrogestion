@@ -12,6 +12,10 @@ CONOCIMIENTO = "9. Conocimiento"
 ASISTENTE = "10. Asistente"
 NOTICIAS = "11. Noticias"
 SALUD = "12. Salud"
+FINCAS = "13. Fincas y lotes"
+USUARIOS = "14. Usuarios"
+OPERACION = "15. Labores, insumos y dinero"
+PECUARIO = "16. Pecuario"
 
 ETIQUETAS = [
     {
@@ -36,4 +40,11 @@ ETIQUETAS = [
     },
     {"name": NOTICIAS, "description": "Noticias de su región que vencen solas."},
     {"name": SALUD, "description": "Salud del servicio."},
+    {"name": FINCAS, "description": "Fincas, lotes y quién trabaja en cada una."},
+    {"name": USUARIOS, "description": "Creación de usuarios por el administrador."},
+    {
+        "name": OPERACION,
+        "description": "Ciclos, labores, jornales, insumos, cosechas, procesos, gastos e ingresos.",
+    },
+    {"name": PECUARIO, "description": "Animales, lotes, eventos y alertas regionales."},
 ]

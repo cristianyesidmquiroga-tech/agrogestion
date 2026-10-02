@@ -1,12 +1,12 @@
 """Vista 10: Detalle de ciclo."""
 
 import uuid
-from datetime import date
+from datetime import UTC, date, datetime
 from decimal import Decimal
 
 from app.models import Cosecha
 
-URL = "/api/v1/ciclos"
+URL = "/ciclos"
 ENTRAN = {"admin", "agricultor", "contador"}
 
 
@@ -37,7 +37,7 @@ async def test_el_ciclo_de_otro_no_se_abre(cliente, entrar_como, f):
 async def test_ciclo_inexistente(cliente, entrar_como):
     await entrar_como("agricultor")
     r = await cliente.get(f"{URL}/{uuid.uuid4()}")
-    assert r.json()["error"] == "CICLO_NO_ENCONTRADO"
+    assert r.json()["error"]["code"] == "CICLO_NO_ENCONTRADO"
 
 
 async def test_no_cierra_sin_cosecha_ni_motivo(cliente, entrar_como, f):
@@ -45,13 +45,22 @@ async def test_no_cierra_sin_cosecha_ni_motivo(cliente, entrar_como, f):
     _, ciclo = await ciclo_de(f, yo)
     r = await cliente.post(f"{URL}/{ciclo.id}/cerrar")
     assert r.status_code == 422
-    assert r.json()["error"] == "CICLO_SIN_COSECHA"
+    assert r.json()["error"]["code"] == "CICLO_SIN_COSECHA"
 
 
 async def test_cierra_cuando_hay_cosecha(cliente, entrar_como, f):
     yo = await entrar_como("agricultor")
     _, ciclo = await ciclo_de(f, yo)
-    f.s.add(Cosecha(ciclo_id=ciclo.id, fecha=date.today(), cantidad=Decimal("20"), unidad="kilo"))
+    f.s.add(
+        Cosecha(
+            finca_id=ciclo.finca_id,
+            ciclo_id=ciclo.id,
+            creado_por=ciclo.creado_por,
+            fecha=datetime.now(UTC),
+            cantidad=Decimal("20"),
+            unidad="kilo",
+        )
+    )
     await f.s.commit()
     r = await cliente.post(f"{URL}/{ciclo.id}/cerrar")
     assert r.status_code == 200
@@ -62,8 +71,8 @@ async def test_cierra_cuando_hay_cosecha(cliente, entrar_como, f):
 async def test_iniciar_un_ciclo_planeado(cliente, entrar_como, f):
     yo = await entrar_como("agricultor")
     siembra, ciclo = await ciclo_de(f, yo, estado="planeada")
-    r = await cliente.post(f"/api/v1/siembras/{siembra.id}/iniciar")
-    assert r.json()["ciclos"][0]["estado"] == "en_curso"
+    r = await cliente.post(f"/siembras/{siembra.id}/iniciar")
+    assert r.json()["ciclos"][0]["estado"] == "abierto"
     repetido = await cliente.post(f"{URL}/{ciclo.id}/iniciar")
     assert repetido.status_code == 422
 

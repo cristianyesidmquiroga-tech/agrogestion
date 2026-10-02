@@ -12,9 +12,7 @@ async def preparar(cliente: AsyncClient, f: Fabrica, dosis=(), **cultivo):  # ty
     c = await f.cultivo(dosis=dosis, **cultivo)
     h = f.cabecera(usuario)
     creada = (
-        await cliente.post(
-            "/api/v1/siembras", json=payload_siembra(finca.id, lote.id, c.id), headers=h
-        )
+        await cliente.post("/siembras", json=payload_siembra(finca.id, lote.id, c.id), headers=h)
     ).json()
     return h, creada["id"], creada["ciclos"][0]["id"]
 
@@ -27,15 +25,15 @@ def conteo(**extra: object) -> dict[str, object]:
 
 async def test_cronograma_calcula_fechas_desde_el_inicio(cliente: AsyncClient, f: Fabrica) -> None:
     h, siembra, ciclo = await preparar(cliente, f)
-    antes = await cliente.get(f"/api/v1/ciclos/{ciclo}/cronograma", headers=h)
+    antes = await cliente.get(f"/ciclos/{ciclo}/cronograma", headers=h)
     assert antes.json()["fases"][0]["inicio_plan"] is None
     assert "cuando el ciclo inicia" in antes.json()["aviso"]
 
     inicio = date(2026, 1, 1)
     await cliente.post(
-        f"/api/v1/siembras/{siembra}/iniciar", json={"fecha_inicio": inicio.isoformat()}, headers=h
+        f"/siembras/{siembra}/iniciar", json={"fecha_inicio": inicio.isoformat()}, headers=h
     )
-    r = await cliente.get(f"/api/v1/ciclos/{ciclo}/cronograma", headers=h)
+    r = await cliente.get(f"/ciclos/{ciclo}/cronograma", headers=h)
     fases = r.json()["fases"]
     assert [x["fase"] for x in fases] == ["preparacion", "siembra", "mantenimiento"]
     assert fases[0]["inicio_plan"] == "2026-01-01"

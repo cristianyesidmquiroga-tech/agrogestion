@@ -1,6 +1,6 @@
 """Vista 42: Calidad del asistente."""
 
-URL = "/api/v1/asistente/calidad"
+URL = "/asistente/calidad"
 
 
 async def test_solo_el_admin_entra(cliente, entrar_como, clave):
@@ -23,20 +23,20 @@ async def test_sin_valoraciones_lo_dice(cliente, entrar_como):
 async def test_mide_lo_que_sirvio(cliente, entrar_como, f):
     agricultor = await f.usuario("agricultor")
     siembra = await f.siembra(*await f.escenario(agricultor))
-    from app.core.security import crear_token
+    from app.core.security import create_access_token
 
-    h = {"Authorization": f"Bearer {crear_token(agricultor.id)}"}
+    h = {"Authorization": f"Bearer {create_access_token(agricultor.id)}"}
     ids = []
     for n in range(4):
         r = await cliente.post(
-            "/api/v1/consultas",
+            "/consultas",
             json={"siembra_id": str(siembra.id), "texto": f"Consulta {n} sobre las hojas"},
             headers=h,
         )
         ids.append(r.json()["id"])
     for consulta, valor in zip(ids, ["sirvio", "sirvio", "no_sirvio", "equivocado"], strict=True):
         await cliente.post(
-            f"/api/v1/consultas/{consulta}/retroalimentacion", json={"valor": valor}, headers=h
+            f"/consultas/{consulta}/retroalimentacion", json={"valor": valor}, headers=h
         )
     await entrar_como("admin")
     r = (await cliente.get(URL)).json()

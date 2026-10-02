@@ -1,27 +1,17 @@
-"""Base declarativa y columnas comunes de todas las tablas."""
-
 import uuid
 from datetime import UTC, datetime
 from typing import get_args
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, MetaData, Uuid
-from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Uuid
+from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
-CONVENCION = {
-    "ix": "ix_%(table_name)s_%(column_0_name)s",
-    "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(constraint_name)s",
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "pk": "pk_%(table_name)s",
-}
+from app.models.entities import Base
+
+__all__ = ["Base", "ColumnasComunes", "ahora", "check_en"]
 
 
 def ahora() -> datetime:
     return datetime.now(UTC)
-
-
-class Base(DeclarativeBase):
-    metadata = MetaData(naming_convention=CONVENCION)
 
 
 class ColumnasComunes:

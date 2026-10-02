@@ -2,7 +2,7 @@
 
 from datetime import date
 
-URL = "/api/v1/eventos-adversos"
+URL = "/eventos-adversos"
 ENTRAN = {"admin", "agricultor"}
 
 

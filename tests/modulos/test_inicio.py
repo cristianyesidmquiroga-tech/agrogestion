@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from app.models import EventoAdverso
 from tests.conftest import Fabrica
 
-URL = "/api/v1/inicio"
+URL = "/inicio"
 
 
 async def test_sin_fincas_guia_los_primeros_pasos(cliente: AsyncClient, f: Fabrica) -> None:

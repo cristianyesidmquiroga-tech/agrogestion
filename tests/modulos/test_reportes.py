@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from app.models import EventoAdverso
 from tests.conftest import Fabrica
 
-URL = "/api/v1/reportes"
+URL = "/reportes"
 
 
 async def test_el_catalogo_depende_del_rol(cliente: AsyncClient, f: Fabrica) -> None:
@@ -33,7 +33,7 @@ async def test_indices_de_mis_siembras(cliente: AsyncClient, f: Fabrica) -> None
     assert sin_conteo["indicadores"] == []
     assert "Cuente sus plantas" in sin_conteo["aviso"]
     await cliente.post(
-        f"/api/v1/siembras/{siembra.id}/conteos",
+        f"/siembras/{siembra.id}/conteos",
         json={"fecha": date.today().isoformat(), "vivas": 90},
         headers=h,
     )
@@ -60,7 +60,7 @@ async def test_indices_filtra_por_finca_y_protege_las_ajenas(
     ajena = await f.finca(await f.usuario())
     r = await cliente.get(f"{URL}/indices", params={"finca_id": str(ajena.id)}, headers=h)
     assert r.status_code == 404
-    assert r.json()["error"] == "FINCA_NO_ENCONTRADA"
+    assert r.json()["error"]["code"] == "FINCA_NO_ENCONTRADA"
 
 
 async def test_cronograma_de_mis_ciclos(cliente: AsyncClient, f: Fabrica) -> None:

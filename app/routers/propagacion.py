@@ -5,7 +5,7 @@ import uuid
 from fastapi import APIRouter, status
 
 from app.core.etiquetas import VIVERO
-from app.core.security import EscribeProduccion
+from app.dependencies import EscribeProduccion
 from app.routers.dependencias import BD, Pagina, armar_pagina
 from app.schemas.common import Page
 from app.schemas.propagacion import (

@@ -18,14 +18,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-os.environ.setdefault("AGRO_SECRET_KEY", "clave-solo-para-exportar-el-contrato-0123456789")
-os.environ.setdefault("AGRO_DATABASE_URL", "sqlite+aiosqlite://")
+os.environ.setdefault("JWT_SECRET", "clave-solo-para-exportar-el-contrato-0123456789")
+os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite://")
+os.environ.setdefault("RATE_LIMIT", "1000000")
 
 from fastapi import FastAPI
 from fastapi.dependencies.models import Dependant
 from fastapi.routing import APIRoute
 
-from app.core.security import RequiereRol, get_usuario_actual
+from app.dependencies import RequiereRol, current_user
 from app.main import ETIQUETAS, create_app
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -37,7 +38,7 @@ CLASES_ERROR = {
     "Conflicto": (409, "CONFLICTO"),
     "ReglaNegocio": (422, "REGLA_DE_NEGOCIO"),
     "NoAutenticado": (401, "NO_AUTENTICADO"),
-    "SinPermiso": (403, "SIN_PERMISO"),
+    "SinPermiso": (403, "PERMISO_DENEGADO"),
     "LimiteSuperado": (429, "LIMITE_SUPERADO"),
     "ServicioNoListo": (503, "SERVICIO_NO_LISTO"),
 }
@@ -61,37 +62,37 @@ ERRORES_GENERALES = [
 ]
 
 PANTALLAS = [
-    (r"^/api/v1/auth/login$", "Iniciar sesión"),
-    (r"^/api/v1/auth/me$", "Splash y Mi cuenta"),
+    (r"^/auth/login$", "Iniciar sesión"),
+    (r"^/auth/me$", "Splash y Mi cuenta"),
     (r"^/health$", "Splash"),
     (r"^/health/ready$", "Operación (monitoreo)"),
-    (r"^/api/v1/inicio$", "Inicio"),
-    (r"^/api/v1/avisos$", "Inicio (avisos)"),
-    (r"^/api/v1/reportes$", "Reportes"),
-    (r"^/api/v1/reportes/", "Visor de reporte"),
-    (r"^/api/v1/conocimiento$", "Biblioteca de conocimiento"),
-    (r"^/api/v1/conocimiento/\{[a-z_]+\}/estado$", "Revisión de conocimiento"),
-    (r"^/api/v1/conocimiento/\{[a-z_]+\}$", "Ficha de problema"),
-    (r"^/api/v1/fuentes$", "Revisión de conocimiento"),
-    (r"^/api/v1/consultas$", "Consultar e Historial de consultas"),
-    (r"^/api/v1/consultas/", "Consultar"),
-    (r"^/api/v1/asistente/calidad$", "Calidad del asistente"),
-    (r"^/api/v1/noticias$", "Novedades de mi región"),
-    (r"^/api/v1/politica$", "Autorización de datos"),
-    (r"^/api/v1/cuenta/consentimiento$", "Autorización de datos"),
-    (r"^/api/v1/glosario$", "Ayuda y glosario"),
-    (r"^/api/v1/cultivos$", "Catálogo de cultivos"),
-    (r"^/api/v1/cultivos/\{[a-z_]+\}", "Ficha del cultivo"),
-    (r"^/api/v1/riesgos$", "Ficha del cultivo (riesgos)"),
-    (r"^/api/v1/siembras$", "Mis siembras"),
-    (r"^/api/v1/siembras/\{[a-z_]+\}/(conteos|indices)$", "Detalle de siembra (Plantas)"),
-    (r"^/api/v1/siembras/\{[a-z_]+\}/ciclos$", "Detalle de siembra (Ciclos)"),
-    (r"^/api/v1/siembras/\{[a-z_]+\}", "Detalle de siembra"),
-    (r"^/api/v1/ciclos/\{[a-z_]+\}/cronograma$", "Detalle de siembra (Tiempos)"),
-    (r"^/api/v1/ciclos/\{[a-z_]+\}", "Detalle de ciclo"),
-    (r"^/api/v1/propagacion", "Vivero"),
-    (r"^/api/v1/eventos-adversos$", "Eventos adversos"),
-    (r"^/api/v1/eventos-adversos/\{[a-z_]+\}$", "Detalle de evento"),
+    (r"^/inicio$", "Inicio"),
+    (r"^/avisos$", "Inicio (avisos)"),
+    (r"^/reportes$", "Reportes"),
+    (r"^/reportes/", "Visor de reporte"),
+    (r"^/conocimiento$", "Biblioteca de conocimiento"),
+    (r"^/conocimiento/\{[a-z_]+\}/estado$", "Revisión de conocimiento"),
+    (r"^/conocimiento/\{[a-z_]+\}$", "Ficha de problema"),
+    (r"^/fuentes$", "Revisión de conocimiento"),
+    (r"^/consultas$", "Consultar e Historial de consultas"),
+    (r"^/consultas/", "Consultar"),
+    (r"^/asistente/calidad$", "Calidad del asistente"),
+    (r"^/noticias$", "Novedades de mi región"),
+    (r"^/politica$", "Autorización de datos"),
+    (r"^/cuenta/consentimiento$", "Autorización de datos"),
+    (r"^/glosario$", "Ayuda y glosario"),
+    (r"^/cultivos$", "Catálogo de cultivos"),
+    (r"^/cultivos/\{[a-z_]+\}", "Ficha del cultivo"),
+    (r"^/riesgos$", "Ficha del cultivo (riesgos)"),
+    (r"^/siembras$", "Mis siembras"),
+    (r"^/siembras/\{[a-z_]+\}/(conteos|indices)$", "Detalle de siembra (Plantas)"),
+    (r"^/siembras/\{[a-z_]+\}/ciclos$", "Detalle de siembra (Ciclos)"),
+    (r"^/siembras/\{[a-z_]+\}", "Detalle de siembra"),
+    (r"^/ciclos/\{[a-z_]+\}/cronograma$", "Detalle de siembra (Tiempos)"),
+    (r"^/ciclos/\{[a-z_]+\}", "Detalle de ciclo"),
+    (r"^/propagacion", "Vivero"),
+    (r"^/eventos-adversos$", "Eventos adversos"),
+    (r"^/eventos-adversos/\{[a-z_]+\}$", "Detalle de evento"),
 ]
 
 ACCIONES_HTTP = ("get", "post", "put", "patch", "delete")
@@ -120,7 +121,7 @@ def roles_de(ruta: APIRoute) -> str:
     for d in dependencias:
         if isinstance(d.call, RequiereRol):
             return ", ".join(d.call.roles)
-    if any(d.call is get_usuario_actual for d in dependencias):
+    if any(d.call is current_user for d in dependencias):
         return "cualquier usuario con sesión"
     return "público"
 
@@ -167,6 +168,12 @@ def codigos_de_error() -> dict[str, tuple[int, str]]:
     for archivo in sorted((RAIZ / "app").rglob("*.py")):
         for nodo in ast.walk(ast.parse(archivo.read_text(encoding="utf-8"))):
             if not (isinstance(nodo, ast.Call) and isinstance(nodo.func, ast.Name)):
+                continue
+            if nodo.func.id == "AppError" and len(nodo.args) >= 3:
+                estado_app = nodo.args[0]
+                codigo_app, mensaje_app = _texto(nodo.args[1]), _texto(nodo.args[2])
+                if isinstance(estado_app, ast.Constant) and codigo_app and mensaje_app:
+                    encontrados.setdefault(codigo_app, (int(estado_app.value), mensaje_app))
                 continue
             if nodo.func.id not in CLASES_ERROR:
                 continue
@@ -271,11 +278,6 @@ def _cuerpo_json(operacion: dict[str, Any]) -> dict[str, Any] | None:
     return cuerpo.get("application/json", {}).get("schema")
 
 
-def _es_formulario(operacion: dict[str, Any]) -> bool:
-    contenido = operacion.get("requestBody", {}).get("content", {})
-    return "application/x-www-form-urlencoded" in contenido
-
-
 def postman(app: FastAPI, contrato: dict[str, Any]) -> dict[str, Any]:
     carpetas: dict[str, list[dict[str, Any]]] = {}
     for path, metodo, ruta in sorted(_rutas(app), key=lambda x: (x[0], x[1])):
@@ -314,14 +316,6 @@ def postman(app: FastAPI, contrato: dict[str, Any]) -> dict[str, Any]:
         }
         if roles_de(ruta) == "público":
             peticion["auth"] = {"type": "noauth"}
-        if _es_formulario(operacion):
-            peticion["body"] = {
-                "mode": "urlencoded",
-                "urlencoded": [
-                    {"key": "username", "value": "{{correo}}", "type": "text"},
-                    {"key": "password", "value": "{{clave}}", "type": "text"},
-                ],
-            }
         esquema = _cuerpo_json(operacion)
         if esquema:
             peticion["header"].append({"key": "Content-Type", "value": "application/json"})
@@ -366,7 +360,7 @@ def postman(app: FastAPI, contrato: dict[str, Any]) -> dict[str, Any]:
         },
         "variable": [
             {"key": "base_url", "value": "http://127.0.0.1:8025"},
-            {"key": "correo", "value": ""},
+            {"key": "email", "value": ""},
             {"key": "clave", "value": ""},
             {"key": "token", "value": ""},
         ],

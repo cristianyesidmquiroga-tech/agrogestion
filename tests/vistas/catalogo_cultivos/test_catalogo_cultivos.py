@@ -2,7 +2,7 @@
 
 from tests.conftest import payload_cultivo
 
-URL = "/api/v1/cultivos"
+URL = "/cultivos"
 ENTRAN = {"admin", "agricultor"}
 
 
@@ -29,7 +29,7 @@ async def test_crea_desde_la_vista_y_no_se_duplica(cliente, entrar_como):
     assert (await cliente.post(URL, json=payload_cultivo())).status_code == 201
     repetido = await cliente.post(URL, json=payload_cultivo())
     assert repetido.status_code == 409
-    assert repetido.json()["error"] == "CULTIVO_DUPLICADO"
+    assert repetido.json()["error"]["code"] == "CULTIVO_DUPLICADO"
 
 
 async def test_el_perfil_nuevo_se_puede_copiar_de_otro(cliente, entrar_como):

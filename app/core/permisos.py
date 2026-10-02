@@ -6,7 +6,7 @@ from fastapi.dependencies.models import Dependant
 from fastapi.routing import APIRoute
 from starlette.routing import BaseRoute
 
-from app.core.security import RequiereRol
+from app.dependencies import RequiereRol
 
 ORDEN_METODOS = {"GET": 0, "POST": 1, "PUT": 2, "PATCH": 3, "DELETE": 4}
 

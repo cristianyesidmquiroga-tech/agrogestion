@@ -21,7 +21,7 @@ Arranque del servidor en desarrollo:
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8025
 ```
 
-Prefijo común de los endpoints de datos: `/api/v1`. En la documentación están ordenados por pasos, empezando por **1. Acceso**. La salud del servicio está en `/health` (sin prefijo).
+Los endpoints de datos no llevan prefijo. En la documentación están ordenados por pasos, empezando por **1. Acceso**. La salud del servicio está en `/health` (sin prefijo).
 
 En la app, la URL base es una constante de compilación (`dart/lib/api_config.dart`):
 
@@ -33,16 +33,16 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8025
 
 Es lo primero que hace la app, y el único endpoint de datos sin candado (además de la política de datos y la salud del servicio).
 
-1. `POST /api/v1/auth/login` recibe **formulario** (`application/x-www-form-urlencoded`), no JSON. Campos: `username` (el correo) y `password`.
+1. `POST /auth/login` recibe JSON con `email` y `password`.
 2. Responde `{ access_token, token_type, expires_in, rol, nombre }`. El token vale 60 minutos; no hay token de refresco.
 3. Todas las demás peticiones llevan `Authorization: Bearer <access_token>`.
-4. `GET /api/v1/auth/me` devuelve quién es, su rol, las fincas que tiene asignadas y `permisos`: la lista de funciones de la API que ese perfil puede usar (grupo, método, ruta y resumen), generada con las mismas reglas que las protegen. Úselo al abrir la app para decidir qué pantallas y botones mostrar; el servidor siempre vuelve a validar.
+4. `GET /auth/me` devuelve quién es, su rol, las fincas que tiene asignadas y `permisos`: la lista de funciones de la API que ese perfil puede usar (grupo, método, ruta y resumen), generada con las mismas reglas que las protegen. Úselo al abrir la app para decidir qué pantallas y botones mostrar; el servidor siempre vuelve a validar.
 5. Un `401` significa: borrar el token del almacenamiento seguro y llevar al inicio de sesión.
 6. El token se guarda con `flutter_secure_storage`, nunca en `SharedPreferences`.
 
 Errores del inicio de sesión:
 
-| `error` | Estado | Cuándo |
+| `error.code` | Estado | Cuándo |
 |---|---|---|
 | `CREDENCIALES_INVALIDAS` | 401 | Correo o contraseña incorrectos. El mensaje es el mismo exista o no el correo |
 | `DEMASIADOS_INTENTOS` | 429 | 5 intentos fallidos con el mismo correo en 15 minutos; se libera solo |
@@ -78,12 +78,12 @@ La respuesta trae `items`, `total`, `page`, `size` y `has_more`. Detenga el scro
 Todo error tiene la misma forma:
 
 ```json
-{ "error": "CODIGO_ESTABLE", "message": "Texto para la persona.", "status_code": 422, "details": null }
+{ "error": { "code": "CODIGO_ESTABLE", "message": "Texto para la persona.", "details": null } }
 ```
 
-- Decida siempre con `error`, nunca con `message`: el texto puede cambiar, el código no.
-- `message` está en español claro y se puede mostrar tal cual.
-- `details` solo viene en `DATOS_INVALIDOS` (`422` de validación): lista de `{campo, mensaje, tipo}` para pintar el error bajo cada campo.
+- Decida siempre con `error.code`, nunca con `error.message`: el texto puede cambiar, el código no.
+- `error.message` está en español claro y se puede mostrar tal cual.
+- `error.details` solo viene en `DATOS_INVALIDOS` (`422` de validación): lista de `{campo, mensaje, tipo}` para pintar el error bajo cada campo.
 
 Cómo reacciona la app según el estado:
 
@@ -93,8 +93,8 @@ Cómo reacciona la app según el estado:
 | `403` | Muestra el mensaje y oculta la acción |
 | `404` | Muestra que ya no existe y vuelve a la lista |
 | `409` | Recarga los datos y avisa del choque |
-| `422` | Muestra `message`; con `details`, cada mensaje bajo su campo |
-| `500` | Muestra `message` y permite reintentar |
+| `422` | Muestra `error.message`; con `details`, cada mensaje bajo su campo |
+| `500` | Muestra `error.message` y permite reintentar |
 
 Ejemplo en Dart (`dart/lib/api_exception.dart`):
 
@@ -102,13 +102,13 @@ Ejemplo en Dart (`dart/lib/api_exception.dart`):
 try {
   await api.crearSiembra(datos);
 } on ApiException catch (e) {
-  switch (e.respuesta.error) {
+  switch (e.respuesta.error.code) {
     case 'AREA_SUPERA_LOTE':
-      mostrarAviso(e.respuesta.message);
+      mostrarAviso(e.respuesta.error.message);
     case 'SIEMBRA_ESTADO_INVALIDO':
       recargarSiembra();
     default:
-      mostrarAviso(e.respuesta.message);
+      mostrarAviso(e.respuesta.error.message);
   }
 }
 ```
@@ -128,7 +128,7 @@ try {
 
 ## Indicadores explicados
 
-Los índices (por ejemplo `GET /api/v1/siembras/{id}/indices`) traen sus propios textos: `titulo`, `valor`, `unidad`, `explicacion`, `estado` (`bien`, `atencion`, `alerta` o `informativo`), `que_hacer` y `fecha_datos`. La app los muestra tal cual y no los redacta ni los recalcula. `valor` puede ser `null`.
+Los índices (por ejemplo `GET /siembras/{id}/indices`) traen sus propios textos: `titulo`, `valor`, `unidad`, `explicacion`, `estado` (`bien`, `atencion`, `alerta` o `informativo`), `que_hacer` y `fecha_datos`. La app los muestra tal cual y no los redacta ni los recalcula. `valor` puede ser `null`.
 
 Los valores agronómicos cargados por el equipo llevan `por_validar: true` hasta tener fuente técnica. La app los muestra como estimados.
 

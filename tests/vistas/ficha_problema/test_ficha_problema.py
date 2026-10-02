@@ -1,6 +1,6 @@
 """Vista 32: Ficha de problema."""
 
-URL = "/api/v1/conocimiento"
+URL = "/conocimiento"
 
 
 async def test_todos_los_roles_ven_una_ficha_validada(cliente, entrar_como, f, clave):
@@ -32,7 +32,7 @@ async def test_una_ficha_que_no_esta_validada_no_se_abre(cliente, entrar_como, f
     await entrar_como("agricultor")
     r = await cliente.get(f"{URL}/{borrador.id}")
     assert r.status_code == 404
-    assert r.json()["error"] == "PROBLEMA_NO_ENCONTRADO"
+    assert r.json()["error"]["code"] == "PROBLEMA_NO_ENCONTRADO"
 
 
 async def test_el_experto_si_ve_el_borrador_y_su_historial(cliente, entrar_como, f):

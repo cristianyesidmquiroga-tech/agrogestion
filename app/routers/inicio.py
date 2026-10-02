@@ -3,7 +3,7 @@
 from fastapi import APIRouter
 
 from app.core.etiquetas import INICIO
-from app.core.security import Autenticado, LeeProduccion
+from app.dependencies import Autenticado, LeeProduccion
 from app.routers.dependencias import BD
 from app.schemas.inicio import AvisosSalida, InicioSalida
 from app.services import aviso_service, inicio_service

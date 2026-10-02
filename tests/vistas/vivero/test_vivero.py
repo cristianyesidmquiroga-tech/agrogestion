@@ -2,7 +2,7 @@
 
 from datetime import date
 
-URL = "/api/v1/propagacion"
+URL = "/propagacion"
 ENTRAN = {"admin", "agricultor"}
 
 
@@ -53,7 +53,7 @@ async def test_metodo_que_el_cultivo_no_admite(cliente, entrar_como, f):
     finca = await f.finca(yo)
     cultivo = await f.cultivo(metodos=("semilla",))
     r = await cliente.post(URL, json=nuevo(finca, cultivo, metodo="injerto"))
-    assert r.json()["error"] == "METODO_NO_VALIDO"
+    assert r.json()["error"]["code"] == "METODO_NO_VALIDO"
 
 
 async def test_pasa_las_plantas_listas_a_una_siembra(cliente, entrar_como, f):
@@ -66,12 +66,12 @@ async def test_pasa_las_plantas_listas_a_una_siembra(cliente, entrar_como, f):
         f"{URL}/{lote}/trasplante", json={"siembra_id": str(siembra.id), "cantidad": 40}
     )
     assert r.json()["trasplantadas"] == 40
-    leida = await cliente.get(f"/api/v1/siembras/{siembra.id}")
+    leida = await cliente.get(f"/siembras/{siembra.id}")
     assert leida.json()["plantas_sembradas"] == 50
     demasiado = await cliente.post(
         f"{URL}/{lote}/trasplante", json={"siembra_id": str(siembra.id), "cantidad": 21}
     )
-    assert demasiado.json()["error"] == "TRASPLANTE_INVALIDO"
+    assert demasiado.json()["error"]["code"] == "TRASPLANTE_INVALIDO"
 
 
 async def test_no_se_ven_los_viveros_de_otros(cliente, entrar_como, f):

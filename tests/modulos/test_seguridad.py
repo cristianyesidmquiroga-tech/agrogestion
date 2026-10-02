@@ -3,16 +3,16 @@ from httpx import AsyncClient
 
 from tests.conftest import Fabrica
 
-RUTA = "/api/v1/cultivos"
+RUTA = "/cultivos"
 
 
 async def test_sin_token_responde_401_con_formato_unico(cliente: AsyncClient) -> None:
     r = await cliente.get(RUTA)
     assert r.status_code == 401
     cuerpo = r.json()
-    assert set(cuerpo) == {"error", "message", "status_code"}
-    assert cuerpo["error"] == "NO_AUTENTICADO"
-    assert cuerpo["status_code"] == 401
+    assert set(cuerpo) == {"error"}
+    assert set(cuerpo["error"]) == {"code", "message"}
+    assert cuerpo["error"]["code"] == "NO_AUTENTICADO"
 
 
 async def test_token_manipulado_es_rechazado(cliente: AsyncClient, f: Fabrica) -> None:

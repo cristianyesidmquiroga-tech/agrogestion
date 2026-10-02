@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 from tests.conftest import Fabrica
 
-URL = "/api/v1/avisos"
+URL = "/avisos"
 
 
 async def siembra_con_riesgo(

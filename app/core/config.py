@@ -1,5 +1,3 @@
-"""Configuración tipada leída del entorno o de un .env fuera de git."""
-
 from functools import lru_cache
 
 from pydantic import Field
@@ -7,39 +5,34 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_prefix="AGRO_",
-        case_sensitive=False,
-        extra="ignore",
-    )
-
+    app_env: str = "development"
     app_name: str = "AgroGestion API"
-    api_prefix: str = "/api/v1"
-    debug: bool = False
-
-    # Sin valor por defecto: si falta un secreto, el arranque falla.
-    secret_key: str
-    database_url: str
-
-    jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = Field(default=60, ge=5, le=1440)
+    database_url: str = "sqlite+aiosqlite:///./agrogestion.db"
+    jwt_secret: str = Field(min_length=16)
+    field_encryption_key: str = ""
+    allowed_origins: str = "http://localhost:3000"
+    login_max_attempts: int = 5
+    login_lock_minutes: int = 15
+    jwt_expire_minutes: int = Field(default=60, ge=5, le=1440)
+    rate_limit: int | None = None
+    alert_allowed_hosts: str = ""
+    bcrypt_cost: int = Field(default=12, ge=4, le=15)
     politica_version: str = "2026-09"
     consultas_por_dia: int = Field(default=20, ge=1, le=500)
     noticias_dias_vigencia: int = Field(default=7, ge=1, le=60)
     log_level: str = "INFO"
-    bcrypt_cost: int = Field(default=12, ge=4, le=15)
-    intentos_maximos: int = Field(default=5, ge=1, le=50)
-    minutos_bloqueo: int = Field(default=15, ge=1, le=1440)
-    # Solo para las cuentas de ejemplo de desarrollo (scripts/demo.py); sin valor por defecto.
     seed_password: str | None = None
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    # Orígenes de navegador permitidos; una app móvil nativa no envía Origin.
-    cors_origins: list[str] = [
-        "http://localhost:8030",
-        "http://127.0.0.1:8030",
-        "http://localhost:3000",
-    ]
+    @property
+    def origins(self) -> list[str]:
+        return [origin.strip() for origin in self.allowed_origins.split(",") if origin.strip()]
+
+    @property
+    def allowed_alert_hosts(self) -> set[str]:
+        return {
+            host.strip().lower() for host in self.alert_allowed_hosts.split(",") if host.strip()
+        }
 
 
 @lru_cache

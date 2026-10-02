@@ -1,7 +1,7 @@
 """Vista 2: Autorización de datos."""
 
-URL_POLITICA = "/api/v1/politica"
-URL = "/api/v1/cuenta/consentimiento"
+URL_POLITICA = "/politica"
+URL = "/cuenta/consentimiento"
 
 
 async def test_la_politica_se_lee_sin_iniciar_sesion(cliente):
@@ -27,7 +27,7 @@ async def test_sin_aceptar_el_tratamiento_no_continua(cliente, entrar_como):
     version = (await cliente.get(URL_POLITICA)).json()["version"]
     r = await cliente.post(URL, json={"version_politica": version, "acepta_tratamiento": False})
     assert r.status_code == 422
-    assert r.json()["error"] == "CONSENTIMIENTO_REQUERIDO"
+    assert r.json()["error"]["code"] == "CONSENTIMIENTO_REQUERIDO"
 
 
 async def test_la_autorizacion_de_ia_es_aparte(cliente, entrar_como):

@@ -1,28 +1,13 @@
-"""Motor y sesión asíncronos de SQLAlchemy."""
+from collections.abc import AsyncGenerator
 
-from collections.abc import AsyncIterator
-from functools import lru_cache
-
-from sqlalchemy.ext.asyncio import (
-    AsyncEngine,
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import get_settings
 
-
-@lru_cache
-def get_engine() -> AsyncEngine:
-    return create_async_engine(get_settings().database_url, pool_pre_ping=True)
+engine = create_async_engine(get_settings().database_url, pool_pre_ping=True)
+session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
 
-@lru_cache
-def get_sessionmaker() -> async_sessionmaker[AsyncSession]:
-    return async_sessionmaker(get_engine(), expire_on_commit=False)
-
-
-async def get_db() -> AsyncIterator[AsyncSession]:
-    async with get_sessionmaker()() as sesion:
-        yield sesion
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with session_factory() as session:
+        yield session

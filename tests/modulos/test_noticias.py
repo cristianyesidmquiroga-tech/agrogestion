@@ -7,7 +7,7 @@ from app.models import Noticia
 from app.services import noticia_service
 from tests.conftest import Fabrica
 
-URL = "/api/v1/noticias"
+URL = "/noticias"
 
 
 def noticia(**extra):
@@ -39,7 +39,7 @@ async def test_no_puede_vencer_antes_de_publicarse(cliente: AsyncClient, f: Fabr
         publicada=ahora.isoformat(), vigente_hasta=(ahora - timedelta(days=1)).isoformat()
     )
     r = await cliente.post(URL, json=cuerpo, headers=h)
-    assert r.json()["error"] == "NOTICIA_FECHAS_INVALIDAS"
+    assert r.json()["error"]["code"] == "NOTICIA_FECHAS_INVALIDAS"
 
 
 async def test_validaciones_de_la_noticia(cliente: AsyncClient, f: Fabrica) -> None:

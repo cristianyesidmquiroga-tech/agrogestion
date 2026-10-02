@@ -3,7 +3,7 @@ from httpx import AsyncClient
 from tests.conftest import Fabrica
 from tests.conftest import payload_cultivo as perfil
 
-URL = "/api/v1/cultivos"
+URL = "/cultivos"
 
 
 async def test_crear_y_leer_un_perfil_completo(cliente: AsyncClient, f: Fabrica) -> None:
@@ -27,15 +27,15 @@ async def test_nombre_duplicado_responde_409(cliente: AsyncClient, f: Fabrica) -
     await cliente.post(URL, json=perfil(), headers=h)
     r = await cliente.post(URL, json=perfil(nombre="CULTIVO DE PRUEBA"), headers=h)
     assert r.status_code == 409
-    assert r.json()["error"] == "CULTIVO_DUPLICADO"
+    assert r.json()["error"]["code"] == "CULTIVO_DUPLICADO"
 
 
 async def test_transitorio_no_admite_renovacion(cliente: AsyncClient, f: Fabrica) -> None:
     h = f.cabecera(await f.usuario())
     r = await cliente.post(URL, json=perfil(tipo_ciclo="transitorio"), headers=h)
     assert r.status_code == 422
-    assert r.json()["error"] == "DATOS_INVALIDOS"
-    assert r.json()["details"]
+    assert r.json()["error"]["code"] == "DATOS_INVALIDOS"
+    assert r.json()["error"]["details"]
 
 
 async def test_fase_repetida_se_rechaza(cliente: AsyncClient, f: Fabrica) -> None:
@@ -99,4 +99,4 @@ async def test_cultivo_inexistente_responde_404(cliente: AsyncClient, f: Fabrica
     h = f.cabecera(await f.usuario())
     r = await cliente.get(f"{URL}/00000000-0000-0000-0000-000000000000", headers=h)
     assert r.status_code == 404
-    assert r.json()["error"] == "CULTIVO_NO_ENCONTRADO"
+    assert r.json()["error"]["code"] == "CULTIVO_NO_ENCONTRADO"

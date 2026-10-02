@@ -2,7 +2,7 @@ from datetime import date
 
 from tests.conftest import payload_siembra
 
-URL = "/api/v1/siembras"
+URL = "/siembras"
 
 
 async def test_planea_inicia_y_cancela(sesion, yo, f):
@@ -27,8 +27,6 @@ async def test_cierra_un_ciclo_con_motivo(sesion, yo, f):
     finca, lote, cultivo = await f.escenario(yo)
     siembra = await f.siembra(finca, lote, cultivo, estado="en_curso")
     ciclo = (await sesion.get(f"{URL}/{siembra.id}/ciclos")).json()[0]["id"]
-    r = await sesion.post(
-        f"/api/v1/ciclos/{ciclo}/cerrar", json={"motivo_perdida": "Pérdida total"}
-    )
+    r = await sesion.post(f"/ciclos/{ciclo}/cerrar", json={"motivo_perdida": "Pérdida total"})
     assert r.status_code == 200
     assert r.json()["estado"] == "cerrado"

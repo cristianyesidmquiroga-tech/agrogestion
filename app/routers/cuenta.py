@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import APIRouter, Query, status
 
 from app.core.etiquetas import CUENTA
-from app.core.security import Autenticado
+from app.dependencies import Autenticado
 from app.routers.dependencias import BD
 from app.schemas.cuenta import (
     ConsentimientoEntrada,

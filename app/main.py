@@ -1,16 +1,16 @@
-"""Punto de entrada. Solo monta routers; la lógica vive en services/."""
-
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse
 
 from app.core.config import get_settings
 from app.core.etiquetas import ETIQUETAS
 from app.core.exceptions import registrar_manejadores
 from app.core.registro import configurar_registro, instalar
 from app.routers import (
-    acceso,
+    auth,
     conocimiento,
     consultas,
     cuenta,
@@ -19,22 +19,47 @@ from app.routers import (
     eventos,
     health,
     inicio,
+    lands,
     noticias,
+    pecuario,
+    phase2,
     propagacion,
     reportes,
     siembras,
+    users,
 )
 from app.schemas.common import ErrorRespuesta
 
-settings = get_settings()
 
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app: FastAPI, limit: int = 120) -> None:
+        super().__init__(app)
+        self.limit = limit
+        self.requests: dict[str, list[float]] = {}
+
+    async def dispatch(self, request: Request, call_next):  # type: ignore[no-untyped-def]
+        import time
+
+        now = time.monotonic()
+        key = request.client.host if request.client else "unknown"
+        recent = [stamp for stamp in self.requests.get(key, []) if now - stamp < 60]
+        if len(recent) >= self.limit:
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "error": {"code": "RATE_LIMIT", "message": "Límite de peticiones excedido."}
+                },
+            )
+        self.requests[key] = [*recent, now]
+        return await call_next(request)
+
+
+settings = get_settings()
 DESCRIPCION = (
     "API para gestionar cultivos de principio a fin: siembras, ciclos, conteo de plantas, "
-    "vivero, riesgos y eventos adversos. Todos los errores usan el mismo formato: decida "
-    "siempre con el campo `error`, nunca con `message`."
+    "vivero, riesgos, labores, insumos, cosechas, dinero y pecuario. Todos los errores usan "
+    "el mismo formato: decida siempre con `error.code`, nunca con `error.message`."
 )
-
-
 RESPUESTAS_ERROR: dict[int | str, dict[str, Any]] = {
     401: {"model": ErrorRespuesta, "description": "Sin sesión o sesión vencida."},
     403: {"model": ErrorRespuesta, "description": "El rol no tiene permiso."},
@@ -54,19 +79,32 @@ def create_app() -> FastAPI:
         redoc_url=None,
         openapi_url="/openapi.json",
     )
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.cors_origins,
-        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-        allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
-        allow_credentials=False,
-        max_age=600,
-    )
     registrar_manejadores(app)
     instalar(app, configurar_registro(settings.log_level))
+    limite = settings.rate_limit or (120 if settings.app_env == "development" else 60)
+    app.add_middleware(RateLimitMiddleware, limit=limite)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.origins,
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+        allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
+        max_age=600,
+    )
+
+    @app.middleware("http")
+    async def security_headers(request: Request, call_next):  # type: ignore[no-untyped-def]
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        return response
+
     app.include_router(documentacion.router)
     for router in (
-        acceso.router,
+        auth.router,
+        users.router,
+        lands.router,
         cuenta.router,
         inicio.router,
         cultivos.router,
@@ -77,8 +115,10 @@ def create_app() -> FastAPI:
         conocimiento.router,
         consultas.router,
         noticias.router,
+        phase2.router,
+        pecuario.router,
     ):
-        app.include_router(router, prefix=settings.api_prefix, responses=RESPUESTAS_ERROR)
+        app.include_router(router, responses=RESPUESTAS_ERROR)
     app.include_router(health.router)
     return app
 

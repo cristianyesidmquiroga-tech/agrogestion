@@ -5,8 +5,7 @@ from datetime import date, timedelta
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.contexto import UsuarioActual
-from app.models.finca import Lote
+from app.models.entities import Lote, Usuario
 from app.models.riesgo import EventoAdverso, Riesgo
 from app.models.siembra import Siembra
 from app.schemas.inicio import EventoReciente, InicioSalida
@@ -14,9 +13,7 @@ from app.services import aviso_service
 from app.services.acceso_service import ids_fincas
 
 
-async def resumen(
-    db: AsyncSession, usuario: UsuarioActual, hoy: date | None = None
-) -> InicioSalida:
+async def resumen(db: AsyncSession, usuario: Usuario, hoy: date | None = None) -> InicioSalida:
     hoy = hoy or date.today()
     fincas = await ids_fincas(db, usuario)
     conteo_estados = await db.execute(

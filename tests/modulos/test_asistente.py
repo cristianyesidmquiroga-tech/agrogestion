@@ -4,7 +4,7 @@ from httpx import AsyncClient
 from app.services import asistente_service
 from tests.conftest import Fabrica
 
-URL = "/api/v1/consultas"
+URL = "/consultas"
 
 
 async def escenario(f: Fabrica, **cultivo):
@@ -115,14 +115,14 @@ async def test_limite_de_consultas_por_dia(
         assert (await cliente.post(URL, json=pregunta(siembra), headers=h)).status_code == 201
     r = await cliente.post(URL, json=pregunta(siembra), headers=h)
     assert r.status_code == 429
-    assert r.json()["error"] == "LIMITE_DE_CONSULTAS"
+    assert r.json()["error"]["code"] == "LIMITE_DE_CONSULTAS"
 
 
 async def test_retroalimentacion_y_calidad(cliente: AsyncClient, f: Fabrica) -> None:
     usuario, _, siembra = await escenario(f)
     h = f.cabecera(usuario)
     admin = f.cabecera(await f.usuario("admin"))
-    vacia = (await cliente.get("/api/v1/asistente/calidad", headers=admin)).json()
+    vacia = (await cliente.get("/asistente/calidad", headers=admin)).json()
     assert vacia["porcentaje_que_sirvio"] is None
     assert "Aún no hay" in vacia["aviso"]
 
@@ -142,7 +142,7 @@ async def test_retroalimentacion_y_calidad(cliente: AsyncClient, f: Fabrica) -> 
         f"{URL}/{c2}/retroalimentacion", json={"valor": "no_sirvio"}, headers=h
     )
     assert corregida.json()["valor"] == "no_sirvio"
-    calidad = (await cliente.get("/api/v1/asistente/calidad", headers=admin)).json()
+    calidad = (await cliente.get("/asistente/calidad", headers=admin)).json()
     assert calidad["consultas"] == 2
     assert calidad["con_valoracion"] == 2
     assert calidad["sirvieron"] == 1

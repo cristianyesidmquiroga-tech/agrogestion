@@ -2,19 +2,19 @@ from httpx import AsyncClient
 
 from tests.conftest import Fabrica
 
-URL = "/api/v1/cultivos"
+URL = "/cultivos"
 
 
 async def test_riesgos_del_catalogo_y_del_cultivo(cliente: AsyncClient, f: Fabrica) -> None:
     admin, agricultor = await f.usuario("admin"), await f.usuario()
     nuevo = {"nombre": "Helada", "tipo": "clima", "aplica_a": "cultivo"}
     assert (
-        await cliente.post("/api/v1/riesgos", json=nuevo, headers=f.cabecera(agricultor))
+        await cliente.post("/riesgos", json=nuevo, headers=f.cabecera(agricultor))
     ).status_code == 403
-    creado = await cliente.post("/api/v1/riesgos", json=nuevo, headers=f.cabecera(admin))
+    creado = await cliente.post("/riesgos", json=nuevo, headers=f.cabecera(admin))
     assert creado.status_code == 201
     assert (
-        await cliente.post("/api/v1/riesgos", json=nuevo, headers=f.cabecera(admin))
+        await cliente.post("/riesgos", json=nuevo, headers=f.cabecera(admin))
     ).status_code == 409
 
     h = f.cabecera(agricultor)

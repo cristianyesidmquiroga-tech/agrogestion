@@ -1,6 +1,6 @@
 from datetime import date
 
-URL = "/api/v1/eventos-adversos"
+URL = "/eventos-adversos"
 
 
 async def test_registra_y_consulta_eventos(sesion, yo, f):

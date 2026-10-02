@@ -13,10 +13,10 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
-from app.core.contexto import UsuarioActual
 from app.core.exceptions import LimiteSuperado, NoEncontrado
 from app.models.asistente import Consulta, Mensaje, Retroalimentacion
 from app.models.conocimiento import ProblemaSanitario
+from app.models.entities import Usuario
 from app.schemas.asistente import (
     CalidadSalida,
     CausaProbable,
@@ -185,7 +185,7 @@ async def _consultas_de_hoy(db: AsyncSession, usuario_id: uuid.UUID) -> int:
     return int(total or 0)
 
 
-async def crear(db: AsyncSession, usuario: UsuarioActual, datos: ConsultaCrear) -> ConsultaSalida:
+async def crear(db: AsyncSession, usuario: Usuario, datos: ConsultaCrear) -> ConsultaSalida:
     siembra = await siembra_service.obtener(db, usuario, datos.siembra_id)
     if await _consultas_de_hoy(db, usuario.id) >= settings.consultas_por_dia:
         raise LimiteSuperado(
@@ -220,7 +220,7 @@ async def crear(db: AsyncSession, usuario: UsuarioActual, datos: ConsultaCrear) 
     )
 
 
-async def _propia(db: AsyncSession, usuario: UsuarioActual, consulta_id: uuid.UUID) -> Consulta:
+async def _propia(db: AsyncSession, usuario: Usuario, consulta_id: uuid.UUID) -> Consulta:
     consulta = await db.get(Consulta, consulta_id)
     if consulta is None or consulta.usuario_id != usuario.id:
         raise NoEncontrado("No encontramos esa consulta.", "CONSULTA_NO_ENCONTRADA")
@@ -236,9 +236,7 @@ async def _valoraciones(db: AsyncSession, consultas: list[uuid.UUID]) -> dict[uu
     return {c: v for c, v in filas}
 
 
-async def obtener(
-    db: AsyncSession, usuario: UsuarioActual, consulta_id: uuid.UUID
-) -> ConsultaSalida:
+async def obtener(db: AsyncSession, usuario: Usuario, consulta_id: uuid.UUID) -> ConsultaSalida:
     consulta = await _propia(db, usuario, consulta_id)
     mensajes = list(
         await db.scalars(
@@ -261,7 +259,7 @@ async def obtener(
 
 
 async def listar(
-    db: AsyncSession, usuario: UsuarioActual, q: str | None, skip: int, limit: int
+    db: AsyncSession, usuario: Usuario, q: str | None, skip: int, limit: int
 ) -> tuple[list[ConsultaResumen], int]:
     base = select(Consulta).where(Consulta.usuario_id == usuario.id)
     if q:
@@ -301,7 +299,7 @@ async def listar(
 
 async def valorar(
     db: AsyncSession,
-    usuario: UsuarioActual,
+    usuario: Usuario,
     consulta_id: uuid.UUID,
     datos: RetroalimentacionEntrada,
 ) -> Retroalimentacion:

@@ -2,7 +2,7 @@
 
 from datetime import date
 
-URL = "/api/v1/siembras"
+URL = "/siembras"
 ENTRAN = {"admin", "agricultor", "contador"}
 
 
@@ -25,7 +25,7 @@ async def test_la_siembra_de_otro_no_se_abre(cliente, entrar_como, f):
     siembra = await f.siembra(*await f.escenario(otro))
     r = await cliente.get(f"{URL}/{siembra.id}")
     assert r.status_code == 404
-    assert r.json()["error"] == "SIEMBRA_NO_ENCONTRADA"
+    assert r.json()["error"]["code"] == "SIEMBRA_NO_ENCONTRADA"
 
 
 async def test_pestana_ciclos(cliente, entrar_como, f):
@@ -61,7 +61,7 @@ async def test_pestana_tiempos(cliente, entrar_como, f):
     yo = await entrar_como("agricultor")
     siembra = await f.siembra(*await f.escenario(yo), estado="en_curso")
     ciclo = (await cliente.get(f"{URL}/{siembra.id}/ciclos")).json()[0]["id"]
-    r = await cliente.get(f"/api/v1/ciclos/{ciclo}/cronograma")
+    r = await cliente.get(f"/ciclos/{ciclo}/cronograma")
     assert [x["fase"] for x in r.json()["fases"]] == ["preparacion", "siembra", "mantenimiento"]
 
 
@@ -73,4 +73,4 @@ async def test_renovar_no_aplica_a_un_cultivo_transitorio(cliente, entrar_como, 
     siembra = await f.siembra(*escenario, estado="en_curso")
     r = await cliente.post(f"{URL}/{siembra.id}/renovar")
     assert r.status_code == 422
-    assert r.json()["error"] == "CICLO_TIPO_NO_VALIDO"
+    assert r.json()["error"]["code"] == "CICLO_TIPO_NO_VALIDO"

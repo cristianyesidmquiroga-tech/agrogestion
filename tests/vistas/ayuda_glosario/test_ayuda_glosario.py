@@ -2,7 +2,7 @@
 
 from app.models import GlosarioTermino
 
-URL = "/api/v1/glosario"
+URL = "/glosario"
 
 
 async def con_terminos(f):

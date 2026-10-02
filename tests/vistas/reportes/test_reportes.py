@@ -1,6 +1,6 @@
 """Vista 23: Reportes (índice)."""
 
-URL = "/api/v1/reportes"
+URL = "/reportes"
 
 
 async def test_todos_los_roles_entran(cliente, entrar_como, clave):

@@ -2,7 +2,7 @@
 
 from tests.conftest import payload_cultivo
 
-URL = "/api/v1/cultivos"
+URL = "/cultivos"
 ENTRAN = {"admin", "agricultor"}
 
 
@@ -51,4 +51,4 @@ async def test_cultivo_inexistente(cliente, entrar_como):
     await entrar_como("agricultor")
     r = await cliente.get(f"{URL}/00000000-0000-0000-0000-000000000000")
     assert r.status_code == 404
-    assert r.json()["error"] == "CULTIVO_NO_ENCONTRADO"
+    assert r.json()["error"]["code"] == "CULTIVO_NO_ENCONTRADO"

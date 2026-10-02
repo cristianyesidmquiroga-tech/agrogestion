@@ -2,6 +2,402 @@
 // Los listados cerrados (estados, tipos, roles) son String; sus valores están
 // en mobile_api_contract.md.
 
+class ActividadCreate {
+  final String cicloId;
+  final String nombre;
+  final String fase;
+  final DateTime fechaInicio;
+  final DateTime? fechaFin;
+  final double areaTrabajada;
+
+  const ActividadCreate({
+    required this.cicloId,
+    required this.nombre,
+    required this.fase,
+    required this.fechaInicio,
+    this.fechaFin,
+    required this.areaTrabajada,
+  });
+
+  factory ActividadCreate.fromJson(Map<String, dynamic> json) => ActividadCreate(
+        cicloId: json['ciclo_id'] as String,
+        nombre: json['nombre'] as String,
+        fase: json['fase'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+        areaTrabajada: (json['area_trabajada'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'ciclo_id': cicloId,
+        'nombre': nombre,
+        'fase': fase,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+        'area_trabajada': areaTrabajada,
+      };
+}
+
+class ActividadResponse {
+  final String id;
+  final String fincaId;
+  final String cicloId;
+  final String nombre;
+  final String fase;
+  final DateTime fechaInicio;
+  final DateTime? fechaFin;
+  final String areaTrabajada;
+  final String estado;
+
+  const ActividadResponse({
+    required this.id,
+    required this.fincaId,
+    required this.cicloId,
+    required this.nombre,
+    required this.fase,
+    required this.fechaInicio,
+    this.fechaFin,
+    required this.areaTrabajada,
+    required this.estado,
+  });
+
+  factory ActividadResponse.fromJson(Map<String, dynamic> json) => ActividadResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        cicloId: json['ciclo_id'] as String,
+        nombre: json['nombre'] as String,
+        fase: json['fase'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+        areaTrabajada: json['area_trabajada'] as String,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'ciclo_id': cicloId,
+        'nombre': nombre,
+        'fase': fase,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+        'area_trabajada': areaTrabajada,
+        'estado': estado,
+      };
+}
+
+class ActividadUpdate {
+  final String? nombre;
+  final String? fase;
+  final DateTime? fechaFin;
+  final double? areaTrabajada;
+
+  const ActividadUpdate({
+    this.nombre,
+    this.fase,
+    this.fechaFin,
+    this.areaTrabajada,
+  });
+
+  factory ActividadUpdate.fromJson(Map<String, dynamic> json) => ActividadUpdate(
+        nombre: json['nombre'] == null ? null : json['nombre'] as String,
+        fase: json['fase'] == null ? null : json['fase'] as String,
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+        areaTrabajada: json['area_trabajada'] == null ? null : (json['area_trabajada'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        if (nombre != null) 'nombre': nombre!,
+        if (fase != null) 'fase': fase!,
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+        if (areaTrabajada != null) 'area_trabajada': areaTrabajada!,
+      };
+}
+
+class AlertaCreate {
+  final String fuenteId;
+  final String tipo;
+  final String regionDane;
+  final String titulo;
+  final String resumen;
+  final DateTime vigenteDesde;
+  final DateTime vigenteHasta;
+
+  const AlertaCreate({
+    required this.fuenteId,
+    required this.tipo,
+    required this.regionDane,
+    required this.titulo,
+    required this.resumen,
+    required this.vigenteDesde,
+    required this.vigenteHasta,
+  });
+
+  factory AlertaCreate.fromJson(Map<String, dynamic> json) => AlertaCreate(
+        fuenteId: json['fuente_id'] as String,
+        tipo: json['tipo'] as String,
+        regionDane: json['region_dane'] as String,
+        titulo: json['titulo'] as String,
+        resumen: json['resumen'] as String,
+        vigenteDesde: DateTime.parse(json['vigente_desde'] as String),
+        vigenteHasta: DateTime.parse(json['vigente_hasta'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'fuente_id': fuenteId,
+        'tipo': tipo,
+        'region_dane': regionDane,
+        'titulo': titulo,
+        'resumen': resumen,
+        'vigente_desde': vigenteDesde.toUtc().toIso8601String(),
+        'vigente_hasta': vigenteHasta.toUtc().toIso8601String(),
+      };
+}
+
+class AlertaResponse {
+  final String id;
+  final String fincaId;
+  final String fuenteId;
+  final String tipo;
+  final String regionDane;
+  final String titulo;
+  final String resumen;
+  final DateTime vigenteDesde;
+  final DateTime vigenteHasta;
+
+  const AlertaResponse({
+    required this.id,
+    required this.fincaId,
+    required this.fuenteId,
+    required this.tipo,
+    required this.regionDane,
+    required this.titulo,
+    required this.resumen,
+    required this.vigenteDesde,
+    required this.vigenteHasta,
+  });
+
+  factory AlertaResponse.fromJson(Map<String, dynamic> json) => AlertaResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        fuenteId: json['fuente_id'] as String,
+        tipo: json['tipo'] as String,
+        regionDane: json['region_dane'] as String,
+        titulo: json['titulo'] as String,
+        resumen: json['resumen'] as String,
+        vigenteDesde: DateTime.parse(json['vigente_desde'] as String),
+        vigenteHasta: DateTime.parse(json['vigente_hasta'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'fuente_id': fuenteId,
+        'tipo': tipo,
+        'region_dane': regionDane,
+        'titulo': titulo,
+        'resumen': resumen,
+        'vigente_desde': vigenteDesde.toUtc().toIso8601String(),
+        'vigente_hasta': vigenteHasta.toUtc().toIso8601String(),
+      };
+}
+
+class AlimentacionCreate {
+  final String loteAnimalId;
+  final String alimento;
+  final double cantidad;
+  final double costo;
+  final DateTime fecha;
+
+  const AlimentacionCreate({
+    required this.loteAnimalId,
+    required this.alimento,
+    required this.cantidad,
+    required this.costo,
+    required this.fecha,
+  });
+
+  factory AlimentacionCreate.fromJson(Map<String, dynamic> json) => AlimentacionCreate(
+        loteAnimalId: json['lote_animal_id'] as String,
+        alimento: json['alimento'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        costo: (json['costo'] as num).toDouble(),
+        fecha: DateTime.parse(json['fecha'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'lote_animal_id': loteAnimalId,
+        'alimento': alimento,
+        'cantidad': cantidad,
+        'costo': costo,
+        'fecha': fecha.toUtc().toIso8601String(),
+      };
+}
+
+class AlimentacionResponse {
+  final String id;
+  final String fincaId;
+  final String loteAnimalId;
+  final String alimento;
+  final String cantidad;
+  final String costo;
+  final DateTime fecha;
+
+  const AlimentacionResponse({
+    required this.id,
+    required this.fincaId,
+    required this.loteAnimalId,
+    required this.alimento,
+    required this.cantidad,
+    required this.costo,
+    required this.fecha,
+  });
+
+  factory AlimentacionResponse.fromJson(Map<String, dynamic> json) => AlimentacionResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        loteAnimalId: json['lote_animal_id'] as String,
+        alimento: json['alimento'] as String,
+        cantidad: json['cantidad'] as String,
+        costo: json['costo'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'lote_animal_id': loteAnimalId,
+        'alimento': alimento,
+        'cantidad': cantidad,
+        'costo': costo,
+        'fecha': fecha.toUtc().toIso8601String(),
+      };
+}
+
+class AnimalCreate {
+  final String especieId;
+  final String? loteAnimalId;
+  final String arete;
+  final String? nombre;
+  final String sexo;
+  final String? raza;
+  final DateTime? nacimiento;
+  final String? madreId;
+  final String? padreId;
+
+  const AnimalCreate({
+    required this.especieId,
+    this.loteAnimalId,
+    required this.arete,
+    this.nombre,
+    required this.sexo,
+    this.raza,
+    this.nacimiento,
+    this.madreId,
+    this.padreId,
+  });
+
+  factory AnimalCreate.fromJson(Map<String, dynamic> json) => AnimalCreate(
+        especieId: json['especie_id'] as String,
+        loteAnimalId: json['lote_animal_id'] == null ? null : json['lote_animal_id'] as String,
+        arete: json['arete'] as String,
+        nombre: json['nombre'] == null ? null : json['nombre'] as String,
+        sexo: json['sexo'] as String,
+        raza: json['raza'] == null ? null : json['raza'] as String,
+        nacimiento: json['nacimiento'] == null ? null : DateTime.parse(json['nacimiento'] as String),
+        madreId: json['madre_id'] == null ? null : json['madre_id'] as String,
+        padreId: json['padre_id'] == null ? null : json['padre_id'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'especie_id': especieId,
+        if (loteAnimalId != null) 'lote_animal_id': loteAnimalId!,
+        'arete': arete,
+        if (nombre != null) 'nombre': nombre!,
+        'sexo': sexo,
+        if (raza != null) 'raza': raza!,
+        if (nacimiento != null) 'nacimiento': nacimiento!.toUtc().toIso8601String(),
+        if (madreId != null) 'madre_id': madreId!,
+        if (padreId != null) 'padre_id': padreId!,
+      };
+}
+
+class AnimalResponse {
+  final String id;
+  final String fincaId;
+  final String especieId;
+  final String? loteAnimalId;
+  final String arete;
+  final String? nombre;
+  final String sexo;
+  final String? raza;
+  final DateTime? nacimiento;
+  final String? madreId;
+  final String? padreId;
+  final String estado;
+
+  const AnimalResponse({
+    required this.id,
+    required this.fincaId,
+    required this.especieId,
+    this.loteAnimalId,
+    required this.arete,
+    this.nombre,
+    required this.sexo,
+    this.raza,
+    this.nacimiento,
+    this.madreId,
+    this.padreId,
+    required this.estado,
+  });
+
+  factory AnimalResponse.fromJson(Map<String, dynamic> json) => AnimalResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        especieId: json['especie_id'] as String,
+        loteAnimalId: json['lote_animal_id'] == null ? null : json['lote_animal_id'] as String,
+        arete: json['arete'] as String,
+        nombre: json['nombre'] == null ? null : json['nombre'] as String,
+        sexo: json['sexo'] as String,
+        raza: json['raza'] == null ? null : json['raza'] as String,
+        nacimiento: json['nacimiento'] == null ? null : DateTime.parse(json['nacimiento'] as String),
+        madreId: json['madre_id'] == null ? null : json['madre_id'] as String,
+        padreId: json['padre_id'] == null ? null : json['padre_id'] as String,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'especie_id': especieId,
+        if (loteAnimalId != null) 'lote_animal_id': loteAnimalId!,
+        'arete': arete,
+        if (nombre != null) 'nombre': nombre!,
+        'sexo': sexo,
+        if (raza != null) 'raza': raza!,
+        if (nacimiento != null) 'nacimiento': nacimiento!.toUtc().toIso8601String(),
+        if (madreId != null) 'madre_id': madreId!,
+        if (padreId != null) 'padre_id': padreId!,
+        'estado': estado,
+      };
+}
+
+class AnulacionCreate {
+  final String motivo;
+
+  const AnulacionCreate({
+    required this.motivo,
+  });
+
+  factory AnulacionCreate.fromJson(Map<String, dynamic> json) => AnulacionCreate(
+        motivo: json['motivo'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'motivo': motivo,
+      };
+}
+
 class AvisoRiesgo {
   final String siembraId;
   final String cicloId;
@@ -71,42 +467,6 @@ class AvisosSalida {
         'avisos': avisos.map((x) => x.toJson()).toList(),
         'siembras_sin_calendario': siembrasSinCalendario,
         if (aviso != null) 'aviso': aviso!,
-      };
-}
-
-class Bodyloginapiv1authloginpost {
-  final String? grantType;
-  final String username;
-  final String password;
-  final String? scope;
-  final String? clientId;
-  final String? clientSecret;
-
-  const Bodyloginapiv1authloginpost({
-    this.grantType,
-    required this.username,
-    required this.password,
-    this.scope,
-    this.clientId,
-    this.clientSecret,
-  });
-
-  factory Bodyloginapiv1authloginpost.fromJson(Map<String, dynamic> json) => Bodyloginapiv1authloginpost(
-        grantType: json['grant_type'] == null ? null : json['grant_type'] as String,
-        username: json['username'] as String,
-        password: json['password'] as String,
-        scope: json['scope'] == null ? null : json['scope'] as String,
-        clientId: json['client_id'] == null ? null : json['client_id'] as String,
-        clientSecret: json['client_secret'] == null ? null : json['client_secret'] as String,
-      );
-
-  Map<String, dynamic> toJson() => {
-        if (grantType != null) 'grant_type': grantType!,
-        'username': username,
-        'password': password,
-        if (scope != null) 'scope': scope!,
-        if (clientId != null) 'client_id': clientId!,
-        if (clientSecret != null) 'client_secret': clientSecret!,
       };
 }
 
@@ -238,6 +598,30 @@ class CicloCrear {
       };
 }
 
+class CicloCreate {
+  final String nombre;
+  final DateTime fechaInicio;
+  final DateTime? fechaFin;
+
+  const CicloCreate({
+    required this.nombre,
+    required this.fechaInicio,
+    this.fechaFin,
+  });
+
+  factory CicloCreate.fromJson(Map<String, dynamic> json) => CicloCreate(
+        nombre: json['nombre'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+      };
+}
+
 class CicloCronograma {
   final String siembraId;
   final String cicloId;
@@ -283,6 +667,42 @@ class CicloCronograma {
         'fases_planeadas': fasesPlaneadas,
         if (fechaFinPlaneada != null) 'fecha_fin_planeada': fechaFinPlaneada!.toIso8601String().substring(0, 10),
         if (aviso != null) 'aviso': aviso!,
+      };
+}
+
+class CicloResponse {
+  final String id;
+  final String fincaId;
+  final String nombre;
+  final String estado;
+  final DateTime fechaInicio;
+  final DateTime? fechaFin;
+
+  const CicloResponse({
+    required this.id,
+    required this.fincaId,
+    required this.nombre,
+    required this.estado,
+    required this.fechaInicio,
+    this.fechaFin,
+  });
+
+  factory CicloResponse.fromJson(Map<String, dynamic> json) => CicloResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        nombre: json['nombre'] as String,
+        estado: json['estado'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'nombre': nombre,
+        'estado': estado,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
       };
 }
 
@@ -470,6 +890,42 @@ class ConsultaSalida {
       };
 }
 
+class ContableResponse {
+  final String id;
+  final String fincaId;
+  final String categoria;
+  final String? monto;
+  final String? total;
+  final String estado;
+
+  const ContableResponse({
+    required this.id,
+    required this.fincaId,
+    required this.categoria,
+    this.monto,
+    this.total,
+    required this.estado,
+  });
+
+  factory ContableResponse.fromJson(Map<String, dynamic> json) => ContableResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        categoria: json['categoria'] as String,
+        monto: json['monto'] == null ? null : json['monto'] as String,
+        total: json['total'] == null ? null : json['total'] as String,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'categoria': categoria,
+        if (monto != null) 'monto': monto!,
+        if (total != null) 'total': total!,
+        'estado': estado,
+      };
+}
+
 class ConteoCrear {
   final DateTime fecha;
   final int vivas;
@@ -527,6 +983,106 @@ class ConteoSalida {
         'vivas': vivas,
         'muertas': muertas,
         'resiembras': resiembras,
+      };
+}
+
+class CosechaAcumuladoResponse {
+  final String fincaId;
+  final String cicloId;
+  final String total;
+  final List<CosechaResponse> registros;
+
+  const CosechaAcumuladoResponse({
+    required this.fincaId,
+    required this.cicloId,
+    required this.total,
+    required this.registros,
+  });
+
+  factory CosechaAcumuladoResponse.fromJson(Map<String, dynamic> json) => CosechaAcumuladoResponse(
+        fincaId: json['finca_id'] as String,
+        cicloId: json['ciclo_id'] as String,
+        total: json['total'] as String,
+        registros: (json['registros'] as List<dynamic>).map((x) => CosechaResponse.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'finca_id': fincaId,
+        'ciclo_id': cicloId,
+        'total': total,
+        'registros': registros.map((x) => x.toJson()).toList(),
+      };
+}
+
+class CosechaCreate {
+  final String cicloId;
+  final double cantidad;
+  final String unidad;
+  final String? calidad;
+  final DateTime fecha;
+
+  const CosechaCreate({
+    required this.cicloId,
+    required this.cantidad,
+    required this.unidad,
+    this.calidad,
+    required this.fecha,
+  });
+
+  factory CosechaCreate.fromJson(Map<String, dynamic> json) => CosechaCreate(
+        cicloId: json['ciclo_id'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        unidad: json['unidad'] as String,
+        calidad: json['calidad'] == null ? null : json['calidad'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'ciclo_id': cicloId,
+        'cantidad': cantidad,
+        'unidad': unidad,
+        if (calidad != null) 'calidad': calidad!,
+        'fecha': fecha.toUtc().toIso8601String(),
+      };
+}
+
+class CosechaResponse {
+  final String id;
+  final String fincaId;
+  final String cicloId;
+  final String cantidad;
+  final String unidad;
+  final String? calidad;
+  final DateTime fecha;
+
+  const CosechaResponse({
+    required this.id,
+    required this.fincaId,
+    required this.cicloId,
+    required this.cantidad,
+    required this.unidad,
+    this.calidad,
+    required this.fecha,
+  });
+
+  factory CosechaResponse.fromJson(Map<String, dynamic> json) => CosechaResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        cicloId: json['ciclo_id'] as String,
+        cantidad: json['cantidad'] as String,
+        unidad: json['unidad'] as String,
+        calidad: json['calidad'] == null ? null : json['calidad'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'ciclo_id': cicloId,
+        'cantidad': cantidad,
+        'unidad': unidad,
+        if (calidad != null) 'calidad': calidad!,
+        'fecha': fecha.toUtc().toIso8601String(),
       };
 }
 
@@ -986,31 +1542,183 @@ class DosisSalida {
       };
 }
 
-class ErrorRespuesta {
-  final String error;
+class ErrorDetalle {
+  final String code;
   final String message;
-  final int statusCode;
+  final String? action;
   final List<DetalleError>? details;
 
-  const ErrorRespuesta({
-    required this.error,
+  const ErrorDetalle({
+    required this.code,
     required this.message,
-    required this.statusCode,
+    this.action,
     this.details,
   });
 
-  factory ErrorRespuesta.fromJson(Map<String, dynamic> json) => ErrorRespuesta(
-        error: json['error'] as String,
+  factory ErrorDetalle.fromJson(Map<String, dynamic> json) => ErrorDetalle(
+        code: json['code'] as String,
         message: json['message'] as String,
-        statusCode: json['status_code'] as int,
+        action: json['action'] == null ? null : json['action'] as String,
         details: json['details'] == null ? null : (json['details'] as List<dynamic>).map((x) => DetalleError.fromJson(x as Map<String, dynamic>)).toList(),
       );
 
   Map<String, dynamic> toJson() => {
-        'error': error,
+        'code': code,
         'message': message,
-        'status_code': statusCode,
+        if (action != null) 'action': action!,
         if (details != null) 'details': details!.map((x) => x.toJson()).toList(),
+      };
+}
+
+class ErrorRespuesta {
+  final ErrorDetalle error;
+
+  const ErrorRespuesta({
+    required this.error,
+  });
+
+  factory ErrorRespuesta.fromJson(Map<String, dynamic> json) => ErrorRespuesta(
+        error: ErrorDetalle.fromJson(json['error'] as Map<String, dynamic>),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'error': error.toJson(),
+      };
+}
+
+class EspecieCreate {
+  final String nombre;
+  final String? descripcion;
+
+  const EspecieCreate({
+    required this.nombre,
+    this.descripcion,
+  });
+
+  factory EspecieCreate.fromJson(Map<String, dynamic> json) => EspecieCreate(
+        nombre: json['nombre'] as String,
+        descripcion: json['descripcion'] == null ? null : json['descripcion'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        if (descripcion != null) 'descripcion': descripcion!,
+      };
+}
+
+class EspecieResponse {
+  final String id;
+  final String fincaId;
+  final String nombre;
+  final String? descripcion;
+
+  const EspecieResponse({
+    required this.id,
+    required this.fincaId,
+    required this.nombre,
+    this.descripcion,
+  });
+
+  factory EspecieResponse.fromJson(Map<String, dynamic> json) => EspecieResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        nombre: json['nombre'] as String,
+        descripcion: json['descripcion'] == null ? null : json['descripcion'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'nombre': nombre,
+        if (descripcion != null) 'descripcion': descripcion!,
+      };
+}
+
+class EtapaCreate {
+  final String nombre;
+  final double diasEstimados;
+
+  const EtapaCreate({
+    required this.nombre,
+    required this.diasEstimados,
+  });
+
+  factory EtapaCreate.fromJson(Map<String, dynamic> json) => EtapaCreate(
+        nombre: json['nombre'] as String,
+        diasEstimados: (json['dias_estimados'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'dias_estimados': diasEstimados,
+      };
+}
+
+class EtapaResponse {
+  final String id;
+  final String procesoId;
+  final String fincaId;
+  final String nombre;
+  final String diasEstimados;
+  final DateTime? iniciadoEn;
+  final DateTime? finalizadoEn;
+
+  const EtapaResponse({
+    required this.id,
+    required this.procesoId,
+    required this.fincaId,
+    required this.nombre,
+    required this.diasEstimados,
+    this.iniciadoEn,
+    this.finalizadoEn,
+  });
+
+  factory EtapaResponse.fromJson(Map<String, dynamic> json) => EtapaResponse(
+        id: json['id'] as String,
+        procesoId: json['proceso_id'] as String,
+        fincaId: json['finca_id'] as String,
+        nombre: json['nombre'] as String,
+        diasEstimados: json['dias_estimados'] as String,
+        iniciadoEn: json['iniciado_en'] == null ? null : DateTime.parse(json['iniciado_en'] as String),
+        finalizadoEn: json['finalizado_en'] == null ? null : DateTime.parse(json['finalizado_en'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'proceso_id': procesoId,
+        'finca_id': fincaId,
+        'nombre': nombre,
+        'dias_estimados': diasEstimados,
+        if (iniciadoEn != null) 'iniciado_en': iniciadoEn!.toUtc().toIso8601String(),
+        if (finalizadoEn != null) 'finalizado_en': finalizadoEn!.toUtc().toIso8601String(),
+      };
+}
+
+class EtapasMetricasResponse {
+  final String procesoId;
+  final String diasEstimados;
+  final String diasReales;
+  final String diferencia;
+
+  const EtapasMetricasResponse({
+    required this.procesoId,
+    required this.diasEstimados,
+    required this.diasReales,
+    required this.diferencia,
+  });
+
+  factory EtapasMetricasResponse.fromJson(Map<String, dynamic> json) => EtapasMetricasResponse(
+        procesoId: json['proceso_id'] as String,
+        diasEstimados: json['dias_estimados'] as String,
+        diasReales: json['dias_reales'] as String,
+        diferencia: json['diferencia'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'proceso_id': procesoId,
+        'dias_estimados': diasEstimados,
+        'dias_reales': diasReales,
+        'diferencia': diferencia,
       };
 }
 
@@ -1106,6 +1814,50 @@ class EventoCrear {
       };
 }
 
+class EventoCreate {
+  final String? animalId;
+  final String? loteAnimalId;
+  final String tipo;
+  final DateTime fecha;
+  final String? producto;
+  final double? dosis;
+  final DateTime? retiroHasta;
+  final String? notas;
+
+  const EventoCreate({
+    this.animalId,
+    this.loteAnimalId,
+    required this.tipo,
+    required this.fecha,
+    this.producto,
+    this.dosis,
+    this.retiroHasta,
+    this.notas,
+  });
+
+  factory EventoCreate.fromJson(Map<String, dynamic> json) => EventoCreate(
+        animalId: json['animal_id'] == null ? null : json['animal_id'] as String,
+        loteAnimalId: json['lote_animal_id'] == null ? null : json['lote_animal_id'] as String,
+        tipo: json['tipo'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        producto: json['producto'] == null ? null : json['producto'] as String,
+        dosis: json['dosis'] == null ? null : (json['dosis'] as num).toDouble(),
+        retiroHasta: json['retiro_hasta'] == null ? null : DateTime.parse(json['retiro_hasta'] as String),
+        notas: json['notas'] == null ? null : json['notas'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        if (animalId != null) 'animal_id': animalId!,
+        if (loteAnimalId != null) 'lote_animal_id': loteAnimalId!,
+        'tipo': tipo,
+        'fecha': fecha.toUtc().toIso8601String(),
+        if (producto != null) 'producto': producto!,
+        if (dosis != null) 'dosis': dosis!,
+        if (retiroHasta != null) 'retiro_hasta': retiroHasta!.toUtc().toIso8601String(),
+        if (notas != null) 'notas': notas!,
+      };
+}
+
 class EventoReciente {
   final String id;
   final String riesgo;
@@ -1131,6 +1883,58 @@ class EventoReciente {
         'riesgo': riesgo,
         'severidad': severidad,
         'inicio': inicio.toIso8601String().substring(0, 10),
+      };
+}
+
+class EventoResponse {
+  final String id;
+  final String fincaId;
+  final String? animalId;
+  final String? loteAnimalId;
+  final String tipo;
+  final DateTime fecha;
+  final String? producto;
+  final String? dosis;
+  final DateTime? retiroHasta;
+  final String? notas;
+
+  const EventoResponse({
+    required this.id,
+    required this.fincaId,
+    this.animalId,
+    this.loteAnimalId,
+    required this.tipo,
+    required this.fecha,
+    this.producto,
+    this.dosis,
+    this.retiroHasta,
+    this.notas,
+  });
+
+  factory EventoResponse.fromJson(Map<String, dynamic> json) => EventoResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        animalId: json['animal_id'] == null ? null : json['animal_id'] as String,
+        loteAnimalId: json['lote_animal_id'] == null ? null : json['lote_animal_id'] as String,
+        tipo: json['tipo'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        producto: json['producto'] == null ? null : json['producto'] as String,
+        dosis: json['dosis'] == null ? null : json['dosis'] as String,
+        retiroHasta: json['retiro_hasta'] == null ? null : DateTime.parse(json['retiro_hasta'] as String),
+        notas: json['notas'] == null ? null : json['notas'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        if (animalId != null) 'animal_id': animalId!,
+        if (loteAnimalId != null) 'lote_animal_id': loteAnimalId!,
+        'tipo': tipo,
+        'fecha': fecha.toUtc().toIso8601String(),
+        if (producto != null) 'producto': producto!,
+        if (dosis != null) 'dosis': dosis!,
+        if (retiroHasta != null) 'retiro_hasta': retiroHasta!.toUtc().toIso8601String(),
+        if (notas != null) 'notas': notas!,
       };
 }
 
@@ -1326,6 +2130,86 @@ class FaseSalida {
       };
 }
 
+class FincaCreate {
+  final String nombre;
+  final String? ubicacion;
+
+  const FincaCreate({
+    required this.nombre,
+    this.ubicacion,
+  });
+
+  factory FincaCreate.fromJson(Map<String, dynamic> json) => FincaCreate(
+        nombre: json['nombre'] as String,
+        ubicacion: json['ubicacion'] == null ? null : json['ubicacion'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        if (ubicacion != null) 'ubicacion': ubicacion!,
+      };
+}
+
+class FincaResponse {
+  final String id;
+  final String nombre;
+
+  const FincaResponse({
+    required this.id,
+    required this.nombre,
+  });
+
+  factory FincaResponse.fromJson(Map<String, dynamic> json) => FincaResponse(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+      };
+}
+
+class FlujoCajaResponse {
+  final String fincaId;
+  final String? cicloId;
+  final int anio;
+  final int mes;
+  final String ingresos;
+  final String gastos;
+  final String saldo;
+
+  const FlujoCajaResponse({
+    required this.fincaId,
+    this.cicloId,
+    required this.anio,
+    required this.mes,
+    required this.ingresos,
+    required this.gastos,
+    required this.saldo,
+  });
+
+  factory FlujoCajaResponse.fromJson(Map<String, dynamic> json) => FlujoCajaResponse(
+        fincaId: json['finca_id'] as String,
+        cicloId: json['ciclo_id'] == null ? null : json['ciclo_id'] as String,
+        anio: json['anio'] as int,
+        mes: json['mes'] as int,
+        ingresos: json['ingresos'] as String,
+        gastos: json['gastos'] as String,
+        saldo: json['saldo'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'finca_id': fincaId,
+        if (cicloId != null) 'ciclo_id': cicloId!,
+        'anio': anio,
+        'mes': mes,
+        'ingresos': ingresos,
+        'gastos': gastos,
+        'saldo': saldo,
+      };
+}
+
 class FuenteCrear {
   final String nombre;
   final String? url;
@@ -1351,6 +2235,26 @@ class FuenteCrear {
         if (url != null) 'url': url!,
         if (fecha != null) 'fecha': fecha!.toIso8601String().substring(0, 10),
         if (licencia != null) 'licencia': licencia!,
+      };
+}
+
+class FuenteCreate {
+  final String nombre;
+  final String url;
+
+  const FuenteCreate({
+    required this.nombre,
+    required this.url,
+  });
+
+  factory FuenteCreate.fromJson(Map<String, dynamic> json) => FuenteCreate(
+        nombre: json['nombre'] as String,
+        url: json['url'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'url': url,
       };
 }
 
@@ -1383,6 +2287,34 @@ class FuenteSalida {
         if (url != null) 'url': url!,
         if (fecha != null) 'fecha': fecha!.toIso8601String().substring(0, 10),
         if (licencia != null) 'licencia': licencia!,
+      };
+}
+
+class GastoCreate {
+  final String categoria;
+  final double monto;
+  final DateTime fecha;
+  final String? cicloId;
+
+  const GastoCreate({
+    required this.categoria,
+    required this.monto,
+    required this.fecha,
+    this.cicloId,
+  });
+
+  factory GastoCreate.fromJson(Map<String, dynamic> json) => GastoCreate(
+        categoria: json['categoria'] as String,
+        monto: (json['monto'] as num).toDouble(),
+        fecha: DateTime.parse(json['fecha'] as String),
+        cicloId: json['ciclo_id'] == null ? null : json['ciclo_id'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'categoria': categoria,
+        'monto': monto,
+        'fecha': fecha.toUtc().toIso8601String(),
+        if (cicloId != null) 'ciclo_id': cicloId!,
       };
 }
 
@@ -1514,6 +2446,46 @@ class IndicesSalida {
       };
 }
 
+class IngresoCreate {
+  final String categoria;
+  final double cantidad;
+  final double precioUnitario;
+  final double? total;
+  final DateTime fecha;
+  final String? cicloId;
+  final String? comprador;
+
+  const IngresoCreate({
+    required this.categoria,
+    required this.cantidad,
+    required this.precioUnitario,
+    this.total,
+    required this.fecha,
+    this.cicloId,
+    this.comprador,
+  });
+
+  factory IngresoCreate.fromJson(Map<String, dynamic> json) => IngresoCreate(
+        categoria: json['categoria'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        precioUnitario: (json['precio_unitario'] as num).toDouble(),
+        total: json['total'] == null ? null : (json['total'] as num).toDouble(),
+        fecha: DateTime.parse(json['fecha'] as String),
+        cicloId: json['ciclo_id'] == null ? null : json['ciclo_id'] as String,
+        comprador: json['comprador'] == null ? null : json['comprador'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'categoria': categoria,
+        'cantidad': cantidad,
+        'precio_unitario': precioUnitario,
+        if (total != null) 'total': total!,
+        'fecha': fecha.toUtc().toIso8601String(),
+        if (cicloId != null) 'ciclo_id': cicloId!,
+        if (comprador != null) 'comprador': comprador!,
+      };
+}
+
 class IniciarEntrada {
   final DateTime? fechaInicio;
 
@@ -1563,6 +2535,334 @@ class InicioSalida {
         'avisos': avisos.map((x) => x.toJson()).toList(),
         'eventos_recientes': eventosRecientes.map((x) => x.toJson()).toList(),
         'primeros_pasos': primerosPasos.map((x) => x).toList(),
+      };
+}
+
+class InsumoCreate {
+  final String nombre;
+  final String unidad;
+
+  const InsumoCreate({
+    required this.nombre,
+    required this.unidad,
+  });
+
+  factory InsumoCreate.fromJson(Map<String, dynamic> json) => InsumoCreate(
+        nombre: json['nombre'] as String,
+        unidad: json['unidad'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'unidad': unidad,
+      };
+}
+
+class InsumoResponse {
+  final String id;
+  final String fincaId;
+  final String nombre;
+  final String unidad;
+  final String existencia;
+  final String estado;
+
+  const InsumoResponse({
+    required this.id,
+    required this.fincaId,
+    required this.nombre,
+    required this.unidad,
+    required this.existencia,
+    required this.estado,
+  });
+
+  factory InsumoResponse.fromJson(Map<String, dynamic> json) => InsumoResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        nombre: json['nombre'] as String,
+        unidad: json['unidad'] as String,
+        existencia: json['existencia'] as String,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'nombre': nombre,
+        'unidad': unidad,
+        'existencia': existencia,
+        'estado': estado,
+      };
+}
+
+class JornalCreate {
+  final String? trabajadorId;
+  final String actividadId;
+  final String cicloId;
+  final DateTime fecha;
+  final double obreros;
+  final double dias;
+  final double valorJornal;
+  final String? modalidad;
+
+  const JornalCreate({
+    this.trabajadorId,
+    required this.actividadId,
+    required this.cicloId,
+    required this.fecha,
+    required this.obreros,
+    required this.dias,
+    required this.valorJornal,
+    this.modalidad,
+  });
+
+  factory JornalCreate.fromJson(Map<String, dynamic> json) => JornalCreate(
+        trabajadorId: json['trabajador_id'] == null ? null : json['trabajador_id'] as String,
+        actividadId: json['actividad_id'] as String,
+        cicloId: json['ciclo_id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        obreros: (json['obreros'] as num).toDouble(),
+        dias: (json['dias'] as num).toDouble(),
+        valorJornal: (json['valor_jornal'] as num).toDouble(),
+        modalidad: json['modalidad'] == null ? null : json['modalidad'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        if (trabajadorId != null) 'trabajador_id': trabajadorId!,
+        'actividad_id': actividadId,
+        'ciclo_id': cicloId,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'obreros': obreros,
+        'dias': dias,
+        'valor_jornal': valorJornal,
+        if (modalidad != null) 'modalidad': modalidad!,
+      };
+}
+
+class JornalResponse {
+  final String id;
+  final String fincaId;
+  final String? trabajadorId;
+  final String actividadId;
+  final String cicloId;
+  final DateTime fecha;
+  final String obreros;
+  final String dias;
+  final String valorJornal;
+  final String modalidad;
+  final String total;
+  final String estado;
+
+  const JornalResponse({
+    required this.id,
+    required this.fincaId,
+    this.trabajadorId,
+    required this.actividadId,
+    required this.cicloId,
+    required this.fecha,
+    required this.obreros,
+    required this.dias,
+    required this.valorJornal,
+    required this.modalidad,
+    required this.total,
+    required this.estado,
+  });
+
+  factory JornalResponse.fromJson(Map<String, dynamic> json) => JornalResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        trabajadorId: json['trabajador_id'] == null ? null : json['trabajador_id'] as String,
+        actividadId: json['actividad_id'] as String,
+        cicloId: json['ciclo_id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        obreros: json['obreros'] as String,
+        dias: json['dias'] as String,
+        valorJornal: json['valor_jornal'] as String,
+        modalidad: json['modalidad'] as String,
+        total: json['total'] as String,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        if (trabajadorId != null) 'trabajador_id': trabajadorId!,
+        'actividad_id': actividadId,
+        'ciclo_id': cicloId,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'obreros': obreros,
+        'dias': dias,
+        'valor_jornal': valorJornal,
+        'modalidad': modalidad,
+        'total': total,
+        'estado': estado,
+      };
+}
+
+class LineaVentaCreate {
+  final String cosechaId;
+  final String categoria;
+  final String unidad;
+  final double cantidad;
+  final double? merma;
+  final double precioUnitario;
+
+  const LineaVentaCreate({
+    required this.cosechaId,
+    required this.categoria,
+    required this.unidad,
+    required this.cantidad,
+    this.merma,
+    required this.precioUnitario,
+  });
+
+  factory LineaVentaCreate.fromJson(Map<String, dynamic> json) => LineaVentaCreate(
+        cosechaId: json['cosecha_id'] as String,
+        categoria: json['categoria'] as String,
+        unidad: json['unidad'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        merma: json['merma'] == null ? null : (json['merma'] as num).toDouble(),
+        precioUnitario: (json['precio_unitario'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'cosecha_id': cosechaId,
+        'categoria': categoria,
+        'unidad': unidad,
+        'cantidad': cantidad,
+        if (merma != null) 'merma': merma!,
+        'precio_unitario': precioUnitario,
+      };
+}
+
+class LoginRequest {
+  final String email;
+  final String password;
+
+  const LoginRequest({
+    required this.email,
+    required this.password,
+  });
+
+  factory LoginRequest.fromJson(Map<String, dynamic> json) => LoginRequest(
+        email: json['email'] as String,
+        password: json['password'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'email': email,
+        'password': password,
+      };
+}
+
+class LoteAnimalCreate {
+  final String especieId;
+  final String nombre;
+  final double cantidad;
+  final String? ubicacion;
+
+  const LoteAnimalCreate({
+    required this.especieId,
+    required this.nombre,
+    required this.cantidad,
+    this.ubicacion,
+  });
+
+  factory LoteAnimalCreate.fromJson(Map<String, dynamic> json) => LoteAnimalCreate(
+        especieId: json['especie_id'] as String,
+        nombre: json['nombre'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        ubicacion: json['ubicacion'] == null ? null : json['ubicacion'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'especie_id': especieId,
+        'nombre': nombre,
+        'cantidad': cantidad,
+        if (ubicacion != null) 'ubicacion': ubicacion!,
+      };
+}
+
+class LoteAnimalResponse {
+  final String id;
+  final String fincaId;
+  final String especieId;
+  final String nombre;
+  final String cantidad;
+  final String? ubicacion;
+
+  const LoteAnimalResponse({
+    required this.id,
+    required this.fincaId,
+    required this.especieId,
+    required this.nombre,
+    required this.cantidad,
+    this.ubicacion,
+  });
+
+  factory LoteAnimalResponse.fromJson(Map<String, dynamic> json) => LoteAnimalResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        especieId: json['especie_id'] as String,
+        nombre: json['nombre'] as String,
+        cantidad: json['cantidad'] as String,
+        ubicacion: json['ubicacion'] == null ? null : json['ubicacion'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'especie_id': especieId,
+        'nombre': nombre,
+        'cantidad': cantidad,
+        if (ubicacion != null) 'ubicacion': ubicacion!,
+      };
+}
+
+class LoteCreate {
+  final String nombre;
+  final double area;
+
+  const LoteCreate({
+    required this.nombre,
+    required this.area,
+  });
+
+  factory LoteCreate.fromJson(Map<String, dynamic> json) => LoteCreate(
+        nombre: json['nombre'] as String,
+        area: (json['area'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'area': area,
+      };
+}
+
+class LoteResponse {
+  final String id;
+  final String fincaId;
+  final String nombre;
+  final String area;
+
+  const LoteResponse({
+    required this.id,
+    required this.fincaId,
+    required this.nombre,
+    required this.area,
+  });
+
+  factory LoteResponse.fromJson(Map<String, dynamic> json) => LoteResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        nombre: json['nombre'] as String,
+        area: json['area'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'nombre': nombre,
+        'area': area,
       };
 }
 
@@ -1675,6 +2975,86 @@ class MetodoSalida {
         if (diasGerminacion != null) 'dias_germinacion': diasGerminacion!,
         if (diasVivero != null) 'dias_vivero': diasVivero!,
         'por_validar': porValidar,
+      };
+}
+
+class MovimientoCreate {
+  final String insumoId;
+  final double cantidad;
+  final DateTime fecha;
+  final double? costo;
+  final String? actividadId;
+
+  const MovimientoCreate({
+    required this.insumoId,
+    required this.cantidad,
+    required this.fecha,
+    this.costo,
+    this.actividadId,
+  });
+
+  factory MovimientoCreate.fromJson(Map<String, dynamic> json) => MovimientoCreate(
+        insumoId: json['insumo_id'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        fecha: DateTime.parse(json['fecha'] as String),
+        costo: json['costo'] == null ? null : (json['costo'] as num).toDouble(),
+        actividadId: json['actividad_id'] == null ? null : json['actividad_id'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'insumo_id': insumoId,
+        'cantidad': cantidad,
+        'fecha': fecha.toUtc().toIso8601String(),
+        if (costo != null) 'costo': costo!,
+        if (actividadId != null) 'actividad_id': actividadId!,
+      };
+}
+
+class MovimientoResponse {
+  final String id;
+  final String fincaId;
+  final String insumoId;
+  final String? actividadId;
+  final String tipo;
+  final String cantidad;
+  final String costo;
+  final DateTime fecha;
+  final String creadoPor;
+
+  const MovimientoResponse({
+    required this.id,
+    required this.fincaId,
+    required this.insumoId,
+    this.actividadId,
+    required this.tipo,
+    required this.cantidad,
+    required this.costo,
+    required this.fecha,
+    required this.creadoPor,
+  });
+
+  factory MovimientoResponse.fromJson(Map<String, dynamic> json) => MovimientoResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        insumoId: json['insumo_id'] as String,
+        actividadId: json['actividad_id'] == null ? null : json['actividad_id'] as String,
+        tipo: json['tipo'] as String,
+        cantidad: json['cantidad'] as String,
+        costo: json['costo'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        creadoPor: json['creado_por'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'insumo_id': insumoId,
+        if (actividadId != null) 'actividad_id': actividadId!,
+        'tipo': tipo,
+        'cantidad': cantidad,
+        'costo': costo,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'creado_por': creadoPor,
       };
 }
 
@@ -2058,56 +3438,60 @@ class PageSiembraResumen {
       };
 }
 
-class PerfilSalida {
+class PerfilResponse {
   final String id;
+  final String email;
   final String nombre;
-  final String correo;
   final String rol;
+  final bool activo;
   final List<String> fincas;
-  final List<PermisoSalida> permisos;
+  final List<PermisoResponse> permisos;
 
-  const PerfilSalida({
+  const PerfilResponse({
     required this.id,
+    required this.email,
     required this.nombre,
-    required this.correo,
     required this.rol,
+    required this.activo,
     required this.fincas,
     required this.permisos,
   });
 
-  factory PerfilSalida.fromJson(Map<String, dynamic> json) => PerfilSalida(
+  factory PerfilResponse.fromJson(Map<String, dynamic> json) => PerfilResponse(
         id: json['id'] as String,
+        email: json['email'] as String,
         nombre: json['nombre'] as String,
-        correo: json['correo'] as String,
         rol: json['rol'] as String,
+        activo: json['activo'] as bool,
         fincas: (json['fincas'] as List<dynamic>).map((x) => x as String).toList(),
-        permisos: (json['permisos'] as List<dynamic>).map((x) => PermisoSalida.fromJson(x as Map<String, dynamic>)).toList(),
+        permisos: (json['permisos'] as List<dynamic>).map((x) => PermisoResponse.fromJson(x as Map<String, dynamic>)).toList(),
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'email': email,
         'nombre': nombre,
-        'correo': correo,
         'rol': rol,
+        'activo': activo,
         'fincas': fincas.map((x) => x).toList(),
         'permisos': permisos.map((x) => x.toJson()).toList(),
       };
 }
 
-class PermisoSalida {
+class PermisoResponse {
   final String grupo;
   final String metodo;
   final String ruta;
   final String resumen;
 
-  const PermisoSalida({
+  const PermisoResponse({
     required this.grupo,
     required this.metodo,
     required this.ruta,
     required this.resumen,
   });
 
-  factory PermisoSalida.fromJson(Map<String, dynamic> json) => PermisoSalida(
+  factory PermisoResponse.fromJson(Map<String, dynamic> json) => PermisoResponse(
         grupo: json['grupo'] as String,
         metodo: json['metodo'] as String,
         ruta: json['ruta'] as String,
@@ -2151,6 +3535,78 @@ class PoliticaSalida {
         'datos_que_usamos': datosQueUsamos.map((x) => x).toList(),
         'para_que': paraQue.map((x) => x).toList(),
         'sus_derechos': susDerechos.map((x) => x).toList(),
+      };
+}
+
+class PrecioCreate {
+  final String categoria;
+  final String unidad;
+  final double precio;
+  final DateTime vigenteDesde;
+  final DateTime? vigenteHasta;
+
+  const PrecioCreate({
+    required this.categoria,
+    required this.unidad,
+    required this.precio,
+    required this.vigenteDesde,
+    this.vigenteHasta,
+  });
+
+  factory PrecioCreate.fromJson(Map<String, dynamic> json) => PrecioCreate(
+        categoria: json['categoria'] as String,
+        unidad: json['unidad'] as String,
+        precio: (json['precio'] as num).toDouble(),
+        vigenteDesde: DateTime.parse(json['vigente_desde'] as String),
+        vigenteHasta: json['vigente_hasta'] == null ? null : DateTime.parse(json['vigente_hasta'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'categoria': categoria,
+        'unidad': unidad,
+        'precio': precio,
+        'vigente_desde': vigenteDesde.toUtc().toIso8601String(),
+        if (vigenteHasta != null) 'vigente_hasta': vigenteHasta!.toUtc().toIso8601String(),
+      };
+}
+
+class PrecioResponse {
+  final String id;
+  final String fincaId;
+  final String categoria;
+  final String unidad;
+  final String precio;
+  final DateTime vigenteDesde;
+  final DateTime? vigenteHasta;
+
+  const PrecioResponse({
+    required this.id,
+    required this.fincaId,
+    required this.categoria,
+    required this.unidad,
+    required this.precio,
+    required this.vigenteDesde,
+    this.vigenteHasta,
+  });
+
+  factory PrecioResponse.fromJson(Map<String, dynamic> json) => PrecioResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        categoria: json['categoria'] as String,
+        unidad: json['unidad'] as String,
+        precio: json['precio'] as String,
+        vigenteDesde: DateTime.parse(json['vigente_desde'] as String),
+        vigenteHasta: json['vigente_hasta'] == null ? null : DateTime.parse(json['vigente_hasta'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'categoria': categoria,
+        'unidad': unidad,
+        'precio': precio,
+        'vigente_desde': vigenteDesde.toUtc().toIso8601String(),
+        if (vigenteHasta != null) 'vigente_hasta': vigenteHasta!.toUtc().toIso8601String(),
       };
 }
 
@@ -2271,6 +3727,154 @@ class ProblemaRevision {
         'manejos': manejos.map((x) => x.toJson()).toList(),
         if (aviso != null) 'aviso': aviso!,
         'validaciones': validaciones.map((x) => x.toJson()).toList(),
+      };
+}
+
+class ProcesoCreate {
+  final String nombre;
+  final String producto;
+  final String materiaPrima;
+  final String origenMateria;
+  final DateTime fechaInicio;
+
+  const ProcesoCreate({
+    required this.nombre,
+    required this.producto,
+    required this.materiaPrima,
+    required this.origenMateria,
+    required this.fechaInicio,
+  });
+
+  factory ProcesoCreate.fromJson(Map<String, dynamic> json) => ProcesoCreate(
+        nombre: json['nombre'] as String,
+        producto: json['producto'] as String,
+        materiaPrima: json['materia_prima'] as String,
+        origenMateria: json['origen_materia'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'producto': producto,
+        'materia_prima': materiaPrima,
+        'origen_materia': origenMateria,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+      };
+}
+
+class ProcesoResponse {
+  final String id;
+  final String fincaId;
+  final String nombre;
+  final String producto;
+  final String materiaPrima;
+  final String origenMateria;
+  final DateTime fechaInicio;
+  final DateTime? fechaFin;
+
+  const ProcesoResponse({
+    required this.id,
+    required this.fincaId,
+    required this.nombre,
+    required this.producto,
+    required this.materiaPrima,
+    required this.origenMateria,
+    required this.fechaInicio,
+    this.fechaFin,
+  });
+
+  factory ProcesoResponse.fromJson(Map<String, dynamic> json) => ProcesoResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        nombre: json['nombre'] as String,
+        producto: json['producto'] as String,
+        materiaPrima: json['materia_prima'] as String,
+        origenMateria: json['origen_materia'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'nombre': nombre,
+        'producto': producto,
+        'materia_prima': materiaPrima,
+        'origen_materia': origenMateria,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+      };
+}
+
+class ProduccionCreate {
+  final String loteAnimalId;
+  final DateTime fecha;
+  final String tipo;
+  final double cantidad;
+  final String unidad;
+
+  const ProduccionCreate({
+    required this.loteAnimalId,
+    required this.fecha,
+    required this.tipo,
+    required this.cantidad,
+    required this.unidad,
+  });
+
+  factory ProduccionCreate.fromJson(Map<String, dynamic> json) => ProduccionCreate(
+        loteAnimalId: json['lote_animal_id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        tipo: json['tipo'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        unidad: json['unidad'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'lote_animal_id': loteAnimalId,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'tipo': tipo,
+        'cantidad': cantidad,
+        'unidad': unidad,
+      };
+}
+
+class ProduccionResponse {
+  final String id;
+  final String fincaId;
+  final String loteAnimalId;
+  final DateTime fecha;
+  final String tipo;
+  final String cantidad;
+  final String unidad;
+
+  const ProduccionResponse({
+    required this.id,
+    required this.fincaId,
+    required this.loteAnimalId,
+    required this.fecha,
+    required this.tipo,
+    required this.cantidad,
+    required this.unidad,
+  });
+
+  factory ProduccionResponse.fromJson(Map<String, dynamic> json) => ProduccionResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        loteAnimalId: json['lote_animal_id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        tipo: json['tipo'] as String,
+        cantidad: json['cantidad'] as String,
+        unidad: json['unidad'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'lote_animal_id': loteAnimalId,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'tipo': tipo,
+        'cantidad': cantidad,
+        'unidad': unidad,
       };
 }
 
@@ -2886,24 +4490,24 @@ class TerminoSalida {
       };
 }
 
-class TokenSalida {
+class TokenResponse {
   final String accessToken;
-  final String tokenType;
+  final String? tokenType;
   final int expiresIn;
   final String rol;
   final String nombre;
 
-  const TokenSalida({
+  const TokenResponse({
     required this.accessToken,
-    required this.tokenType,
+    this.tokenType,
     required this.expiresIn,
     required this.rol,
     required this.nombre,
   });
 
-  factory TokenSalida.fromJson(Map<String, dynamic> json) => TokenSalida(
+  factory TokenResponse.fromJson(Map<String, dynamic> json) => TokenResponse(
         accessToken: json['access_token'] as String,
-        tokenType: json['token_type'] as String,
+        tokenType: json['token_type'] == null ? null : json['token_type'] as String,
         expiresIn: json['expires_in'] as int,
         rol: json['rol'] as String,
         nombre: json['nombre'] as String,
@@ -2911,10 +4515,118 @@ class TokenSalida {
 
   Map<String, dynamic> toJson() => {
         'access_token': accessToken,
-        'token_type': tokenType,
+        if (tokenType != null) 'token_type': tokenType!,
         'expires_in': expiresIn,
         'rol': rol,
         'nombre': nombre,
+      };
+}
+
+class TrabajadorCreate {
+  final String nombre;
+  final String tipo;
+  final double jornalHabitual;
+  final String? documento;
+  final String? telefono;
+
+  const TrabajadorCreate({
+    required this.nombre,
+    required this.tipo,
+    required this.jornalHabitual,
+    this.documento,
+    this.telefono,
+  });
+
+  factory TrabajadorCreate.fromJson(Map<String, dynamic> json) => TrabajadorCreate(
+        nombre: json['nombre'] as String,
+        tipo: json['tipo'] as String,
+        jornalHabitual: (json['jornal_habitual'] as num).toDouble(),
+        documento: json['documento'] == null ? null : json['documento'] as String,
+        telefono: json['telefono'] == null ? null : json['telefono'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'tipo': tipo,
+        'jornal_habitual': jornalHabitual,
+        if (documento != null) 'documento': documento!,
+        if (telefono != null) 'telefono': telefono!,
+      };
+}
+
+class TrabajadorResponse {
+  final String id;
+  final String fincaId;
+  final String nombre;
+  final String tipo;
+  final String jornalHabitual;
+  final String? documentoUltimos4;
+  final String? telefono;
+  final String estado;
+
+  const TrabajadorResponse({
+    required this.id,
+    required this.fincaId,
+    required this.nombre,
+    required this.tipo,
+    required this.jornalHabitual,
+    this.documentoUltimos4,
+    this.telefono,
+    required this.estado,
+  });
+
+  factory TrabajadorResponse.fromJson(Map<String, dynamic> json) => TrabajadorResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        nombre: json['nombre'] as String,
+        tipo: json['tipo'] as String,
+        jornalHabitual: json['jornal_habitual'] as String,
+        documentoUltimos4: json['documento_ultimos4'] == null ? null : json['documento_ultimos4'] as String,
+        telefono: json['telefono'] == null ? null : json['telefono'] as String,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        'nombre': nombre,
+        'tipo': tipo,
+        'jornal_habitual': jornalHabitual,
+        if (documentoUltimos4 != null) 'documento_ultimos4': documentoUltimos4!,
+        if (telefono != null) 'telefono': telefono!,
+        'estado': estado,
+      };
+}
+
+class TrabajadorUpdate {
+  final String? nombre;
+  final String? tipo;
+  final double? jornalHabitual;
+  final String? documento;
+  final String? telefono;
+
+  const TrabajadorUpdate({
+    this.nombre,
+    this.tipo,
+    this.jornalHabitual,
+    this.documento,
+    this.telefono,
+  });
+
+  factory TrabajadorUpdate.fromJson(Map<String, dynamic> json) => TrabajadorUpdate(
+        nombre: json['nombre'] == null ? null : json['nombre'] as String,
+        tipo: json['tipo'] == null ? null : json['tipo'] as String,
+        jornalHabitual: json['jornal_habitual'] == null ? null : (json['jornal_habitual'] as num).toDouble(),
+        documento: json['documento'] == null ? null : json['documento'] as String,
+        telefono: json['telefono'] == null ? null : json['telefono'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        if (nombre != null) 'nombre': nombre!,
+        if (tipo != null) 'tipo': tipo!,
+        if (jornalHabitual != null) 'jornal_habitual': jornalHabitual!,
+        if (documento != null) 'documento': documento!,
+        if (telefono != null) 'telefono': telefono!,
       };
 }
 
@@ -2966,6 +4678,66 @@ class TratamientoValidado {
       };
 }
 
+class UsuarioCreate {
+  final String email;
+  final String nombre;
+  final String password;
+  final String? rol;
+
+  const UsuarioCreate({
+    required this.email,
+    required this.nombre,
+    required this.password,
+    this.rol,
+  });
+
+  factory UsuarioCreate.fromJson(Map<String, dynamic> json) => UsuarioCreate(
+        email: json['email'] as String,
+        nombre: json['nombre'] as String,
+        password: json['password'] as String,
+        rol: json['rol'] == null ? null : json['rol'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'email': email,
+        'nombre': nombre,
+        'password': password,
+        if (rol != null) 'rol': rol!,
+      };
+}
+
+class UsuarioResponse {
+  final String id;
+  final String email;
+  final String nombre;
+  final String rol;
+  final bool activo;
+
+  const UsuarioResponse({
+    required this.id,
+    required this.email,
+    required this.nombre,
+    required this.rol,
+    required this.activo,
+  });
+
+  factory UsuarioResponse.fromJson(Map<String, dynamic> json) => UsuarioResponse(
+        id: json['id'] as String,
+        email: json['email'] as String,
+        nombre: json['nombre'] as String,
+        rol: json['rol'] as String,
+        activo: json['activo'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'email': email,
+        'nombre': nombre,
+        'rol': rol,
+        'activo': activo,
+      };
+}
+
 class ValidacionSalida {
   final String estado;
   final String expertoId;
@@ -2991,5 +4763,65 @@ class ValidacionSalida {
         'experto_id': expertoId,
         if (observacion != null) 'observacion': observacion!,
         'creado_en': creadoEn.toUtc().toIso8601String(),
+      };
+}
+
+class VentaCreate {
+  final String? comprador;
+  final DateTime fecha;
+  final List<LineaVentaCreate> lineas;
+
+  const VentaCreate({
+    this.comprador,
+    required this.fecha,
+    required this.lineas,
+  });
+
+  factory VentaCreate.fromJson(Map<String, dynamic> json) => VentaCreate(
+        comprador: json['comprador'] == null ? null : json['comprador'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        lineas: (json['lineas'] as List<dynamic>).map((x) => LineaVentaCreate.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        if (comprador != null) 'comprador': comprador!,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'lineas': lineas.map((x) => x.toJson()).toList(),
+      };
+}
+
+class VentaResponse {
+  final String id;
+  final String fincaId;
+  final String? comprador;
+  final DateTime fecha;
+  final String estado;
+  final String total;
+
+  const VentaResponse({
+    required this.id,
+    required this.fincaId,
+    this.comprador,
+    required this.fecha,
+    required this.estado,
+    required this.total,
+  });
+
+  factory VentaResponse.fromJson(Map<String, dynamic> json) => VentaResponse(
+        id: json['id'] as String,
+        fincaId: json['finca_id'] as String,
+        comprador: json['comprador'] == null ? null : json['comprador'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        estado: json['estado'] as String,
+        total: json['total'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'finca_id': fincaId,
+        if (comprador != null) 'comprador': comprador!,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'estado': estado,
+        'total': total,
       };
 }

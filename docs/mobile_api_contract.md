@@ -21,7 +21,7 @@ Arranque del servidor en desarrollo:
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8025
 ```
 
-Prefijo común de los endpoints de datos: `/api/v1`. En la documentación están ordenados por pasos, empezando por **1. Acceso**. La salud del servicio está en `/health` (sin prefijo).
+Los endpoints de datos no llevan prefijo. En la documentación están ordenados por pasos, empezando por **1. Acceso**. La salud del servicio está en `/health` (sin prefijo).
 
 En la app, la URL base es una constante de compilación (`dart/lib/api_config.dart`):
 
@@ -33,16 +33,16 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8025
 
 Es lo primero que hace la app, y el único endpoint de datos sin candado (además de la política de datos y la salud del servicio).
 
-1. `POST /api/v1/auth/login` recibe **formulario** (`application/x-www-form-urlencoded`), no JSON. Campos: `username` (el correo) y `password`.
+1. `POST /auth/login` recibe JSON con `email` y `password`.
 2. Responde `{ access_token, token_type, expires_in, rol, nombre }`. El token vale 60 minutos; no hay token de refresco.
 3. Todas las demás peticiones llevan `Authorization: Bearer <access_token>`.
-4. `GET /api/v1/auth/me` devuelve quién es, su rol, las fincas que tiene asignadas y `permisos`: la lista de funciones de la API que ese perfil puede usar (grupo, método, ruta y resumen), generada con las mismas reglas que las protegen. Úselo al abrir la app para decidir qué pantallas y botones mostrar; el servidor siempre vuelve a validar.
+4. `GET /auth/me` devuelve quién es, su rol, las fincas que tiene asignadas y `permisos`: la lista de funciones de la API que ese perfil puede usar (grupo, método, ruta y resumen), generada con las mismas reglas que las protegen. Úselo al abrir la app para decidir qué pantallas y botones mostrar; el servidor siempre vuelve a validar.
 5. Un `401` significa: borrar el token del almacenamiento seguro y llevar al inicio de sesión.
 6. El token se guarda con `flutter_secure_storage`, nunca en `SharedPreferences`.
 
 Errores del inicio de sesión:
 
-| `error` | Estado | Cuándo |
+| `error.code` | Estado | Cuándo |
 |---|---|---|
 | `CREDENCIALES_INVALIDAS` | 401 | Correo o contraseña incorrectos. El mensaje es el mismo exista o no el correo |
 | `DEMASIADOS_INTENTOS` | 429 | 5 intentos fallidos con el mismo correo en 15 minutos; se libera solo |
@@ -68,68 +68,120 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 
 | Método | Ruta | Quién entra | Pantalla | Qué hace |
 |---|---|---|---|---|
-| `GET` | `/api/v1/asistente/calidad` | admin | Calidad del asistente | Calidad del asistente |
-| `POST` | `/api/v1/auth/login` | público | Iniciar sesión | Iniciar sesión y obtener el token |
-| `GET` | `/api/v1/auth/me` | cualquier usuario con sesión | Splash y Mi cuenta | Quién soy y qué puedo usar con este perfil |
-| `GET` | `/api/v1/avisos` | admin, agricultor, contador | Inicio (avisos) | Avisos de riesgo según la fase de sus cultivos |
-| `GET` | `/api/v1/ciclos/{ciclo_id}` | admin, agricultor, contador | Detalle de ciclo | Detalle de un ciclo |
-| `POST` | `/api/v1/ciclos/{ciclo_id}/cerrar` | admin, agricultor | Detalle de ciclo | Cerrar un ciclo |
-| `GET` | `/api/v1/ciclos/{ciclo_id}/cronograma` | admin, agricultor, contador | Detalle de siembra (Tiempos) | Cronograma planeado del ciclo |
-| `POST` | `/api/v1/ciclos/{ciclo_id}/iniciar` | admin, agricultor | Detalle de ciclo | Iniciar un ciclo |
-| `GET` | `/api/v1/ciclos/{ciclo_id}/necesidad-insumos` | admin, agricultor, contador | Detalle de ciclo | Cuánto insumo se necesita |
-| `GET` | `/api/v1/conocimiento` | cualquier usuario con sesión | Biblioteca de conocimiento | Buscar en la biblioteca |
-| `POST` | `/api/v1/conocimiento` | admin, experto | Biblioteca de conocimiento | Crear una ficha en borrador |
-| `GET` | `/api/v1/conocimiento/{problema_id}` | cualquier usuario con sesión | Ficha de problema | Ficha de un problema |
-| `PATCH` | `/api/v1/conocimiento/{problema_id}/estado` | admin, experto | Revisión de conocimiento | Validar, retirar o reabrir una ficha |
-| `GET` | `/api/v1/consultas` | admin, agricultor | Consultar e Historial de consultas | Historial de consultas |
-| `POST` | `/api/v1/consultas` | admin, agricultor | Consultar e Historial de consultas | Preguntarle al asistente |
-| `GET` | `/api/v1/consultas/{consulta_id}` | admin, agricultor | Consultar | Una consulta y su respuesta |
-| `POST` | `/api/v1/consultas/{consulta_id}/retroalimentacion` | admin, agricultor | Consultar | Decir si la respuesta sirvió |
-| `GET` | `/api/v1/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Última autorización aceptada |
-| `POST` | `/api/v1/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Aceptar el tratamiento de datos |
-| `GET` | `/api/v1/cultivos` | admin, agricultor | Catálogo de cultivos | Buscar cultivos |
-| `POST` | `/api/v1/cultivos` | admin, agricultor | Catálogo de cultivos | Crear un cultivo con su perfil |
-| `GET` | `/api/v1/cultivos/{cultivo_id}` | admin, agricultor | Ficha del cultivo | Ver el perfil de un cultivo |
-| `PUT` | `/api/v1/cultivos/{cultivo_id}` | admin, agricultor | Ficha del cultivo | Reemplazar el perfil de un cultivo |
-| `GET` | `/api/v1/cultivos/{cultivo_id}/dosis` | admin, agricultor | Ficha del cultivo | Dosis de referencia |
-| `GET` | `/api/v1/cultivos/{cultivo_id}/fases` | admin, agricultor | Ficha del cultivo | Fases del cultivo |
-| `GET` | `/api/v1/cultivos/{cultivo_id}/metodos` | admin, agricultor | Ficha del cultivo | Métodos de propagación |
-| `GET` | `/api/v1/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Riesgos del cultivo |
-| `PUT` | `/api/v1/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Reemplazar los riesgos del cultivo |
-| `GET` | `/api/v1/eventos-adversos` | admin, agricultor | Eventos adversos | Eventos adversos |
-| `POST` | `/api/v1/eventos-adversos` | admin, agricultor | Eventos adversos | Registrar un evento adverso |
-| `GET` | `/api/v1/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Detalle de un evento |
-| `PATCH` | `/api/v1/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Actualizar un evento |
-| `GET` | `/api/v1/fuentes` | admin, experto | Revisión de conocimiento | Fuentes de la biblioteca |
-| `POST` | `/api/v1/fuentes` | admin, experto | Revisión de conocimiento | Agregar una fuente |
-| `GET` | `/api/v1/glosario` | cualquier usuario con sesión | Ayuda y glosario | Términos del agro explicados |
-| `GET` | `/api/v1/inicio` | cualquier usuario con sesión | Inicio | Lo de hoy |
-| `GET` | `/api/v1/noticias` | cualquier usuario con sesión | Novedades de mi región | Noticias vigentes de mi región |
-| `POST` | `/api/v1/noticias` | admin | Novedades de mi región | Cargar una noticia |
-| `GET` | `/api/v1/politica` | público | Autorización de datos | Política de tratamiento de datos |
-| `GET` | `/api/v1/propagacion` | admin, agricultor | Vivero | Lotes de vivero |
-| `POST` | `/api/v1/propagacion` | admin, agricultor | Vivero | Crear un lote de vivero |
-| `PATCH` | `/api/v1/propagacion/{lote_id}` | admin, agricultor | Vivero | Actualizar germinadas, listas y pérdidas |
-| `POST` | `/api/v1/propagacion/{lote_id}/trasplante` | admin, agricultor | Vivero | Pasar plantas listas a una siembra |
-| `GET` | `/api/v1/reportes` | cualquier usuario con sesión | Reportes | Reportes que puedo ver |
-| `GET` | `/api/v1/reportes/cronograma` | admin, agricultor, contador | Visor de reporte | Tiempos de mis ciclos |
-| `GET` | `/api/v1/reportes/eventos` | admin, agricultor | Visor de reporte | Eventos adversos y su costo |
-| `GET` | `/api/v1/reportes/indices` | admin, agricultor, contador | Visor de reporte | Índices por planta de mis siembras |
-| `GET` | `/api/v1/riesgos` | admin, agricultor | Ficha del cultivo (riesgos) | Catálogo de riesgos |
-| `POST` | `/api/v1/riesgos` | admin | Ficha del cultivo (riesgos) | Agregar un riesgo al catálogo |
-| `GET` | `/api/v1/siembras` | admin, agricultor, contador | Mis siembras | Mis siembras |
-| `POST` | `/api/v1/siembras` | admin, agricultor | Mis siembras | Planear una siembra |
-| `GET` | `/api/v1/siembras/{siembra_id}` | admin, agricultor, contador | Detalle de siembra | Detalle de una siembra |
-| `POST` | `/api/v1/siembras/{siembra_id}/cancelar` | admin, agricultor | Detalle de siembra | Cancelar una siembra |
-| `GET` | `/api/v1/siembras/{siembra_id}/ciclos` | admin, agricultor, contador | Detalle de siembra (Ciclos) | Ciclos de una siembra |
-| `POST` | `/api/v1/siembras/{siembra_id}/ciclos` | admin, agricultor | Detalle de siembra (Ciclos) | Abrir el siguiente ciclo |
-| `GET` | `/api/v1/siembras/{siembra_id}/conteos` | admin, agricultor, contador | Detalle de siembra (Plantas) | Conteos de plantas |
-| `POST` | `/api/v1/siembras/{siembra_id}/conteos` | admin, agricultor | Detalle de siembra (Plantas) | Registrar un conteo de plantas |
-| `GET` | `/api/v1/siembras/{siembra_id}/indices` | admin, agricultor, contador | Detalle de siembra (Plantas) | Índices por planta |
-| `POST` | `/api/v1/siembras/{siembra_id}/iniciar` | admin, agricultor | Detalle de siembra | Iniciar una siembra |
-| `POST` | `/api/v1/siembras/{siembra_id}/renovar` | admin, agricultor | Detalle de siembra | Abrir el ciclo de renovación (soqueo) |
+| `POST` | `/alertas/fuentes` | admin |  | Source Route |
+| `POST` | `/alertas/fuentes/{source_id}/sincronizar` | admin |  | Sync Route |
+| `GET` | `/asistente/calidad` | admin | Calidad del asistente | Calidad del asistente |
+| `POST` | `/auth/login` | público | Iniciar sesión | Iniciar sesión y obtener el token |
+| `GET` | `/auth/me` | cualquier usuario con sesión | Splash y Mi cuenta | Quién soy y qué puedo usar |
+| `GET` | `/avisos` | admin, agricultor, contador | Inicio (avisos) | Avisos de riesgo según la fase de sus cultivos |
+| `GET` | `/ciclos/{ciclo_id}` | admin, agricultor, contador | Detalle de ciclo | Detalle de un ciclo |
+| `POST` | `/ciclos/{ciclo_id}/cerrar` | admin, agricultor | Detalle de ciclo | Cerrar un ciclo |
+| `GET` | `/ciclos/{ciclo_id}/cronograma` | admin, agricultor, contador | Detalle de siembra (Tiempos) | Cronograma planeado del ciclo |
+| `POST` | `/ciclos/{ciclo_id}/iniciar` | admin, agricultor | Detalle de ciclo | Iniciar un ciclo |
+| `GET` | `/ciclos/{ciclo_id}/necesidad-insumos` | admin, agricultor, contador | Detalle de ciclo | Cuánto insumo se necesita |
+| `GET` | `/conocimiento` | cualquier usuario con sesión | Biblioteca de conocimiento | Buscar en la biblioteca |
+| `POST` | `/conocimiento` | admin, experto | Biblioteca de conocimiento | Crear una ficha en borrador |
+| `GET` | `/conocimiento/{problema_id}` | cualquier usuario con sesión | Ficha de problema | Ficha de un problema |
+| `PATCH` | `/conocimiento/{problema_id}/estado` | admin, experto | Revisión de conocimiento | Validar, retirar o reabrir una ficha |
+| `GET` | `/consultas` | admin, agricultor | Consultar e Historial de consultas | Historial de consultas |
+| `POST` | `/consultas` | admin, agricultor | Consultar e Historial de consultas | Preguntarle al asistente |
+| `GET` | `/consultas/{consulta_id}` | admin, agricultor | Consultar | Una consulta y su respuesta |
+| `POST` | `/consultas/{consulta_id}/retroalimentacion` | admin, agricultor | Consultar | Decir si la respuesta sirvió |
+| `GET` | `/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Última autorización aceptada |
+| `POST` | `/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Aceptar el tratamiento de datos |
+| `GET` | `/cultivos` | admin, agricultor | Catálogo de cultivos | Buscar cultivos |
+| `POST` | `/cultivos` | admin, agricultor | Catálogo de cultivos | Crear un cultivo con su perfil |
+| `GET` | `/cultivos/{cultivo_id}` | admin, agricultor | Ficha del cultivo | Ver el perfil de un cultivo |
+| `PUT` | `/cultivos/{cultivo_id}` | admin, agricultor | Ficha del cultivo | Reemplazar el perfil de un cultivo |
+| `GET` | `/cultivos/{cultivo_id}/dosis` | admin, agricultor | Ficha del cultivo | Dosis de referencia |
+| `GET` | `/cultivos/{cultivo_id}/fases` | admin, agricultor | Ficha del cultivo | Fases del cultivo |
+| `GET` | `/cultivos/{cultivo_id}/metodos` | admin, agricultor | Ficha del cultivo | Métodos de propagación |
+| `GET` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Riesgos del cultivo |
+| `PUT` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Reemplazar los riesgos del cultivo |
+| `GET` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Eventos adversos |
+| `POST` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Registrar un evento adverso |
+| `GET` | `/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Detalle de un evento |
+| `PATCH` | `/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Actualizar un evento |
+| `GET` | `/fincas` | cualquier usuario con sesión |  | List Owned |
+| `POST` | `/fincas` | cualquier usuario con sesión |  | Create |
+| `GET` | `/fincas/{finca_id}/actividades` | cualquier usuario con sesión |  | Activity List |
+| `POST` | `/fincas/{finca_id}/actividades` | cualquier usuario con sesión |  | Activity Route |
+| `PATCH` | `/fincas/{finca_id}/actividades/{activity_id}` | cualquier usuario con sesión |  | Activity Update |
+| `DELETE` | `/fincas/{finca_id}/actividades/{activity_id}` | cualquier usuario con sesión |  | Activity Delete |
+| `GET` | `/fincas/{finca_id}/alertas` | cualquier usuario con sesión |  | Alerts Route |
+| `POST` | `/fincas/{finca_id}/alertas` | admin, agricultor |  | Alert Route |
+| `GET` | `/fincas/{finca_id}/alimentacion-animal` | cualquier usuario con sesión |  | Feed List |
+| `POST` | `/fincas/{finca_id}/alimentacion-animal` | cualquier usuario con sesión |  | Feed Route |
+| `GET` | `/fincas/{finca_id}/animales` | cualquier usuario con sesión |  | Animal List |
+| `POST` | `/fincas/{finca_id}/animales` | cualquier usuario con sesión |  | Animal Route |
+| `POST` | `/fincas/{finca_id}/ciclos` | cualquier usuario con sesión |  | Cycle Route |
+| `GET` | `/fincas/{finca_id}/ciclos/{cycle_id}/cosechas/acumulado` | cualquier usuario con sesión |  | Harvest Total |
+| `POST` | `/fincas/{finca_id}/cosechas` | cualquier usuario con sesión |  | Harvest Route |
+| `GET` | `/fincas/{finca_id}/especies` | cualquier usuario con sesión |  | Species List |
+| `POST` | `/fincas/{finca_id}/especies` | cualquier usuario con sesión |  | Species Route |
+| `POST` | `/fincas/{finca_id}/etapas/{stage_id}/{action}` | cualquier usuario con sesión |  | Stage Transition |
+| `GET` | `/fincas/{finca_id}/eventos-animales` | cualquier usuario con sesión |  | Event List |
+| `POST` | `/fincas/{finca_id}/eventos-animales` | cualquier usuario con sesión |  | Event Route |
+| `GET` | `/fincas/{finca_id}/flujo-caja` | cualquier usuario con sesión |  | Cash Flow Route |
+| `GET` | `/fincas/{finca_id}/gastos` | cualquier usuario con sesión |  | Expense List |
+| `POST` | `/fincas/{finca_id}/gastos` | cualquier usuario con sesión |  | Expense Route |
+| `POST` | `/fincas/{finca_id}/gastos/{expense_id}/anular` | cualquier usuario con sesión |  | Cancel Expense Route |
+| `GET` | `/fincas/{finca_id}/ingresos` | cualquier usuario con sesión |  | Income List |
+| `POST` | `/fincas/{finca_id}/ingresos` | cualquier usuario con sesión |  | Income Route |
+| `POST` | `/fincas/{finca_id}/ingresos/{income_id}/anular` | cualquier usuario con sesión |  | Cancel Income Route |
+| `POST` | `/fincas/{finca_id}/insumos` | cualquier usuario con sesión |  | Supply Route |
+| `POST` | `/fincas/{finca_id}/insumos/consumo` | cualquier usuario con sesión |  | Output Route |
+| `POST` | `/fincas/{finca_id}/insumos/entrada` | cualquier usuario con sesión |  | Input Route |
+| `POST` | `/fincas/{finca_id}/jornales` | cualquier usuario con sesión |  | Jornal Route |
+| `POST` | `/fincas/{finca_id}/jornales/{jornal_id}/pagar` | cualquier usuario con sesión |  | Pay Route |
+| `GET` | `/fincas/{finca_id}/lotes` | cualquier usuario con sesión |  | List Lots |
+| `POST` | `/fincas/{finca_id}/lotes` | cualquier usuario con sesión |  | Create Lot |
+| `GET` | `/fincas/{finca_id}/lotes-animales` | cualquier usuario con sesión |  | Lot List |
+| `POST` | `/fincas/{finca_id}/lotes-animales` | cualquier usuario con sesión |  | Lot Route |
+| `GET` | `/fincas/{finca_id}/movimientos-insumo` | cualquier usuario con sesión |  | Movement List |
+| `GET` | `/fincas/{finca_id}/precios` | cualquier usuario con sesión |  | Price List |
+| `POST` | `/fincas/{finca_id}/precios` | cualquier usuario con sesión |  | Price Route |
+| `POST` | `/fincas/{finca_id}/procesos` | cualquier usuario con sesión |  | Process Route |
+| `POST` | `/fincas/{finca_id}/procesos/{process_id}/etapas` | cualquier usuario con sesión |  | Stage Route |
+| `GET` | `/fincas/{finca_id}/procesos/{process_id}/etapas/metricas` | cualquier usuario con sesión |  | Stage Metrics Route |
+| `GET` | `/fincas/{finca_id}/produccion-animal` | cualquier usuario con sesión |  | Production List |
+| `POST` | `/fincas/{finca_id}/produccion-animal` | cualquier usuario con sesión |  | Production Route |
+| `GET` | `/fincas/{finca_id}/trabajadores` | cualquier usuario con sesión |  | Worker List |
+| `POST` | `/fincas/{finca_id}/trabajadores` | cualquier usuario con sesión |  | Worker Route |
+| `PATCH` | `/fincas/{finca_id}/trabajadores/{worker_id}` | cualquier usuario con sesión |  | Worker Update |
+| `DELETE` | `/fincas/{finca_id}/trabajadores/{worker_id}` | cualquier usuario con sesión |  | Worker Delete |
+| `POST` | `/fincas/{finca_id}/ventas` | cualquier usuario con sesión |  | Sale Route |
+| `GET` | `/fuentes` | admin, experto | Revisión de conocimiento | Fuentes de la biblioteca |
+| `POST` | `/fuentes` | admin, experto | Revisión de conocimiento | Agregar una fuente |
+| `GET` | `/glosario` | cualquier usuario con sesión | Ayuda y glosario | Términos del agro explicados |
 | `GET` | `/health` | público | Splash | Salud del servicio |
 | `GET` | `/health/ready` | público | Operación (monitoreo) | El servicio está listo para trabajar |
+| `GET` | `/inicio` | cualquier usuario con sesión | Inicio | Lo de hoy |
+| `GET` | `/noticias` | cualquier usuario con sesión | Novedades de mi región | Noticias vigentes de mi región |
+| `POST` | `/noticias` | admin | Novedades de mi región | Cargar una noticia |
+| `GET` | `/politica` | público | Autorización de datos | Política de tratamiento de datos |
+| `GET` | `/propagacion` | admin, agricultor | Vivero | Lotes de vivero |
+| `POST` | `/propagacion` | admin, agricultor | Vivero | Crear un lote de vivero |
+| `PATCH` | `/propagacion/{lote_id}` | admin, agricultor | Vivero | Actualizar germinadas, listas y pérdidas |
+| `POST` | `/propagacion/{lote_id}/trasplante` | admin, agricultor | Vivero | Pasar plantas listas a una siembra |
+| `GET` | `/reportes` | cualquier usuario con sesión | Reportes | Reportes que puedo ver |
+| `GET` | `/reportes/cronograma` | admin, agricultor, contador | Visor de reporte | Tiempos de mis ciclos |
+| `GET` | `/reportes/eventos` | admin, agricultor | Visor de reporte | Eventos adversos y su costo |
+| `GET` | `/reportes/indices` | admin, agricultor, contador | Visor de reporte | Índices por planta de mis siembras |
+| `GET` | `/riesgos` | admin, agricultor | Ficha del cultivo (riesgos) | Catálogo de riesgos |
+| `POST` | `/riesgos` | admin | Ficha del cultivo (riesgos) | Agregar un riesgo al catálogo |
+| `GET` | `/siembras` | admin, agricultor, contador | Mis siembras | Mis siembras |
+| `POST` | `/siembras` | admin, agricultor | Mis siembras | Planear una siembra |
+| `GET` | `/siembras/{siembra_id}` | admin, agricultor, contador | Detalle de siembra | Detalle de una siembra |
+| `POST` | `/siembras/{siembra_id}/cancelar` | admin, agricultor | Detalle de siembra | Cancelar una siembra |
+| `GET` | `/siembras/{siembra_id}/ciclos` | admin, agricultor, contador | Detalle de siembra (Ciclos) | Ciclos de una siembra |
+| `POST` | `/siembras/{siembra_id}/ciclos` | admin, agricultor | Detalle de siembra (Ciclos) | Abrir el siguiente ciclo |
+| `GET` | `/siembras/{siembra_id}/conteos` | admin, agricultor, contador | Detalle de siembra (Plantas) | Conteos de plantas |
+| `POST` | `/siembras/{siembra_id}/conteos` | admin, agricultor | Detalle de siembra (Plantas) | Registrar un conteo de plantas |
+| `GET` | `/siembras/{siembra_id}/indices` | admin, agricultor, contador | Detalle de siembra (Plantas) | Índices por planta |
+| `POST` | `/siembras/{siembra_id}/iniciar` | admin, agricultor | Detalle de siembra | Iniciar una siembra |
+| `POST` | `/siembras/{siembra_id}/renovar` | admin, agricultor | Detalle de siembra | Abrir el ciclo de renovación (soqueo) |
+| `POST` | `/usuarios` | admin |  | Create |
 
 ## Paginación
 
@@ -141,12 +193,12 @@ La respuesta trae `items`, `total`, `page`, `size` y `has_more`. Detenga el scro
 Todo error tiene la misma forma:
 
 ```json
-{ "error": "CODIGO_ESTABLE", "message": "Texto para la persona.", "status_code": 422, "details": null }
+{ "error": { "code": "CODIGO_ESTABLE", "message": "Texto para la persona.", "details": null } }
 ```
 
-- Decida siempre con `error`, nunca con `message`: el texto puede cambiar, el código no.
-- `message` está en español claro y se puede mostrar tal cual.
-- `details` solo viene en `DATOS_INVALIDOS` (`422` de validación): lista de `{campo, mensaje, tipo}` para pintar el error bajo cada campo.
+- Decida siempre con `error.code`, nunca con `error.message`: el texto puede cambiar, el código no.
+- `error.message` está en español claro y se puede mostrar tal cual.
+- `error.details` solo viene en `DATOS_INVALIDOS` (`422` de validación): lista de `{campo, mensaje, tipo}` para pintar el error bajo cada campo.
 
 Cómo reacciona la app según el estado:
 
@@ -156,8 +208,8 @@ Cómo reacciona la app según el estado:
 | `403` | Muestra el mensaje y oculta la acción |
 | `404` | Muestra que ya no existe y vuelve a la lista |
 | `409` | Recarga los datos y avisa del choque |
-| `422` | Muestra `message`; con `details`, cada mensaje bajo su campo |
-| `500` | Muestra `message` y permite reintentar |
+| `422` | Muestra `error.message`; con `details`, cada mensaje bajo su campo |
+| `500` | Muestra `error.message` y permite reintentar |
 
 Ejemplo en Dart (`dart/lib/api_exception.dart`):
 
@@ -165,13 +217,13 @@ Ejemplo en Dart (`dart/lib/api_exception.dart`):
 try {
   await api.crearSiembra(datos);
 } on ApiException catch (e) {
-  switch (e.respuesta.error) {
+  switch (e.respuesta.error.code) {
     case 'AREA_SUPERA_LOTE':
-      mostrarAviso(e.respuesta.message);
+      mostrarAviso(e.respuesta.error.message);
     case 'SIEMBRA_ESTADO_INVALIDO':
       recargarSiembra();
     default:
-      mostrarAviso(e.respuesta.message);
+      mostrarAviso(e.respuesta.error.message);
   }
 }
 ```
@@ -180,28 +232,53 @@ try {
 
 | Código (`error`) | Estado | Mensaje de ejemplo | Nota |
 |---|---|---|---|
-| `CREDENCIALES_INVALIDAS` | 401 | Correo o contraseña incorrectos. |  |
-| `NO_AUTENTICADO` | 401 | Su sesión venció o no es válida. Inicie sesión de nuevo. |  |
-| `SIN_PERMISO` | 403 | No tiene permiso para esta acción. |  |
+| `FUENTE_NO_AUTORIZADA` | 400 | La fuente no está autorizada. |  |
+| `FUENTE_NO_DISPONIBLE` | 400 | No se pudo validar la fuente. |  |
+| `REFERENCIA_NO_VALIDA` | 400 | El ciclo o la actividad no son válidos. |  |
+| `CREDENCIALES_INVALIDAS` | 401 | El correo o la contraseña no son válidos. |  |
+| `NO_AUTENTICADO` | 401 | Debe autenticarse para continuar. |  |
+| `TOKEN_INVALIDO` | 401 | La autenticación no es válida. |  |
+| `PERMISO_DENEGADO` | 403 | No tiene permisos para realizar esta operación. |  |
+| `ACTIVIDAD_NO_ENCONTRADA` | 404 | La actividad no existe. |  |
+| `ANIMAL_NO_ENCONTRADO` | 404 | El animal no pertenece a la finca. |  |
 | `CICLO_NO_ENCONTRADO` | 404 | No encontramos ese ciclo. |  |
 | `CONSENTIMIENTO_PENDIENTE` | 404 | Aún no ha aceptado el tratamiento de datos. |  |
 | `CONSULTA_NO_ENCONTRADA` | 404 | No encontramos esa consulta. |  |
+| `COSECHA_NO_ENCONTRADA` | 404 | La cosecha no pertenece a la finca. |  |
 | `CULTIVO_NO_ENCONTRADO` | 404 | No encontramos ese cultivo. |  |
+| `ESPECIE_NO_ENCONTRADA` | 404 | La especie no pertenece a la finca. |  |
+| `ETAPA_NO_ENCONTRADA` | 404 | La etapa no existe. |  |
 | `EVENTO_NO_ENCONTRADO` | 404 | No encontramos ese evento. |  |
-| `FINCA_NO_ENCONTRADA` | 404 | No encontramos esa finca. | No existe o no está asignada al usuario. |
-| `FUENTE_NO_ENCONTRADA` | 404 | Una de las fuentes no existe. |  |
-| `LOTE_NO_ENCONTRADO` | 404 | No encontramos ese lote en la finca. |  |
+| `FINCA_NO_ENCONTRADA` | 404 | La finca no existe o no está asignada al usuario. |  |
+| `FUENTE_NO_ENCONTRADA` | 404 | La fuente no existe. |  |
+| `GASTO_NO_ENCONTRADO` | 404 | El gasto no existe. |  |
+| `INGRESO_NO_ENCONTRADO` | 404 | El ingreso no existe. |  |
+| `INSUMO_NO_ENCONTRADO` | 404 | El insumo no existe. |  |
+| `JORNALE_NO_ENCONTRADO` | 404 | El jornal no existe. |  |
+| `LOTE_NO_ENCONTRADO` | 404 | El lote no pertenece a la finca. |  |
 | `NO_ENCONTRADO` | 404 | No encontramos lo que busca. | La dirección no existe. |
 | `PROBLEMA_NO_ENCONTRADO` | 404 | No encontramos esa ficha. |  |
+| `PROCESO_NO_ENCONTRADO` | 404 | El proceso no pertenece a la finca. |  |
 | `PROPAGACION_NO_ENCONTRADA` | 404 | No encontramos ese lote de vivero. |  |
 | `RIESGO_NO_ENCONTRADO` | 404 | Uno de los riesgos no existe. |  |
 | `SIEMBRA_NO_ENCONTRADA` | 404 | No encontramos esa siembra. |  |
+| `TRABAJADOR_NO_ENCONTRADO` | 404 | El trabajador no existe. |  |
 | `METODO_NO_PERMITIDO` | 405 | Esa acción no está disponible en esta dirección. |  |
+| `CANTIDAD_NO_DISPONIBLE` | 409 | La venta supera la cantidad disponible. |  |
 | `CICLO_ACTIVO` | 409 | Cierre el ciclo actual antes de abrir otro. |  |
 | `CULTIVO_DUPLICADO` | 409 | Ya existe un cultivo con ese nombre. |  |
+| `EMAIL_EN_USO` | 409 | El correo electrónico ya está registrado. |  |
+| `EXISTENCIA_INSUFICIENTE` | 409 | La existencia no puede quedar negativa. |  |
+| `GASTO_YA_ANULADO` | 409 | El gasto ya está anulado. |  |
+| `INGRESO_YA_ANULADO` | 409 | El ingreso ya está anulado. |  |
+| `JORNALE_DUPLICADO` | 409 | El trabajador ya tiene un jornal registrado ese día. |  |
+| `JORNALE_YA_PAGADO` | 409 | El jornal ya fue procesado. |  |
 | `POLITICA_DESACTUALIZADA` | 409 | La política cambió. Léala de nuevo antes de aceptar. |  |
 | `RIESGO_DUPLICADO` | 409 | Ya existe un riesgo con ese nombre. |  |
 | `RIESGO_REPETIDO` | 409 | Un riesgo no puede repetirse en la misma fase. |  |
+| `TRANSICION_INVALIDA` | 409 | La etapa no permite esa transición. |  |
+| `ACCION_INVALIDA` | 422 | La acción debe ser iniciar o finalizar. |  |
+| `ACTIVIDAD_REQUERIDA` | 422 | El consumo debe estar asociado a una actividad. |  |
 | `AREA_SUPERA_LOTE` | 422 | El lote solo tiene … hectáreas libres. |  |
 | `CICLO_ESTADO_INVALIDO` | 422 | Solo se puede iniciar un ciclo planeado. |  |
 | `CICLO_NO_VALIDO` | 422 | Ese ciclo no pertenece a la finca. |  |
@@ -213,8 +290,10 @@ try {
 | `DATOS_INVALIDOS` | 422 | Hay datos que corregir. | Trae `details` con un mensaje por campo. |
 | `ESTADO_NO_PERMITIDO` | 422 | Una ficha … no puede pasar a …. |  |
 | `EVENTO_FECHAS_INVALIDAS` | 422 | La fecha final no puede ser anterior a la inicial. |  |
+| `FECHAS_INVALIDAS` | 422 | La fecha final no puede ser anterior a la inicial. |  |
 | `FICHA_INCOMPLETA` | 422 | Para validar, la ficha necesita al menos un síntoma. |  |
 | `FICHA_SIN_FUENTE` | 422 | Para validar, cada manejo debe tener su fuente. |  |
+| `MES_INVALIDO` | 422 | El mes debe estar entre 1 y 12. |  |
 | `METODO_NO_VALIDO` | 422 | Este cultivo no se propaga con ese método. |  |
 | `NOTICIA_FECHAS_INVALIDAS` | 422 | La noticia debe vencer después de publicarse. |  |
 | `PLANTAS_OBLIGATORIAS` | 422 | Indique cuántas plantas va a sembrar. |  |
@@ -222,7 +301,7 @@ try {
 | `SIEMBRA_ESTADO_INVALIDO` | 422 | La siembra ya no admite conteos. |  |
 | `SIEMBRA_NO_VALIDA` | 422 | Esa siembra no pertenece a la finca. |  |
 | `TRASPLANTE_INVALIDO` | 422 | La siembra debe ser de la misma finca y el mismo cultivo. |  |
-| `DEMASIADOS_INTENTOS` | 429 | Demasiados intentos. Intente de nuevo en … minutos. |  |
+| `VIGENCIA_INVALIDA` | 422 | La vigencia del precio no es válida. |  |
 | `LIMITE_DE_CONSULTAS` | 429 | Llegó al máximo de consultas de hoy. Mañana podrá hacer más. |  |
 | `ERROR_INTERNO` | 500 | Algo salió mal de nuestro lado. Intente de nuevo. | Permitir reintentar. |
 | `SERVICIO_NO_LISTO` | 503 | El servicio aún no puede atender. Intente en un momento. |  |
@@ -243,7 +322,6 @@ try {
 | `fase_critica` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `metodo` | `semilla`, `esqueje`, `estaca`, `injerto`, `hijuelo`, `acodo`, `in_vitro` |
 | `pago_cosecha_sugerido` | `por_kilo`, `por_jornal`, `por_destajo` |
-| `rol` | `admin`, `agricultor`, `contador`, `experto` |
 | `severidad` | `leve`, `moderada`, `severa` |
 | `susceptibilidad` | `baja`, `media`, `alta` |
 | `tipo` | `levante`, `produccion`, `renovacion` |
@@ -255,7 +333,7 @@ try {
 
 ## Indicadores explicados
 
-Los índices (por ejemplo `GET /api/v1/siembras/{id}/indices`) traen sus propios textos: `titulo`, `valor`, `unidad`, `explicacion`, `estado` (`bien`, `atencion`, `alerta` o `informativo`), `que_hacer` y `fecha_datos`. La app los muestra tal cual y no los redacta ni los recalcula. `valor` puede ser `null`.
+Los índices (por ejemplo `GET /siembras/{id}/indices`) traen sus propios textos: `titulo`, `valor`, `unidad`, `explicacion`, `estado` (`bien`, `atencion`, `alerta` o `informativo`), `que_hacer` y `fecha_datos`. La app los muestra tal cual y no los redacta ni los recalcula. `valor` puede ser `null`.
 
 Los valores agronómicos cargados por el equipo llevan `por_validar: true` hasta tener fuente técnica. La app los muestra como estimados.
 

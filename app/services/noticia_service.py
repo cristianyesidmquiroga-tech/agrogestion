@@ -7,9 +7,8 @@ from sqlalchemy import ColumnElement, delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
-from app.core.contexto import UsuarioActual
 from app.core.exceptions import ReglaNegocio
-from app.models.finca import Finca, FincaUsuario
+from app.models.entities import Finca, FincaUsuario, Usuario
 from app.models.noticia import Noticia
 from app.models.siembra import Siembra
 from app.schemas.noticia import NoticiaCrear
@@ -18,7 +17,7 @@ from app.services import cultivo_service
 settings = get_settings()
 
 
-async def _regiones_del_usuario(db: AsyncSession, usuario: UsuarioActual) -> set[str]:
+async def _regiones_del_usuario(db: AsyncSession, usuario: Usuario) -> set[str]:
     filas = await db.execute(
         select(Finca.municipio_dane, Finca.departamento_dane)
         .join(FincaUsuario, FincaUsuario.finca_id == Finca.id)
@@ -30,7 +29,7 @@ async def _regiones_del_usuario(db: AsyncSession, usuario: UsuarioActual) -> set
     return regiones
 
 
-async def _cultivos_del_usuario(db: AsyncSession, usuario: UsuarioActual) -> set[uuid.UUID]:
+async def _cultivos_del_usuario(db: AsyncSession, usuario: Usuario) -> set[uuid.UUID]:
     filas = await db.scalars(
         select(Siembra.cultivo_id)
         .join(FincaUsuario, FincaUsuario.finca_id == Siembra.finca_id)
@@ -41,7 +40,7 @@ async def _cultivos_del_usuario(db: AsyncSession, usuario: UsuarioActual) -> set
 
 async def listar(
     db: AsyncSession,
-    usuario: UsuarioActual,
+    usuario: Usuario,
     region: str | None,
     cultivo_id: uuid.UUID | None,
     skip: int,

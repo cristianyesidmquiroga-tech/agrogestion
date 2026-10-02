@@ -1,6 +1,6 @@
 from tests.conftest import payload_cultivo
 
-URL = "/api/v1/cultivos"
+URL = "/cultivos"
 
 
 async def test_crea_y_consulta_cultivos(sesion):

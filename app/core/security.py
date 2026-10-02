@@ -1,68 +1,41 @@
-"""Verificación del token y roles. El inicio de sesión lo completa el módulo de acceso."""
-
-import uuid
 from datetime import UTC, datetime, timedelta
-from typing import Annotated
+from functools import lru_cache
+from uuid import UUID
 
+import bcrypt
 import jwt
-from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
-from app.core.contexto import UsuarioActual
-from app.core.database import get_db
-from app.core.exceptions import NoAutenticado, SinPermiso
-from app.models.usuario import Usuario
-
-settings = get_settings()
-oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.api_prefix}/auth/login", auto_error=False)
 
 
-def crear_token(usuario_id: uuid.UUID, minutos: int | None = None) -> str:
-    ahora = datetime.now(UTC)
-    vence = ahora + timedelta(minutes=minutos or settings.access_token_expire_minutes)
-    return jwt.encode(
-        {"sub": str(usuario_id), "iat": ahora, "exp": vence},
-        settings.secret_key,
-        algorithm=settings.jwt_algorithm,
-    )
+def hash_password(password: str) -> str:
+    rounds = get_settings().bcrypt_cost
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=rounds)).decode()
 
 
-async def get_usuario_actual(
-    token: Annotated[str | None, Depends(oauth2)],
-    db: Annotated[AsyncSession, Depends(get_db)],
-) -> UsuarioActual:
-    sesion_invalida = NoAutenticado("Su sesión venció o no es válida. Inicie sesión de nuevo.")
-    if not token:
-        raise NoAutenticado("Inicie sesión para continuar.")
+def verify_password(password: str, hashed: str) -> bool:
     try:
-        datos = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
-        usuario_id = uuid.UUID(str(datos["sub"]))
-    except (jwt.PyJWTError, KeyError, ValueError):
-        raise sesion_invalida from None
-    usuario = await db.get(Usuario, usuario_id)
-    if usuario is None or not usuario.activo:
-        raise sesion_invalida
-    return UsuarioActual(id=usuario.id, rol=usuario.rol)
+        return bcrypt.checkpw(password.encode(), hashed.encode())
+    except ValueError:
+        return False
 
 
-class RequiereRol:
-    """Dependencia que deja pasar solo a los roles indicados."""
-
-    def __init__(self, *roles: str) -> None:
-        self.roles = roles
-
-    async def __call__(
-        self, usuario: Annotated[UsuarioActual, Depends(get_usuario_actual)]
-    ) -> UsuarioActual:
-        if usuario.rol not in self.roles:
-            raise SinPermiso("No tiene permiso para esta acción.")
-        return usuario
+def create_access_token(user_id: UUID) -> str:
+    now = datetime.now(UTC)
+    expira = now + timedelta(minutes=get_settings().jwt_expire_minutes)
+    claims = {"sub": str(user_id), "iat": now, "exp": expira}
+    return jwt.encode(claims, get_settings().jwt_secret, algorithm="HS256")
 
 
-Autenticado = Annotated[UsuarioActual, Depends(get_usuario_actual)]
-EscribeProduccion = Annotated[UsuarioActual, Depends(RequiereRol("admin", "agricultor"))]
-LeeProduccion = Annotated[UsuarioActual, Depends(RequiereRol("admin", "agricultor", "contador"))]
-Revisa = Annotated[UsuarioActual, Depends(RequiereRol("admin", "experto"))]
-SoloAdmin = Annotated[UsuarioActual, Depends(RequiereRol("admin"))]
+def decode_access_token(token: str) -> UUID:
+    payload = jwt.decode(token, get_settings().jwt_secret, algorithms=["HS256"])
+    return UUID(str(payload["sub"]))
+
+
+@lru_cache
+def _hash_de_relleno() -> str:
+    return hash_password("relleno-para-igualar-tiempos")
+
+
+def gastar_el_mismo_tiempo(password: str) -> None:
+    verify_password(password, _hash_de_relleno())
