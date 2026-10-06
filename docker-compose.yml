@@ -8,6 +8,8 @@ services:
       DATABASE_URL: sqlite+aiosqlite:////data/agrogestion.db
       JWT_SECRET: "${JWT_SECRET:?Define JWT_SECRET en las variables runtime de Coolify}"
       FIELD_ENCRYPTION_KEY: "${FIELD_ENCRYPTION_KEY:?Define FIELD_ENCRYPTION_KEY en las variables runtime de Coolify}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-}"
       ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000}"
       ALERT_ALLOWED_HOSTS: "${ALERT_ALLOWED_HOSTS:-}"
     volumes:

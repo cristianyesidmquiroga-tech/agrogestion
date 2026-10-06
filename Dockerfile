@@ -8,6 +8,7 @@ WORKDIR /app
 
 COPY requirements.txt ./requirements.txt
 COPY app ./app
+COPY scripts ./scripts
 COPY alembic ./alembic
 COPY alembic.ini ./alembic.ini
 COPY docs ./docs
