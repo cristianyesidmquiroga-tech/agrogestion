@@ -17,6 +17,12 @@ def test_security_headers_and_closed_cors() -> None:
     assert "access-control-allow-origin" not in blocked.headers
 
 
+def test_flutter_web_origin_is_allowed() -> None:
+    response = TestClient(app).get("/health", headers={"Origin": "http://localhost:8080"})
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "http://localhost:8080"
+
+
 def test_private_endpoint_requires_authentication() -> None:
     response = TestClient(app).get(f"/fincas/{uuid4()}/animales")
     assert response.status_code == 401
