@@ -1,0 +1,198 @@
+<style>
+#menu-api{position:fixed;top:0;left:0;bottom:0;width:280px;background:#fff;border-right:1px solid #d4d9e1;font-family:sans-serif;color:#3b4151;z-index:100;display:flex;flex-direction:column;transition:transform .2s}
+#menu-api[hidden]{display:flex;transform:translateX(-100%);visibility:hidden}
+#menu-api header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #e3e7ee}
+#menu-api h2{margin:0;font-size:15px}
+#menu-api .cuerpo{overflow-y:auto;padding:12px 16px 24px;flex:1}
+#menu-api h3{margin:16px 0 8px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#6b7385}
+#menu-api button{font:inherit;cursor:pointer}
+#menu-api .perfiles{display:flex;flex-direction:column;gap:4px}
+#menu-api .perfil,#menu-api .grupo{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;border:1px solid transparent;background:#fff;color:#3b4151;border-radius:4px;padding:7px 10px;font-size:14px}
+#menu-api .perfil:hover,#menu-api .grupo:hover{background:#f4f6f9}
+#menu-api .perfil:focus-visible,#menu-api .grupo:focus-visible,#menu-api input:focus-visible,#menu-abrir:focus-visible,#menu-cerrar:focus-visible,#menu-api .limpiar:focus-visible{outline:2px solid #1f8a5f;outline-offset:2px}
+#menu-api .perfil[aria-pressed="true"]{border-color:#49cc90;background:#eefaf4;font-weight:700;color:#1f8a5f}
+#menu-api .grupo[aria-current="true"]{border-color:#b9c0cc;background:#f4f6f9;font-weight:700}
+#menu-api .grupo[disabled]{opacity:.45;cursor:default}
+#menu-api .n{font-size:12px;background:#e9edf3;border-radius:10px;padding:1px 8px;color:#3b4151;font-weight:600}
+#menu-api input[type=search]{width:100%;box-sizing:border-box;border:1px solid #b9c0cc;border-radius:4px;padding:8px 10px;font-size:14px;color:#3b4151}
+#menu-api .estado{margin-top:14px;font-size:13px;color:#6b7385}
+#menu-api .limpiar{margin-top:10px;border:1px solid #b9c0cc;background:#fff;border-radius:4px;padding:6px 12px;font-size:13px;color:#3b4151}
+#menu-api .limpiar:hover{background:#3b4151;color:#fff;border-color:#3b4151}
+#menu-cerrar{border:1px solid #b9c0cc;background:#fff;border-radius:4px;padding:4px 10px;font-size:13px;color:#3b4151;cursor:pointer}
+#menu-abrir{position:fixed;top:12px;left:12px;z-index:99;border:2px solid #49cc90;background:#fff;color:#1f8a5f;border-radius:4px;padding:8px 14px;font:700 14px sans-serif;cursor:pointer;display:none}
+#menu-abrir:hover{background:#49cc90;color:#fff}
+body.menu-cerrado #menu-abrir{display:block}
+body.menu-abierto{padding-left:280px;transition:padding .2s}
+body.menu-cerrado{padding-left:0;transition:padding .2s}
+body.menu-cerrado #panel-acceso{margin-top:48px}
+@media (max-width:900px){body.menu-abierto{padding-left:0}#menu-api{box-shadow:0 0 24px rgba(0,0,0,.2)}}
+@media (prefers-reduced-motion:reduce){#menu-api,body.menu-abierto,body.menu-cerrado{transition:none}}
+</style>
+<script>
+(function () {
+  var NOMBRES = { admin: 'Administrador', agricultor: 'Agricultor', contador: 'Contador', experto: 'Experto', publico: 'Sin sesión' };
+  var ORDEN = ['admin', 'agricultor', 'contador', 'experto', 'publico'];
+  var ops = [];
+  var tags = [];
+  var filtro = { rol: 'todos', grupo: null, texto: '' };
+  var pendiente = false;
+
+  function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) { return; } }
+  function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  var menu = document.createElement('aside');
+  menu.id = 'menu-api';
+  menu.setAttribute('aria-label', 'Navegación de la API');
+  menu.innerHTML =
+    '<header><h2>Navegar la API</h2><button id="menu-cerrar" type="button" aria-expanded="true" aria-controls="menu-api">Ocultar</button></header>' +
+    '<div class="cuerpo">' +
+    '<h3>Perfil</h3><div class="perfiles" id="menu-perfiles" role="group" aria-label="Filtrar por perfil"></div>' +
+    '<h3>Buscar</h3><input id="menu-buscar" type="search" placeholder="Ruta o descripción" aria-label="Buscar ruta o descripción" autocomplete="off">' +
+    '<h3>Grupos</h3><div id="menu-grupos"></div>' +
+    '<p class="estado" id="menu-estado" aria-live="polite"></p>' +
+    '<button class="limpiar" id="menu-limpiar" type="button">Quitar filtros</button>' +
+    '</div>';
+  var abrir = document.createElement('button');
+  abrir.id = 'menu-abrir';
+  abrir.type = 'button';
+  abrir.textContent = 'Menú';
+  abrir.setAttribute('aria-controls', 'menu-api');
+  abrir.setAttribute('aria-expanded', 'false');
+  document.body.appendChild(menu);
+  document.body.appendChild(abrir);
+
+  function fijarAbierto(si, mover, recordar) {
+    menu.hidden = !si;
+    document.body.classList.toggle('menu-abierto', si);
+    document.body.classList.toggle('menu-cerrado', !si);
+    abrir.setAttribute('aria-expanded', String(si));
+    menu.querySelector('#menu-cerrar').setAttribute('aria-expanded', String(si));
+    if (recordar) { guardar('agro-menu', si ? 'abierto' : 'cerrado'); }
+    if (mover) { (si ? menu.querySelector('#menu-cerrar') : abrir).focus(); }
+  }
+  var inicial = leer('agro-menu') !== 'cerrado' && window.innerWidth > 900;
+  fijarAbierto(inicial, false, false);
+  menu.querySelector('#menu-cerrar').addEventListener('click', function () { fijarAbierto(false, true, true); });
+  abrir.addEventListener('click', function () { fijarAbierto(true, true, true); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !menu.hidden && window.innerWidth <= 900) { fijarAbierto(false, true, false); }
+  });
+
+  function permite(op, rol) {
+    if (rol === 'todos') { return true; }
+    if (rol === 'publico') { return op.roles.indexOf('publico') >= 0; }
+    return op.roles.indexOf(rol) >= 0 || op.roles.indexOf('sesion') >= 0 || op.roles.indexOf('publico') >= 0;
+  }
+  function pasa(op, ignorar) {
+    if (ignorar !== 'rol' && !permite(op, filtro.rol)) { return false; }
+    if (ignorar !== 'grupo' && filtro.grupo && op.tag !== filtro.grupo) { return false; }
+    if (filtro.texto && (op.path + ' ' + op.resumen).toLowerCase().indexOf(filtro.texto) < 0) { return false; }
+    return true;
+  }
+  function clave(m, p) { return m.toUpperCase() + ' ' + p; }
+
+  function fila(clase, texto, n) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = clase;
+    var a = document.createElement('span');
+    a.textContent = texto;
+    var c = document.createElement('span');
+    c.className = 'n';
+    c.textContent = n;
+    b.appendChild(a);
+    b.appendChild(c);
+    return b;
+  }
+
+  function pintarMenu() {
+    var cont = menu.querySelector('#menu-perfiles');
+    cont.textContent = '';
+    ['todos'].concat(ORDEN).forEach(function (rol) {
+      var n = ops.filter(function (o) { return permite(o, rol) && pasa(o, 'rol'); }).length;
+      var b = fila('perfil', rol === 'todos' ? 'Todos los perfiles' : NOMBRES[rol], n);
+      b.setAttribute('aria-pressed', String(filtro.rol === rol));
+      b.addEventListener('click', function () { filtro.rol = rol; aplicar(); });
+      cont.appendChild(b);
+    });
+    var g = menu.querySelector('#menu-grupos');
+    g.textContent = '';
+    tags.forEach(function (t) {
+      var n = ops.filter(function (o) { return o.tag === t && pasa(o, 'grupo'); }).length;
+      var b = fila('grupo', t, n);
+      b.disabled = n === 0;
+      if (filtro.grupo === t) { b.setAttribute('aria-current', 'true'); }
+      b.addEventListener('click', function () {
+        filtro.grupo = filtro.grupo === t ? null : t;
+        aplicar();
+        if (filtro.grupo) { setTimeout(function () { irAlGrupo(t); }, 60); }
+      });
+      g.appendChild(b);
+    });
+    var visibles = ops.filter(function (o) { return pasa(o); }).length;
+    menu.querySelector('#menu-estado').textContent = 'Mostrando ' + visibles + ' de ' + ops.length + ' funciones.';
+  }
+
+  function irAlGrupo(t) {
+    var h = document.querySelector('.opblock-tag[data-tag="' + t.replace(/"/g, '\\"') + '"]');
+    if (!h) { return; }
+    var sec = h.closest('.opblock-tag-section');
+    if (sec && !sec.classList.contains('is-open')) { h.click(); }
+    var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    h.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  function pintarDocumento() {
+    pendiente = false;
+    var mapa = {};
+    ops.forEach(function (o) { mapa[clave(o.metodo, o.path)] = o; });
+    document.querySelectorAll('#swagger-ui .opblock').forEach(function (bloque) {
+      var m = bloque.querySelector('.opblock-summary-method');
+      var p = bloque.querySelector('.opblock-summary-path');
+      if (!m || !p) { return; }
+      var op = mapa[clave(m.textContent.trim(), p.getAttribute('data-path') || p.textContent.trim())];
+      bloque.style.display = !op || pasa(op) ? '' : 'none';
+    });
+    document.querySelectorAll('#swagger-ui .opblock-tag-section').forEach(function (sec) {
+      var bloques = sec.querySelectorAll('.opblock');
+      var hay = Array.prototype.some.call(bloques, function (b) { return b.style.display !== 'none'; });
+      sec.style.display = hay || bloques.length === 0 ? '' : 'none';
+    });
+  }
+  function aplicar() {
+    pintarMenu();
+    if (!pendiente) { pendiente = true; requestAnimationFrame(pintarDocumento); }
+  }
+
+  menu.querySelector('#menu-buscar').addEventListener('input', function (e) {
+    filtro.texto = e.target.value.trim().toLowerCase();
+    aplicar();
+  });
+  menu.querySelector('#menu-limpiar').addEventListener('click', function () {
+    filtro = { rol: 'todos', grupo: null, texto: '' };
+    menu.querySelector('#menu-buscar').value = '';
+    aplicar();
+  });
+  document.addEventListener('agro:perfil', function (e) {
+    if (ORDEN.indexOf(e.detail) >= 0) { filtro.rol = e.detail; aplicar(); }
+  });
+
+  var observado = document.getElementById('swagger-ui');
+  if (observado) {
+    new MutationObserver(function () {
+      if (!pendiente && ops.length) { pendiente = true; requestAnimationFrame(pintarDocumento); }
+    }).observe(observado, { childList: true, subtree: true });
+  }
+
+  fetch('/openapi.json').then(function (r) { return r.json(); }).then(function (spec) {
+    tags = (spec.tags || []).map(function (t) { return t.name; });
+    Object.keys(spec.paths).forEach(function (path) {
+      Object.keys(spec.paths[path]).forEach(function (metodo) {
+        var o = spec.paths[path][metodo];
+        ops.push({ path: path, metodo: metodo, tag: (o.tags || [''])[0], resumen: o.summary || '', roles: o['x-roles'] || ['publico'] });
+      });
+    });
+    aplicar();
+  });
+})();
+</script>

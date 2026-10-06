@@ -17,6 +17,7 @@ ESTILO_CLARO = (
     "html,body{background:#fff!important;color:#3b4151}</style>"
 )
 PANEL_ACCESO = (Path(__file__).parent / "docs_acceso.html").read_text(encoding="utf-8")
+MENU_API = (Path(__file__).parent / "docs_menu.html").read_text(encoding="utf-8")
 
 
 @router.get("/docs", include_in_schema=False)
@@ -28,5 +29,5 @@ async def documentacion() -> HTMLResponse:
     )
     html = bytes(pagina.body).decode("utf-8")
     html = html.replace("</head>", ESTILO_CLARO + "</head>", 1)
-    html = html.replace("</body>", PANEL_ACCESO + "</body>", 1)
+    html = html.replace("</body>", PANEL_ACCESO + MENU_API + "</body>", 1)
     return HTMLResponse(html)

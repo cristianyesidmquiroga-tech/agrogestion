@@ -84,7 +84,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "publico"
+        ]
       }
     },
     "/auth/me": {
@@ -160,6 +163,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "sesion"
         ]
       }
     },
@@ -246,6 +252,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin"
         ]
       }
     },
@@ -326,6 +335,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "sesion"
         ]
       },
       "post": {
@@ -410,6 +422,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "sesion"
         ]
       }
     },
@@ -508,7 +523,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "get": {
         "tags": [
@@ -598,7 +616,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/glosario": {
@@ -699,7 +720,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/politica": {
@@ -770,7 +794,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "publico"
+        ]
       }
     },
     "/cuenta/consentimiento": {
@@ -846,6 +873,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "sesion"
         ]
       },
       "post": {
@@ -930,6 +960,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "sesion"
         ]
       }
     },
@@ -1006,6 +1039,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "sesion"
         ]
       }
     },
@@ -1082,6 +1118,11 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
         ]
       }
     },
@@ -1228,7 +1269,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       },
       "post": {
         "tags": [
@@ -1312,7 +1357,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/cultivos/{cultivo_id}": {
@@ -1400,7 +1449,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       },
       "put": {
         "tags": [
@@ -1496,7 +1549,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/cultivos/{cultivo_id}/fases": {
@@ -1588,7 +1645,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/cultivos/{cultivo_id}/metodos": {
@@ -1680,7 +1741,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/cultivos/{cultivo_id}/dosis": {
@@ -1772,7 +1837,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/cultivos/{cultivo_id}/riesgos": {
@@ -1864,7 +1933,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       },
       "put": {
         "tags": [
@@ -1968,7 +2041,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/riesgos": {
@@ -2048,6 +2125,10 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin",
+          "agricultor"
         ]
       },
       "post": {
@@ -2132,6 +2213,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin"
         ]
       }
     },
@@ -2276,7 +2360,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       },
       "post": {
         "tags": [
@@ -2360,7 +2449,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/siembras/{siembra_id}": {
@@ -2448,7 +2541,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       }
     },
     "/siembras/{siembra_id}/iniciar": {
@@ -2553,7 +2651,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/siembras/{siembra_id}/cancelar": {
@@ -2641,7 +2743,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/siembras/{siembra_id}/ciclos": {
@@ -2733,7 +2839,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       },
       "post": {
         "tags": [
@@ -2829,7 +2940,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/siembras/{siembra_id}/renovar": {
@@ -2917,7 +3032,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/siembras/{siembra_id}/conteos": {
@@ -3009,7 +3128,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       },
       "post": {
         "tags": [
@@ -3105,7 +3229,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/siembras/{siembra_id}/indices": {
@@ -3193,7 +3321,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       }
     },
     "/ciclos/{ciclo_id}": {
@@ -3281,7 +3414,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       }
     },
     "/ciclos/{ciclo_id}/iniciar": {
@@ -3386,7 +3524,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/ciclos/{ciclo_id}/cerrar": {
@@ -3491,7 +3633,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/ciclos/{ciclo_id}/cronograma": {
@@ -3579,7 +3725,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       }
     },
     "/ciclos/{ciclo_id}/necesidad-insumos": {
@@ -3667,7 +3818,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       }
     },
     "/propagacion": {
@@ -3788,7 +3944,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       },
       "post": {
         "tags": [
@@ -3872,7 +4032,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/propagacion/{lote_id}": {
@@ -3970,7 +4134,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/propagacion/{lote_id}/trasplante": {
@@ -4068,7 +4236,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/eventos-adversos": {
@@ -4212,7 +4384,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       },
       "post": {
         "tags": [
@@ -4296,7 +4472,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/eventos-adversos/{evento_id}": {
@@ -4384,7 +4564,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       },
       "patch": {
         "tags": [
@@ -4480,7 +4664,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/reportes": {
@@ -4560,6 +4748,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "sesion"
         ]
       }
     },
@@ -4655,7 +4846,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       }
     },
     "/reportes/cronograma": {
@@ -4750,7 +4946,12 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor",
+          "contador"
+        ]
       }
     },
     "/reportes/eventos": {
@@ -4879,7 +5080,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/conocimiento": {
@@ -5066,7 +5271,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -5150,7 +5358,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "experto"
+        ]
       }
     },
     "/conocimiento/{problema_id}": {
@@ -5238,7 +5450,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/conocimiento/{problema_id}/estado": {
@@ -5336,7 +5551,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "experto"
+        ]
       }
     },
     "/fuentes": {
@@ -5416,6 +5635,10 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin",
+          "experto"
         ]
       },
       "post": {
@@ -5500,6 +5723,10 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin",
+          "experto"
         ]
       }
     },
@@ -5596,7 +5823,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       },
       "get": {
         "tags": [
@@ -5718,7 +5949,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/consultas/{consulta_id}": {
@@ -5806,7 +6041,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/consultas/{consulta_id}/retroalimentacion": {
@@ -5904,7 +6143,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/asistente/calidad": {
@@ -5980,6 +6223,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin"
         ]
       }
     },
@@ -6121,7 +6367,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -6205,7 +6454,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin"
+        ]
       }
     },
     "/fincas/{finca_id}/ciclos": {
@@ -6303,7 +6555,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/actividades": {
@@ -6401,7 +6656,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "get": {
         "tags": [
@@ -6491,7 +6749,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/actividades/{activity_id}": {
@@ -6599,7 +6860,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "delete": {
         "tags": [
@@ -6695,7 +6959,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/trabajadores": {
@@ -6793,7 +7060,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "get": {
         "tags": [
@@ -6883,7 +7153,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/trabajadores/{worker_id}": {
@@ -6991,7 +7264,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "delete": {
         "tags": [
@@ -7087,7 +7363,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/jornales": {
@@ -7201,7 +7480,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/jornales/{jornal_id}/pagar": {
@@ -7315,7 +7597,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/insumos": {
@@ -7413,7 +7698,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/insumos/entrada": {
@@ -7527,7 +7815,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/insumos/consumo": {
@@ -7641,7 +7932,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/cosechas": {
@@ -7739,7 +8033,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/ciclos/{cycle_id}/cosechas/acumulado": {
@@ -7837,7 +8134,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/precios": {
@@ -7935,7 +8235,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "get": {
         "tags": [
@@ -8025,7 +8328,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/procesos": {
@@ -8123,7 +8429,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/procesos/{process_id}/etapas": {
@@ -8231,7 +8540,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/etapas/{stage_id}/{action}": {
@@ -8338,7 +8650,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/procesos/{process_id}/etapas/metricas": {
@@ -8436,7 +8751,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/movimientos-insumo": {
@@ -8528,7 +8846,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/gastos": {
@@ -8642,7 +8963,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "get": {
         "tags": [
@@ -8749,7 +9073,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/ingresos": {
@@ -8863,7 +9190,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "get": {
         "tags": [
@@ -8970,7 +9300,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/gastos/{expense_id}/anular": {
@@ -9078,7 +9411,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/ingresos/{income_id}/anular": {
@@ -9186,7 +9522,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/flujo-caja": {
@@ -9309,7 +9648,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/ventas": {
@@ -9423,7 +9765,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/especies": {
@@ -9515,7 +9860,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -9611,7 +9959,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/lotes-animales": {
@@ -9703,7 +10054,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -9799,7 +10153,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/animales": {
@@ -9891,7 +10248,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -10003,7 +10363,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/eventos-animales": {
@@ -10095,7 +10458,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -10207,7 +10573,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/produccion-animal": {
@@ -10299,7 +10668,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -10411,7 +10783,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/alimentacion-animal": {
@@ -10503,7 +10878,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -10615,7 +10993,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       }
     },
     "/fincas/{finca_id}/alertas": {
@@ -10707,7 +11088,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "sesion"
+        ]
       },
       "post": {
         "tags": [
@@ -10819,7 +11203,11 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin",
+          "agricultor"
+        ]
       }
     },
     "/alertas/fuentes": {
@@ -10906,6 +11294,9 @@
           {
             "HTTPBearer": []
           }
+        ],
+        "x-roles": [
+          "admin"
         ]
       }
     },
@@ -11001,7 +11392,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "admin"
+        ]
       }
     },
     "/health": {
@@ -11023,7 +11417,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "publico"
+        ]
       }
     },
     "/health/ready": {
@@ -11044,7 +11441,10 @@
               }
             }
           }
-        }
+        },
+        "x-roles": [
+          "publico"
+        ]
       }
     }
   },

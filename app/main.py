@@ -2,12 +2,15 @@ from typing import Any
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
+from fastapi.routing import APIRoute
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
 from app.core.config import get_settings
 from app.core.etiquetas import ETIQUETAS
 from app.core.exceptions import registrar_manejadores
+from app.core.permisos import acceso_de
 from app.core.registro import configurar_registro, instalar
 from app.routers import (
     auth,
@@ -120,7 +123,26 @@ def create_app() -> FastAPI:
     ):
         app.include_router(router, responses=RESPUESTAS_ERROR)
     app.include_router(health.router)
+    app.openapi = lambda: _esquema(app)  # type: ignore[method-assign]
     return app
+
+
+def _esquema(app: FastAPI) -> dict[str, Any]:
+    if app.openapi_schema:
+        return app.openapi_schema
+    esquema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+        tags=app.openapi_tags,
+    )
+    for ruta in app.routes:
+        if isinstance(ruta, APIRoute) and ruta.include_in_schema:
+            for metodo in ruta.methods:
+                esquema["paths"][ruta.path][metodo.lower()]["x-roles"] = acceso_de(ruta)
+    app.openapi_schema = esquema
+    return esquema
 
 
 app = create_app()

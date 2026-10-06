@@ -6,7 +6,7 @@ from fastapi.dependencies.models import Dependant
 from fastapi.routing import APIRoute
 from starlette.routing import BaseRoute
 
-from app.dependencies import RequiereRol
+from app.dependencies import RequiereRol, current_user
 
 ORDEN_METODOS = {"GET": 0, "POST": 1, "PUT": 2, "PATCH": 3, "DELETE": 4}
 
@@ -52,3 +52,12 @@ def permisos_del_rol(rutas: Iterable[BaseRoute], rol: str) -> list[dict[str, str
             )
     salida.sort(key=lambda x: (x[0], x[1], x[2]))
     return [item[3] for item in salida]
+
+
+def acceso_de(ruta: APIRoute) -> list[str]:
+    roles = roles_permitidos(ruta)
+    if roles is not None:
+        return list(roles)
+    if any(dep.call is current_user for dep in _dependencias(ruta.dependant)):
+        return ["sesion"]
+    return ["publico"]
