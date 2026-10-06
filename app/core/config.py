@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite+aiosqlite:///./agrogestion.db"
     jwt_secret: str = Field(min_length=16)
     field_encryption_key: str = ""
-    allowed_origins: str = "http://localhost:3000"
+    allowed_origins: str = "http://localhost:3000,http://localhost:8080"
     login_max_attempts: int = 5
     login_lock_minutes: int = 15
     jwt_expire_minutes: int = Field(default=60, ge=5, le=1440)
@@ -22,7 +22,9 @@ class Settings(BaseSettings):
     noticias_dias_vigencia: int = Field(default=7, ge=1, le=60)
     log_level: str = "INFO"
     seed_password: str | None = None
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", env_ignore_empty=True, extra="ignore"
+    )
 
     @property
     def origins(self) -> list[str]:

@@ -19,6 +19,8 @@ API REST para la gestión de cultivos y ganadería con FastAPI, PostgreSQL 16, S
 4. Ejecutar: `uvicorn app.main:app --reload`.
 5. Datos de ejemplo en SQLite: `python -m scripts.demo` (usa `SEED_PASSWORD` del `.env`).
 
+En Windows, ejecute `iniciar_local.bat` con doble clic. La primera vez crea `.env` con una clave JWT aleatoria, prepara `.venv` e instala las dependencias; luego aplica las migraciones, prepara `admin@demo.com` con contraseña `1234` y arranca FastAPI. La contraseña se restablece en cada arranque local y no debe usarse en producción. Requiere Python 3.12 o superior y conexión a internet para instalar dependencias.
+
 La documentación interactiva está en `/docs`: inicie sesión en el panel superior y las pruebas usan ese perfil. `GET /auth/me` devuelve las funciones que cada perfil puede usar.
 
 ## Estructura
