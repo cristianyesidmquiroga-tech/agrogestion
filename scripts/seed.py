@@ -73,9 +73,9 @@ async def cargar(db: AsyncSession) -> dict[str, int]:
 
 
 async def main() -> None:
-    from app.core.database import get_sessionmaker
+    from app.core.database import session_factory
 
-    async with get_sessionmaker()() as db:
+    async with session_factory() as db:
         print(await cargar(db))
 
 
