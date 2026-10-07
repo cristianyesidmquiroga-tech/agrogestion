@@ -27,7 +27,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME:-agrogestion}
       JWT_SECRET: "${JWT_SECRET:?Defina JWT_SECRET en las variables de Coolify}"
       FIELD_ENCRYPTION_KEY: "${FIELD_ENCRYPTION_KEY:?Defina FIELD_ENCRYPTION_KEY en las variables de Coolify}"
-      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:?Defina ALLOWED_ORIGINS en las variables de Coolify}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-https://agrogestion.proyecto.sbs}"
       ALERT_ALLOWED_HOSTS: ${ALERT_ALLOWED_HOSTS:-}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
