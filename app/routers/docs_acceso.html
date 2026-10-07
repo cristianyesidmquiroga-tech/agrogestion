@@ -150,6 +150,7 @@
       mostrar();
       panel.querySelector('#acceso-rol').textContent = res.cuerpo.rol + ' (' + res.cuerpo.nombre + ')';
       ok.hidden = false;
+      document.dispatchEvent(new CustomEvent('agro:perfil', { detail: res.cuerpo.rol }));
       autorizar(res.cuerpo.access_token);
       cargarPermisos(res.cuerpo.access_token);
     }).catch(function () {

@@ -68,6 +68,120 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 
 | Método | Ruta | Quién entra | Pantalla | Qué hace |
 |---|---|---|---|---|
+| `POST` | `/alertas/fuentes` | admin |  | Source Route |
+| `POST` | `/alertas/fuentes/{source_id}/sincronizar` | admin |  | Sync Route |
+| `GET` | `/asistente/calidad` | admin | Calidad del asistente | Calidad del asistente |
+| `POST` | `/auth/login` | público | Iniciar sesión | Iniciar sesión y obtener el token |
+| `GET` | `/auth/me` | cualquier usuario con sesión | Splash y Mi cuenta | Quién soy y qué puedo usar |
+| `GET` | `/avisos` | admin, agricultor, contador | Inicio (avisos) | Avisos de riesgo según la fase de sus cultivos |
+| `GET` | `/ciclos/{ciclo_id}` | admin, agricultor, contador | Detalle de ciclo | Detalle de un ciclo |
+| `POST` | `/ciclos/{ciclo_id}/cerrar` | admin, agricultor | Detalle de ciclo | Cerrar un ciclo |
+| `GET` | `/ciclos/{ciclo_id}/cronograma` | admin, agricultor, contador | Detalle de siembra (Tiempos) | Cronograma planeado del ciclo |
+| `POST` | `/ciclos/{ciclo_id}/iniciar` | admin, agricultor | Detalle de ciclo | Iniciar un ciclo |
+| `GET` | `/ciclos/{ciclo_id}/necesidad-insumos` | admin, agricultor, contador | Detalle de ciclo | Cuánto insumo se necesita |
+| `GET` | `/conocimiento` | cualquier usuario con sesión | Biblioteca de conocimiento | Buscar en la biblioteca |
+| `POST` | `/conocimiento` | admin, experto | Biblioteca de conocimiento | Crear una ficha en borrador |
+| `GET` | `/conocimiento/{problema_id}` | cualquier usuario con sesión | Ficha de problema | Ficha de un problema |
+| `PATCH` | `/conocimiento/{problema_id}/estado` | admin, experto | Revisión de conocimiento | Validar, retirar o reabrir una ficha |
+| `GET` | `/consultas` | admin, agricultor | Consultar e Historial de consultas | Historial de consultas |
+| `POST` | `/consultas` | admin, agricultor | Consultar e Historial de consultas | Preguntarle al asistente |
+| `GET` | `/consultas/{consulta_id}` | admin, agricultor | Consultar | Una consulta y su respuesta |
+| `POST` | `/consultas/{consulta_id}/retroalimentacion` | admin, agricultor | Consultar | Decir si la respuesta sirvió |
+| `GET` | `/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Última autorización aceptada |
+| `POST` | `/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Aceptar el tratamiento de datos |
+| `GET` | `/cultivos` | admin, agricultor | Catálogo de cultivos | Buscar cultivos |
+| `POST` | `/cultivos` | admin, agricultor | Catálogo de cultivos | Crear un cultivo con su perfil |
+| `GET` | `/cultivos/{cultivo_id}` | admin, agricultor | Ficha del cultivo | Ver el perfil de un cultivo |
+| `PUT` | `/cultivos/{cultivo_id}` | admin, agricultor | Ficha del cultivo | Reemplazar el perfil de un cultivo |
+| `GET` | `/cultivos/{cultivo_id}/dosis` | admin, agricultor | Ficha del cultivo | Dosis de referencia |
+| `GET` | `/cultivos/{cultivo_id}/fases` | admin, agricultor | Ficha del cultivo | Fases del cultivo |
+| `GET` | `/cultivos/{cultivo_id}/metodos` | admin, agricultor | Ficha del cultivo | Métodos de propagación |
+| `GET` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Riesgos del cultivo |
+| `PUT` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Reemplazar los riesgos del cultivo |
+| `GET` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Eventos adversos |
+| `POST` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Registrar un evento adverso |
+| `GET` | `/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Detalle de un evento |
+| `PATCH` | `/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Actualizar un evento |
+| `GET` | `/fincas` | cualquier usuario con sesión |  | List Owned |
+| `POST` | `/fincas` | cualquier usuario con sesión |  | Create |
+| `GET` | `/fincas/{finca_id}/actividades` | cualquier usuario con sesión |  | Activity List |
+| `POST` | `/fincas/{finca_id}/actividades` | cualquier usuario con sesión |  | Activity Route |
+| `PATCH` | `/fincas/{finca_id}/actividades/{activity_id}` | cualquier usuario con sesión |  | Activity Update |
+| `DELETE` | `/fincas/{finca_id}/actividades/{activity_id}` | cualquier usuario con sesión |  | Activity Delete |
+| `GET` | `/fincas/{finca_id}/alertas` | cualquier usuario con sesión |  | Alerts Route |
+| `POST` | `/fincas/{finca_id}/alertas` | admin, agricultor |  | Alert Route |
+| `GET` | `/fincas/{finca_id}/alimentacion-animal` | cualquier usuario con sesión |  | Feed List |
+| `POST` | `/fincas/{finca_id}/alimentacion-animal` | cualquier usuario con sesión |  | Feed Route |
+| `GET` | `/fincas/{finca_id}/animales` | cualquier usuario con sesión |  | Animal List |
+| `POST` | `/fincas/{finca_id}/animales` | cualquier usuario con sesión |  | Animal Route |
+| `POST` | `/fincas/{finca_id}/ciclos` | cualquier usuario con sesión |  | Cycle Route |
+| `GET` | `/fincas/{finca_id}/ciclos/{cycle_id}/cosechas/acumulado` | cualquier usuario con sesión |  | Harvest Total |
+| `POST` | `/fincas/{finca_id}/cosechas` | cualquier usuario con sesión |  | Harvest Route |
+| `GET` | `/fincas/{finca_id}/especies` | cualquier usuario con sesión |  | Species List |
+| `POST` | `/fincas/{finca_id}/especies` | cualquier usuario con sesión |  | Species Route |
+| `POST` | `/fincas/{finca_id}/etapas/{stage_id}/{action}` | cualquier usuario con sesión |  | Stage Transition |
+| `GET` | `/fincas/{finca_id}/eventos-animales` | cualquier usuario con sesión |  | Event List |
+| `POST` | `/fincas/{finca_id}/eventos-animales` | cualquier usuario con sesión |  | Event Route |
+| `GET` | `/fincas/{finca_id}/flujo-caja` | cualquier usuario con sesión |  | Cash Flow Route |
+| `GET` | `/fincas/{finca_id}/gastos` | cualquier usuario con sesión |  | Expense List |
+| `POST` | `/fincas/{finca_id}/gastos` | cualquier usuario con sesión |  | Expense Route |
+| `POST` | `/fincas/{finca_id}/gastos/{expense_id}/anular` | cualquier usuario con sesión |  | Cancel Expense Route |
+| `GET` | `/fincas/{finca_id}/ingresos` | cualquier usuario con sesión |  | Income List |
+| `POST` | `/fincas/{finca_id}/ingresos` | cualquier usuario con sesión |  | Income Route |
+| `POST` | `/fincas/{finca_id}/ingresos/{income_id}/anular` | cualquier usuario con sesión |  | Cancel Income Route |
+| `POST` | `/fincas/{finca_id}/insumos` | cualquier usuario con sesión |  | Supply Route |
+| `POST` | `/fincas/{finca_id}/insumos/consumo` | cualquier usuario con sesión |  | Output Route |
+| `POST` | `/fincas/{finca_id}/insumos/entrada` | cualquier usuario con sesión |  | Input Route |
+| `POST` | `/fincas/{finca_id}/jornales` | cualquier usuario con sesión |  | Jornal Route |
+| `POST` | `/fincas/{finca_id}/jornales/{jornal_id}/pagar` | cualquier usuario con sesión |  | Pay Route |
+| `GET` | `/fincas/{finca_id}/lotes` | cualquier usuario con sesión |  | List Lots |
+| `POST` | `/fincas/{finca_id}/lotes` | cualquier usuario con sesión |  | Create Lot |
+| `GET` | `/fincas/{finca_id}/lotes-animales` | cualquier usuario con sesión |  | Lot List |
+| `POST` | `/fincas/{finca_id}/lotes-animales` | cualquier usuario con sesión |  | Lot Route |
+| `GET` | `/fincas/{finca_id}/movimientos-insumo` | cualquier usuario con sesión |  | Movement List |
+| `GET` | `/fincas/{finca_id}/precios` | cualquier usuario con sesión |  | Price List |
+| `POST` | `/fincas/{finca_id}/precios` | cualquier usuario con sesión |  | Price Route |
+| `POST` | `/fincas/{finca_id}/procesos` | cualquier usuario con sesión |  | Process Route |
+| `POST` | `/fincas/{finca_id}/procesos/{process_id}/etapas` | cualquier usuario con sesión |  | Stage Route |
+| `GET` | `/fincas/{finca_id}/procesos/{process_id}/etapas/metricas` | cualquier usuario con sesión |  | Stage Metrics Route |
+| `GET` | `/fincas/{finca_id}/produccion-animal` | cualquier usuario con sesión |  | Production List |
+| `POST` | `/fincas/{finca_id}/produccion-animal` | cualquier usuario con sesión |  | Production Route |
+| `GET` | `/fincas/{finca_id}/trabajadores` | cualquier usuario con sesión |  | Worker List |
+| `POST` | `/fincas/{finca_id}/trabajadores` | cualquier usuario con sesión |  | Worker Route |
+| `PATCH` | `/fincas/{finca_id}/trabajadores/{worker_id}` | cualquier usuario con sesión |  | Worker Update |
+| `DELETE` | `/fincas/{finca_id}/trabajadores/{worker_id}` | cualquier usuario con sesión |  | Worker Delete |
+| `POST` | `/fincas/{finca_id}/ventas` | cualquier usuario con sesión |  | Sale Route |
+| `GET` | `/fuentes` | admin, experto | Revisión de conocimiento | Fuentes de la biblioteca |
+| `POST` | `/fuentes` | admin, experto | Revisión de conocimiento | Agregar una fuente |
+| `GET` | `/glosario` | cualquier usuario con sesión | Ayuda y glosario | Términos del agro explicados |
+| `GET` | `/health` | público | Splash | Salud del servicio |
+| `GET` | `/health/ready` | público | Operación (monitoreo) | El servicio está listo para trabajar |
+| `GET` | `/inicio` | cualquier usuario con sesión | Inicio | Lo de hoy |
+| `GET` | `/noticias` | cualquier usuario con sesión | Novedades de mi región | Noticias vigentes de mi región |
+| `POST` | `/noticias` | admin | Novedades de mi región | Cargar una noticia |
+| `GET` | `/politica` | público | Autorización de datos | Política de tratamiento de datos |
+| `GET` | `/propagacion` | admin, agricultor | Vivero | Lotes de vivero |
+| `POST` | `/propagacion` | admin, agricultor | Vivero | Crear un lote de vivero |
+| `PATCH` | `/propagacion/{lote_id}` | admin, agricultor | Vivero | Actualizar germinadas, listas y pérdidas |
+| `POST` | `/propagacion/{lote_id}/trasplante` | admin, agricultor | Vivero | Pasar plantas listas a una siembra |
+| `GET` | `/reportes` | cualquier usuario con sesión | Reportes | Reportes que puedo ver |
+| `GET` | `/reportes/cronograma` | admin, agricultor, contador | Visor de reporte | Tiempos de mis ciclos |
+| `GET` | `/reportes/eventos` | admin, agricultor | Visor de reporte | Eventos adversos y su costo |
+| `GET` | `/reportes/indices` | admin, agricultor, contador | Visor de reporte | Índices por planta de mis siembras |
+| `GET` | `/riesgos` | admin, agricultor | Ficha del cultivo (riesgos) | Catálogo de riesgos |
+| `POST` | `/riesgos` | admin | Ficha del cultivo (riesgos) | Agregar un riesgo al catálogo |
+| `GET` | `/siembras` | admin, agricultor, contador | Mis siembras | Mis siembras |
+| `POST` | `/siembras` | admin, agricultor | Mis siembras | Planear una siembra |
+| `GET` | `/siembras/{siembra_id}` | admin, agricultor, contador | Detalle de siembra | Detalle de una siembra |
+| `POST` | `/siembras/{siembra_id}/cancelar` | admin, agricultor | Detalle de siembra | Cancelar una siembra |
+| `GET` | `/siembras/{siembra_id}/ciclos` | admin, agricultor, contador | Detalle de siembra (Ciclos) | Ciclos de una siembra |
+| `POST` | `/siembras/{siembra_id}/ciclos` | admin, agricultor | Detalle de siembra (Ciclos) | Abrir el siguiente ciclo |
+| `GET` | `/siembras/{siembra_id}/conteos` | admin, agricultor, contador | Detalle de siembra (Plantas) | Conteos de plantas |
+| `POST` | `/siembras/{siembra_id}/conteos` | admin, agricultor | Detalle de siembra (Plantas) | Registrar un conteo de plantas |
+| `GET` | `/siembras/{siembra_id}/indices` | admin, agricultor, contador | Detalle de siembra (Plantas) | Índices por planta |
+| `POST` | `/siembras/{siembra_id}/iniciar` | admin, agricultor | Detalle de siembra | Iniciar una siembra |
+| `POST` | `/siembras/{siembra_id}/renovar` | admin, agricultor | Detalle de siembra | Abrir el ciclo de renovación (soqueo) |
+| `POST` | `/usuarios` | admin |  | Create |
 
 ## Paginación
 
