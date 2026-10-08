@@ -21,6 +21,10 @@ API REST para la gestión de cultivos y ganadería con FastAPI, PostgreSQL 16, S
 
 En Windows, ejecute `iniciar_local.bat` con doble clic. La primera vez crea `.env` con una clave JWT aleatoria, prepara `.venv` e instala las dependencias; luego aplica las migraciones, prepara `admin@demo.com` con contraseña `1234` y arranca FastAPI. La contraseña se restablece en cada arranque local y no debe usarse en producción. Requiere Python 3.12 o superior y conexión a internet para instalar dependencias.
 
+### Administrador inicial en Coolify
+
+En las variables de entorno del servicio configure `ADMIN_EMAIL` con el correo deseado y `ADMIN_PASSWORD` con una contraseña segura de al menos 10 caracteres. El contenedor crea ese usuario con rol `admin` después de aplicar las migraciones y antes de iniciar la API. Configure ambas variables o ninguna. Si ya existe una cuenta admin con ese correo, el arranque la deja intacta: cambiar estas variables después no restablece su contraseña. No use las credenciales locales `admin@demo.com` / `1234` en producción.
+
 La documentación interactiva está en `/docs`: inicie sesión en el panel superior y las pruebas usan ese perfil. `GET /auth/me` devuelve las funciones que cada perfil puede usar.
 
 ## Estructura

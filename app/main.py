@@ -24,6 +24,7 @@ from app.routers import (
     pecuario,
     phase2,
     propagacion,
+    proyecciones,
     reportes,
     siembras,
     users,
@@ -117,6 +118,7 @@ def create_app() -> FastAPI:
         noticias.router,
         phase2.router,
         pecuario.router,
+        proyecciones.router,
     ):
         app.include_router(router, responses=RESPUESTAS_ERROR)
     app.include_router(health.router)

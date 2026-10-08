@@ -5,4 +5,5 @@ set -eu
 : "${FIELD_ENCRYPTION_KEY:?FIELD_ENCRYPTION_KEY debe configurarse en Coolify}"
 
 python -m alembic upgrade head
+python -m scripts.bootstrap_admin
 exec uvicorn app.main:app --host 0.0.0.0 --port "${PORT:-8000}"
