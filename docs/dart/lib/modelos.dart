@@ -4022,6 +4022,74 @@ class PropagacionSalida {
       };
 }
 
+class ProyeccionAgricolaEntrada {
+  final String cultivoId;
+  final double areaM2;
+
+  const ProyeccionAgricolaEntrada({
+    required this.cultivoId,
+    required this.areaM2,
+  });
+
+  factory ProyeccionAgricolaEntrada.fromJson(Map<String, dynamic> json) => ProyeccionAgricolaEntrada(
+        cultivoId: json['cultivo_id'] as String,
+        areaM2: (json['area_m2'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'cultivo_id': cultivoId,
+        'area_m2': areaM2,
+      };
+}
+
+class ProyeccionAgricolaSalida {
+  final String areaM2;
+  final String cultivoNombre;
+  final int plantasEstimadas;
+  final int? mesesPrimeraCosecha;
+  final String? cosechasPorAnio;
+  final String costoSemillaEstimado;
+  final String costoAbonoEstimado;
+  final String ingresoEstimadoAnual;
+  final String utilidadEstimadaAnual;
+
+  const ProyeccionAgricolaSalida({
+    required this.areaM2,
+    required this.cultivoNombre,
+    required this.plantasEstimadas,
+    this.mesesPrimeraCosecha,
+    this.cosechasPorAnio,
+    required this.costoSemillaEstimado,
+    required this.costoAbonoEstimado,
+    required this.ingresoEstimadoAnual,
+    required this.utilidadEstimadaAnual,
+  });
+
+  factory ProyeccionAgricolaSalida.fromJson(Map<String, dynamic> json) => ProyeccionAgricolaSalida(
+        areaM2: json['area_m2'] as String,
+        cultivoNombre: json['cultivo_nombre'] as String,
+        plantasEstimadas: json['plantas_estimadas'] as int,
+        mesesPrimeraCosecha: json['meses_primera_cosecha'] == null ? null : json['meses_primera_cosecha'] as int,
+        cosechasPorAnio: json['cosechas_por_anio'] == null ? null : json['cosechas_por_anio'] as String,
+        costoSemillaEstimado: json['costo_semilla_estimado'] as String,
+        costoAbonoEstimado: json['costo_abono_estimado'] as String,
+        ingresoEstimadoAnual: json['ingreso_estimado_anual'] as String,
+        utilidadEstimadaAnual: json['utilidad_estimada_anual'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'area_m2': areaM2,
+        'cultivo_nombre': cultivoNombre,
+        'plantas_estimadas': plantasEstimadas,
+        if (mesesPrimeraCosecha != null) 'meses_primera_cosecha': mesesPrimeraCosecha!,
+        if (cosechasPorAnio != null) 'cosechas_por_anio': cosechasPorAnio!,
+        'costo_semilla_estimado': costoSemillaEstimado,
+        'costo_abono_estimado': costoAbonoEstimado,
+        'ingreso_estimado_anual': ingresoEstimadoAnual,
+        'utilidad_estimada_anual': utilidadEstimadaAnual,
+      };
+}
+
 class ReadyResponse {
   final String status;
   final String service;

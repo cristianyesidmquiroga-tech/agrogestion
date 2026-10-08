@@ -10845,7 +10845,6 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Source Route Alertas Fuentes Post"
                 }
@@ -11005,6 +11004,93 @@
         }
       }
     },
+    "/proyecciones/agricola": {
+      "post": {
+        "tags": [
+          "15. Labores, insumos y dinero"
+        ],
+        "summary": "Calcular proyección agrícola",
+        "description": "Calcula una proyección de costos e ingresos para un área y cultivo dados.",
+        "operationId": "proyeccion_agricola_proyecciones_agricola_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProyeccionAgricolaEntrada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProyeccionAgricolaSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -11094,8 +11180,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,11}0*$)\\d{0,6}\\.\\d{0,4}0*$)"
+                "type": "string"
               }
             ],
             "title": "Area Trabajada"
@@ -11155,7 +11240,6 @@
           },
           "area_trabajada": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Area Trabajada"
           },
           "estado": {
@@ -11224,8 +11308,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,11}0*$)\\d{0,6}\\.\\d{0,4}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -11367,8 +11450,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Cantidad"
@@ -11380,8 +11462,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Costo"
@@ -11425,12 +11506,10 @@
           },
           "cantidad": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Cantidad"
           },
           "costo": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Costo"
           },
           "fecha": {
@@ -12390,8 +12469,7 @@
           "monto": {
             "anyOf": [
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -12402,8 +12480,7 @@
           "total": {
             "anyOf": [
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -12507,7 +12584,6 @@
           },
           "total": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Total"
           },
           "registros": {
@@ -12541,8 +12617,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Cantidad"
@@ -12598,7 +12673,6 @@
           },
           "cantidad": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Cantidad"
           },
           "unidad": {
@@ -12801,8 +12875,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,2}|(?=[\\d.]{1,4}0*$)\\d{0,2}\\.\\d{0,1}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -12976,8 +13049,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,2}|(?=[\\d.]{1,4}0*$)\\d{0,2}\\.\\d{0,1}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -13385,8 +13457,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,7}|(?=[\\d.]{1,11}0*$)\\d{0,7}\\.\\d{0,3}0*$)"
+                "type": "string"
               }
             ],
             "title": "Dosis"
@@ -13588,8 +13659,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,7}0*$)\\d{0,4}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Dias Estimados"
@@ -13625,7 +13695,6 @@
           },
           "dias_estimados": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Dias Estimados"
           },
           "iniciado_en": {
@@ -13674,17 +13743,14 @@
           },
           "dias_estimados": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Dias Estimados"
           },
           "dias_reales": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Dias Reales"
           },
           "diferencia": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Diferencia"
           }
         },
@@ -13734,8 +13800,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,11}0*$)\\d{0,6}\\.\\d{0,4}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -13751,8 +13816,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,3}|(?=[\\d.]{1,6}0*$)\\d{0,3}\\.\\d{0,2}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -13767,8 +13831,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -13862,8 +13925,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,11}0*$)\\d{0,6}\\.\\d{0,4}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -13879,8 +13941,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,3}|(?=[\\d.]{1,6}0*$)\\d{0,3}\\.\\d{0,2}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -13895,8 +13956,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -13981,8 +14041,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -14115,8 +14174,7 @@
           "dosis": {
             "anyOf": [
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -14550,8 +14608,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,11}0*$)\\d{0,6}\\.\\d{0,4}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -14602,8 +14659,7 @@
           "area_ha": {
             "anyOf": [
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -14648,17 +14704,14 @@
           },
           "ingresos": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Ingresos"
           },
           "gastos": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Gastos"
           },
           "saldo": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Saldo"
           }
         },
@@ -14818,8 +14871,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Monto"
@@ -15060,8 +15112,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Cantidad"
@@ -15073,8 +15124,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Precio Unitario"
@@ -15085,8 +15135,7 @@
                 "type": "number"
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -15242,7 +15291,6 @@
           },
           "existencia": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Existencia"
           },
           "estado": {
@@ -15297,8 +15345,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,7}0*$)\\d{0,4}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Obreros"
@@ -15310,8 +15357,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,7}0*$)\\d{0,4}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Dias"
@@ -15323,8 +15369,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Valor Jornal"
@@ -15388,17 +15433,14 @@
           },
           "obreros": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Obreros"
           },
           "dias": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Dias"
           },
           "valor_jornal": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Valor Jornal"
           },
           "modalidad": {
@@ -15407,7 +15449,6 @@
           },
           "total": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Total"
           },
           "estado": {
@@ -15458,8 +15499,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Cantidad"
@@ -15471,8 +15511,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Merma",
@@ -15485,8 +15524,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Precio Unitario"
@@ -15541,8 +15579,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Cantidad"
@@ -15590,7 +15627,6 @@
           },
           "cantidad": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Cantidad"
           },
           "ubicacion": {
@@ -15631,8 +15667,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,11}0*$)\\d{0,6}\\.\\d{0,4}0*$)"
+                "type": "string"
               }
             ],
             "title": "Area"
@@ -15675,7 +15710,6 @@
           },
           "area": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Area"
           },
           "notas": {
@@ -15901,8 +15935,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Cantidad"
@@ -15919,8 +15952,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Costo",
@@ -15982,12 +16014,10 @@
           },
           "cantidad": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Cantidad"
           },
           "costo": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Costo"
           },
           "fecha": {
@@ -16655,8 +16685,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Precio"
@@ -16710,7 +16739,6 @@
           },
           "precio": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Precio"
           },
           "vigente_desde": {
@@ -17061,8 +17089,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Cantidad"
@@ -17112,7 +17139,6 @@
           },
           "cantidad": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Cantidad"
           },
           "unidad": {
@@ -17296,6 +17322,101 @@
           "trasplantadas"
         ],
         "title": "PropagacionSalida"
+      },
+      "ProyeccionAgricolaEntrada": {
+        "properties": {
+          "cultivo_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Cultivo Id"
+          },
+          "area_m2": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Area M2"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cultivo_id",
+          "area_m2"
+        ],
+        "title": "ProyeccionAgricolaEntrada"
+      },
+      "ProyeccionAgricolaSalida": {
+        "properties": {
+          "area_m2": {
+            "type": "string",
+            "title": "Area M2"
+          },
+          "cultivo_nombre": {
+            "type": "string",
+            "title": "Cultivo Nombre"
+          },
+          "plantas_estimadas": {
+            "type": "integer",
+            "title": "Plantas Estimadas"
+          },
+          "meses_primera_cosecha": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meses Primera Cosecha"
+          },
+          "cosechas_por_anio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cosechas Por Anio"
+          },
+          "costo_semilla_estimado": {
+            "type": "string",
+            "title": "Costo Semilla Estimado"
+          },
+          "costo_abono_estimado": {
+            "type": "string",
+            "title": "Costo Abono Estimado"
+          },
+          "ingreso_estimado_anual": {
+            "type": "string",
+            "title": "Ingreso Estimado Anual"
+          },
+          "utilidad_estimada_anual": {
+            "type": "string",
+            "title": "Utilidad Estimada Anual"
+          }
+        },
+        "type": "object",
+        "required": [
+          "area_m2",
+          "cultivo_nombre",
+          "plantas_estimadas",
+          "meses_primera_cosecha",
+          "cosechas_por_anio",
+          "costo_semilla_estimado",
+          "costo_abono_estimado",
+          "ingreso_estimado_anual",
+          "utilidad_estimada_anual"
+        ],
+        "title": "ProyeccionAgricolaSalida"
       },
       "ReadyResponse": {
         "properties": {
@@ -17689,8 +17810,7 @@
                 "exclusiveMinimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,11}0*$)\\d{0,6}\\.\\d{0,4}0*$)"
+                "type": "string"
               }
             ],
             "title": "Area Ha"
@@ -17719,8 +17839,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -18051,8 +18170,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               }
             ],
             "title": "Jornal Habitual"
@@ -18111,7 +18229,6 @@
           },
           "jornal_habitual": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Jornal Habitual"
           },
           "documento_ultimos4": {
@@ -18189,8 +18306,7 @@
                 "minimum": 0.0
               },
               {
-                "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,12}|(?=[\\d.]{1,15}0*$)\\d{0,12}\\.\\d{0,2}0*$)"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -18454,7 +18570,6 @@
           },
           "total": {
             "type": "string",
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Total"
           }
         },
