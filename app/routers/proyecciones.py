@@ -1,11 +1,12 @@
 from fastapi import APIRouter
 
+from app.core.etiquetas import OPERACION
 from app.dependencies import SoloLectura
 from app.routers.dependencias import BD
 from app.schemas.proyeccion import ProyeccionAgricolaEntrada, ProyeccionAgricolaSalida
 from app.services import proyeccion_service
 
-router = APIRouter(tags=["Proyecciones"])
+router = APIRouter(tags=[OPERACION])
 
 
 @router.post(
