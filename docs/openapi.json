@@ -933,6 +933,85 @@
         ]
       }
     },
+    "/cuenta/cambiar-clave": {
+      "post": {
+        "tags": [
+          "2. Cuenta y ayuda"
+        ],
+        "summary": "Cambiar mi contraseña",
+        "operationId": "cambiar_clave_cuenta_cambiar_clave_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CambioClaveEntrada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/inicio": {
       "get": {
         "tags": [
@@ -7202,6 +7281,113 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "15. Labores, insumos y dinero"
+        ],
+        "summary": "Jornales de la finca, con quién trabajó y en qué labor",
+        "operationId": "jornal_list_fincas__finca_id__jornales_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finca_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finca Id"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(pendiente|pagado)$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estado"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JornalDetalle"
+                  },
+                  "title": "Response Jornal List Fincas  Finca Id  Jornales Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/fincas/{finca_id}/jornales/{jornal_id}/pagar": {
@@ -7359,6 +7545,96 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InsumoResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "15. Labores, insumos y dinero"
+        ],
+        "summary": "Inventario de insumos con existencia y costo promedio",
+        "operationId": "supply_list_fincas__finca_id__insumos_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finca_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finca Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InsumoDetalle"
+                  },
+                  "title": "Response Supply List Fincas  Finca Id  Insumos Get"
                 }
               }
             }
@@ -8124,6 +8400,96 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "15. Labores, insumos y dinero"
+        ],
+        "summary": "Procesos de transformación de la finca",
+        "operationId": "process_list_fincas__finca_id__procesos_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finca_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finca Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProcesoDetalle"
+                  },
+                  "title": "Response Process List Fincas  Finca Id  Procesos Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/fincas/{finca_id}/procesos/{process_id}/etapas": {
@@ -8177,6 +8543,106 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EtapaResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "15. Labores, insumos y dinero"
+        ],
+        "summary": "Etapas de un proceso",
+        "operationId": "stage_list_fincas__finca_id__procesos__process_id__etapas_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finca_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finca Id"
+            }
+          },
+          {
+            "name": "process_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Process Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EtapaResponse"
+                  },
+                  "title": "Response Stage List Fincas  Finca Id  Procesos  Process Id  Etapas Get"
                 }
               }
             }
@@ -11004,6 +11470,93 @@
         }
       }
     },
+    "/proyecciones/agricola": {
+      "post": {
+        "tags": [
+          "17. Proyecciones"
+        ],
+        "summary": "Calcular proyección agrícola",
+        "description": "Calcula una proyección de costos e ingresos para un área y cultivo dados.",
+        "operationId": "proyeccion_agricola_proyecciones_agricola_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProyeccionAgricolaEntrada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProyeccionAgricolaSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -11858,6 +12411,26 @@
         ],
         "title": "CambiarEstado"
       },
+      "CambioClaveEntrada": {
+        "properties": {
+          "clave_actual": {
+            "type": "string",
+            "title": "Clave Actual"
+          },
+          "clave_nueva": {
+            "type": "string",
+            "minLength": 10,
+            "title": "Clave Nueva"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "clave_actual",
+          "clave_nueva"
+        ],
+        "title": "CambioClaveEntrada"
+      },
       "CausaProbable": {
         "properties": {
           "problema_id": {
@@ -12375,6 +12948,18 @@
             "format": "uuid",
             "title": "Finca Id"
           },
+          "ciclo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ciclo Id"
+          },
           "categoria": {
             "type": "string",
             "title": "Categoria"
@@ -12401,9 +12986,65 @@
             ],
             "title": "Total"
           },
+          "cantidad": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cantidad"
+          },
+          "precio_unitario": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Precio Unitario"
+          },
+          "comprador": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comprador"
+          },
+          "fecha": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha"
+          },
           "estado": {
             "type": "string",
             "title": "Estado"
+          },
+          "motivo_anulacion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo Anulacion"
           }
         },
         "type": "object",
@@ -15182,6 +15823,70 @@
         ],
         "title": "InsumoCreate"
       },
+      "InsumoDetalle": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "unidad": {
+            "type": "string",
+            "title": "Unidad"
+          },
+          "existencia": {
+            "type": "string",
+            "title": "Existencia"
+          },
+          "costo_promedio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Costo Promedio"
+          },
+          "valor": {
+            "type": "string",
+            "title": "Valor"
+          },
+          "ultimo_movimiento": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ultimo Movimiento"
+          },
+          "estado": {
+            "type": "string",
+            "title": "Estado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "unidad",
+          "existencia",
+          "costo_promedio",
+          "valor",
+          "ultimo_movimiento",
+          "estado"
+        ],
+        "title": "InsumoDetalle"
+      },
       "InsumoResponse": {
         "properties": {
           "id": {
@@ -15304,6 +16009,111 @@
           "valor_jornal"
         ],
         "title": "JornalCreate"
+      },
+      "JornalDetalle": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trabajador_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trabajador Id"
+          },
+          "trabajador_nombre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trabajador Nombre"
+          },
+          "actividad_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Actividad Id"
+          },
+          "actividad_nombre": {
+            "type": "string",
+            "title": "Actividad Nombre"
+          },
+          "ciclo_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Ciclo Id"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fecha"
+          },
+          "obreros": {
+            "type": "string",
+            "title": "Obreros"
+          },
+          "dias": {
+            "type": "string",
+            "title": "Dias"
+          },
+          "valor_jornal": {
+            "type": "string",
+            "title": "Valor Jornal"
+          },
+          "modalidad": {
+            "type": "string",
+            "title": "Modalidad"
+          },
+          "total": {
+            "type": "string",
+            "title": "Total"
+          },
+          "estado": {
+            "type": "string",
+            "title": "Estado"
+          },
+          "pagado_en": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pagado En"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "trabajador_id",
+          "trabajador_nombre",
+          "actividad_id",
+          "actividad_nombre",
+          "ciclo_id",
+          "fecha",
+          "obreros",
+          "dias",
+          "valor_jornal",
+          "modalidad",
+          "total",
+          "estado",
+          "pagado_en"
+        ],
+        "title": "JornalDetalle"
       },
       "JornalResponse": {
         "properties": {
@@ -16918,6 +17728,74 @@
         ],
         "title": "ProcesoCreate"
       },
+      "ProcesoDetalle": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "producto": {
+            "type": "string",
+            "title": "Producto"
+          },
+          "materia_prima": {
+            "type": "string",
+            "title": "Materia Prima"
+          },
+          "origen_materia": {
+            "type": "string",
+            "title": "Origen Materia"
+          },
+          "fecha_inicio": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fecha Inicio"
+          },
+          "fecha_fin": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha Fin"
+          },
+          "etapas": {
+            "type": "integer",
+            "title": "Etapas"
+          },
+          "etapas_finalizadas": {
+            "type": "integer",
+            "title": "Etapas Finalizadas"
+          },
+          "estado": {
+            "type": "string",
+            "title": "Estado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "producto",
+          "materia_prima",
+          "origen_materia",
+          "fecha_inicio",
+          "fecha_fin",
+          "etapas",
+          "etapas_finalizadas",
+          "estado"
+        ],
+        "title": "ProcesoDetalle"
+      },
       "ProcesoResponse": {
         "properties": {
           "id": {
@@ -17235,6 +18113,101 @@
           "trasplantadas"
         ],
         "title": "PropagacionSalida"
+      },
+      "ProyeccionAgricolaEntrada": {
+        "properties": {
+          "cultivo_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Cultivo Id"
+          },
+          "area_m2": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Area M2"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cultivo_id",
+          "area_m2"
+        ],
+        "title": "ProyeccionAgricolaEntrada"
+      },
+      "ProyeccionAgricolaSalida": {
+        "properties": {
+          "area_m2": {
+            "type": "string",
+            "title": "Area M2"
+          },
+          "cultivo_nombre": {
+            "type": "string",
+            "title": "Cultivo Nombre"
+          },
+          "plantas_estimadas": {
+            "type": "integer",
+            "title": "Plantas Estimadas"
+          },
+          "meses_primera_cosecha": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meses Primera Cosecha"
+          },
+          "cosechas_por_anio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cosechas Por Anio"
+          },
+          "costo_semilla_estimado": {
+            "type": "string",
+            "title": "Costo Semilla Estimado"
+          },
+          "costo_abono_estimado": {
+            "type": "string",
+            "title": "Costo Abono Estimado"
+          },
+          "ingreso_estimado_anual": {
+            "type": "string",
+            "title": "Ingreso Estimado Anual"
+          },
+          "utilidad_estimada_anual": {
+            "type": "string",
+            "title": "Utilidad Estimada Anual"
+          }
+        },
+        "type": "object",
+        "required": [
+          "area_m2",
+          "cultivo_nombre",
+          "plantas_estimadas",
+          "meses_primera_cosecha",
+          "cosechas_por_anio",
+          "costo_semilla_estimado",
+          "costo_abono_estimado",
+          "ingreso_estimado_anual",
+          "utilidad_estimada_anual"
+        ],
+        "title": "ProyeccionAgricolaSalida"
       },
       "ReadyResponse": {
         "properties": {
@@ -18474,6 +19447,10 @@
     {
       "name": "16. Pecuario",
       "description": "Animales, lotes, eventos y alertas regionales."
+    },
+    {
+      "name": "17. Proyecciones",
+      "description": "Cálculo de costos e ingresos esperados de una siembra."
     }
   ]
 }

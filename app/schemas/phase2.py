@@ -226,10 +226,16 @@ class IngresoCreate(BaseModel):
 class ContableResponse(ReadModel):
     id: UUID
     finca_id: UUID
+    ciclo_id: UUID | None = None
     categoria: str
     monto: Decimal | None = None
     total: Decimal | None = None
+    cantidad: Decimal | None = None
+    precio_unitario: Decimal | None = None
+    comprador: str | None = None
+    fecha: datetime | None = None
     estado: str
+    motivo_anulacion: str | None = None
 
 
 class EtapasMetricasResponse(BaseModel):

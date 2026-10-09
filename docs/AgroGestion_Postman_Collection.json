@@ -108,6 +108,39 @@
       "name": "2. Cuenta y ayuda",
       "item": [
         {
+          "name": "POST Cambiar mi contraseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cuenta/cambiar-clave",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cuenta/cambiar-clave"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Cambiar mi contraseña",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clave_actual\": \"texto\",\n  \"clave_nueva\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
           "name": "GET Última autorización aceptada",
           "request": {
             "method": "GET",
@@ -2723,6 +2756,31 @@
           }
         },
         {
+          "name": "GET Inventario de insumos con existencia y costo promedio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/insumos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/insumos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Inventario de insumos con existencia y costo promedio"
+          }
+        },
+        {
           "name": "POST Supply Route",
           "request": {
             "method": "POST",
@@ -2837,6 +2895,38 @@
                 }
               }
             }
+          }
+        },
+        {
+          "name": "GET Jornales de la finca, con quién trabajó y en qué labor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/jornales",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/jornales"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Jornales de la finca, con quién trabajó y en qué labor"
           }
         },
         {
@@ -2998,6 +3088,31 @@
           }
         },
         {
+          "name": "GET Procesos de transformación de la finca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/procesos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/procesos"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Procesos de transformación de la finca"
+          }
+        },
+        {
           "name": "POST Process Route",
           "request": {
             "method": "POST",
@@ -3034,6 +3149,36 @@
                 }
               }
             }
+          }
+        },
+        {
+          "name": "GET Etapas de un proceso",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fincas/:finca_id/procesos/:process_id/etapas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fincas/:finca_id/procesos/:process_id/etapas"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "finca_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                },
+                {
+                  "key": "process_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Etapas de un proceso"
           }
         },
         {
@@ -3790,6 +3935,44 @@
             "body": {
               "mode": "raw",
               "raw": "{\n  \"lote_animal_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"fecha\": \"2026-01-31T12:00:00Z\",\n  \"tipo\": \"texto\",\n  \"cantidad\": 1.0,\n  \"unidad\": \"texto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "17. Proyecciones",
+      "item": [
+        {
+          "name": "POST Calcular proyección agrícola",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/proyecciones/agricola",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "proyecciones/agricola"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Calcular proyección agrícola",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cultivo_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"area_m2\": 1.0\n}",
               "options": {
                 "raw": {
                   "language": "json"

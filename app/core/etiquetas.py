@@ -16,6 +16,7 @@ FINCAS = "13. Fincas y lotes"
 USUARIOS = "14. Usuarios"
 OPERACION = "15. Labores, insumos y dinero"
 PECUARIO = "16. Pecuario"
+PROYECCIONES = "17. Proyecciones"
 
 ETIQUETAS = [
     {
@@ -47,4 +48,5 @@ ETIQUETAS = [
         "description": "Ciclos, labores, jornales, insumos, cosechas, procesos, gastos e ingresos.",
     },
     {"name": PECUARIO, "description": "Animales, lotes, eventos y alertas regionales."},
+    {"name": PROYECCIONES, "description": "Cálculo de costos e ingresos esperados de una siembra."},
 ]
