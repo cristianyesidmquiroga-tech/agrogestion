@@ -1,31 +1,21 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /app
 
-COPY requirements.txt ./requirements.txt
-COPY app ./app
-COPY scripts ./scripts
-COPY alembic ./alembic
-COPY alembic.ini ./alembic.ini
-COPY docs ./docs
-COPY docker-entrypoint.sh ./docker-entrypoint.sh
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN python -m pip install --no-cache-dir -r requirements.txt
+COPY . .
+RUN pip install --no-cache-dir -e . --no-deps && chmod +x docker-entrypoint.sh
 
-RUN useradd --create-home --shell /usr/sbin/nologin appuser \
-    && mkdir -p /data \
-    && chown -R appuser:appuser /app /data \
-    && chmod +x /app/docker-entrypoint.sh
-
+RUN useradd --create-home --shell /bin/false appuser && chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4)"
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
