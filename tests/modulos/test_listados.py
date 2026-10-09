@@ -212,3 +212,27 @@ async def test_cambiar_la_clave_exige_la_actual_y_una_nueva_distinta(cliente, f)
     assert igual.json()["error"]["code"] == "CLAVE_REPETIDA"
     corta = await cliente.post(ruta, json={"clave_actual": CLAVE_PRUEBA, "clave_nueva": "corta"})
     assert corta.status_code == 422
+
+
+async def test_la_lista_de_trabajadores_muestra_los_ultimos_cuatro_del_documento(
+    cliente, f, monkeypatch
+):
+    from cryptography.fernet import Fernet
+
+    from app.core.config import get_settings
+
+    monkeypatch.setattr(get_settings(), "field_encryption_key", Fernet.generate_key().decode())
+    _, base, *_ = await _escenario(cliente, f)
+    await cliente.post(
+        f"{base}/trabajadores",
+        json={
+            "nombre": "Marta",
+            "tipo": "jornalero",
+            "jornal_habitual": 85000,
+            "documento": "43211902",
+        },
+    )
+    lista = (await cliente.get(f"{base}/trabajadores")).json()
+    por_nombre = {t["nombre"]: t for t in lista}
+    assert por_nombre["Marta"]["documento_ultimos4"] == "1902"
+    assert por_nombre["Pedro Nel"]["documento_ultimos4"] is None

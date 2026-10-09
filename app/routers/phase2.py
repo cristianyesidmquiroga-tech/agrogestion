@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Header, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.crypto import decrypt_sensitive
 from app.core.database import get_db
 from app.core.etiquetas import OPERACION
 from app.core.exceptions import AppError
@@ -87,6 +88,11 @@ from app.services.phase2 import (
     update_activity,
     update_worker,
 )
+
+
+def _ultimos4(cifrado: str | None) -> str | None:
+    return decrypt_sensitive(cifrado)[-4:] if cifrado else None
+
 
 router = APIRouter(tags=[OPERACION])
 
@@ -178,14 +184,26 @@ async def worker_route(
 @router.get("/fincas/{finca_id}/trabajadores", response_model=list[TrabajadorResponse])
 async def worker_list(
     finca_id: UUID, db: AsyncSession = Depends(get_db), user: Usuario = Depends(current_user)
-) -> list[Trabajador]:
+) -> list[dict[str, object]]:
     from app.services.lands import user_finca
 
     await user_finca(db, user.id, finca_id)
     result = await db.scalars(
         select(Trabajador).where(Trabajador.finca_id == finca_id, Trabajador.estado == "activo")
     )
-    return list(result)
+    return [
+        {
+            "id": item.id,
+            "finca_id": item.finca_id,
+            "nombre": item.nombre,
+            "tipo": item.tipo,
+            "jornal_habitual": item.jornal_habitual,
+            "documento_ultimos4": _ultimos4(item.documento_cifrado),
+            "telefono": item.telefono,
+            "estado": item.estado,
+        }
+        for item in result
+    ]
 
 
 @router.patch("/fincas/{finca_id}/trabajadores/{worker_id}", response_model=TrabajadorResponse)
