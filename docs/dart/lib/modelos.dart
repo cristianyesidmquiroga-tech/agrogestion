@@ -530,6 +530,26 @@ class CambiarEstado {
       };
 }
 
+class CambioClaveEntrada {
+  final String claveActual;
+  final String claveNueva;
+
+  const CambioClaveEntrada({
+    required this.claveActual,
+    required this.claveNueva,
+  });
+
+  factory CambioClaveEntrada.fromJson(Map<String, dynamic> json) => CambioClaveEntrada(
+        claveActual: json['clave_actual'] as String,
+        claveNueva: json['clave_nueva'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'clave_actual': claveActual,
+        'clave_nueva': claveNueva,
+      };
+}
+
 class CausaProbable {
   final String problemaId;
   final String problema;
@@ -893,36 +913,60 @@ class ConsultaSalida {
 class ContableResponse {
   final String id;
   final String fincaId;
+  final String? cicloId;
   final String categoria;
   final String? monto;
   final String? total;
+  final String? cantidad;
+  final String? precioUnitario;
+  final String? comprador;
+  final DateTime? fecha;
   final String estado;
+  final String? motivoAnulacion;
 
   const ContableResponse({
     required this.id,
     required this.fincaId,
+    this.cicloId,
     required this.categoria,
     this.monto,
     this.total,
+    this.cantidad,
+    this.precioUnitario,
+    this.comprador,
+    this.fecha,
     required this.estado,
+    this.motivoAnulacion,
   });
 
   factory ContableResponse.fromJson(Map<String, dynamic> json) => ContableResponse(
         id: json['id'] as String,
         fincaId: json['finca_id'] as String,
+        cicloId: json['ciclo_id'] == null ? null : json['ciclo_id'] as String,
         categoria: json['categoria'] as String,
         monto: json['monto'] == null ? null : json['monto'] as String,
         total: json['total'] == null ? null : json['total'] as String,
+        cantidad: json['cantidad'] == null ? null : json['cantidad'] as String,
+        precioUnitario: json['precio_unitario'] == null ? null : json['precio_unitario'] as String,
+        comprador: json['comprador'] == null ? null : json['comprador'] as String,
+        fecha: json['fecha'] == null ? null : DateTime.parse(json['fecha'] as String),
         estado: json['estado'] as String,
+        motivoAnulacion: json['motivo_anulacion'] == null ? null : json['motivo_anulacion'] as String,
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'finca_id': fincaId,
+        if (cicloId != null) 'ciclo_id': cicloId!,
         'categoria': categoria,
         if (monto != null) 'monto': monto!,
         if (total != null) 'total': total!,
+        if (cantidad != null) 'cantidad': cantidad!,
+        if (precioUnitario != null) 'precio_unitario': precioUnitario!,
+        if (comprador != null) 'comprador': comprador!,
+        if (fecha != null) 'fecha': fecha!.toUtc().toIso8601String(),
         'estado': estado,
+        if (motivoAnulacion != null) 'motivo_anulacion': motivoAnulacion!,
       };
 }
 
@@ -2582,6 +2626,50 @@ class InsumoCreate {
       };
 }
 
+class InsumoDetalle {
+  final String id;
+  final String nombre;
+  final String unidad;
+  final String existencia;
+  final String? costoPromedio;
+  final String valor;
+  final DateTime? ultimoMovimiento;
+  final String estado;
+
+  const InsumoDetalle({
+    required this.id,
+    required this.nombre,
+    required this.unidad,
+    required this.existencia,
+    this.costoPromedio,
+    required this.valor,
+    this.ultimoMovimiento,
+    required this.estado,
+  });
+
+  factory InsumoDetalle.fromJson(Map<String, dynamic> json) => InsumoDetalle(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+        unidad: json['unidad'] as String,
+        existencia: json['existencia'] as String,
+        costoPromedio: json['costo_promedio'] == null ? null : json['costo_promedio'] as String,
+        valor: json['valor'] as String,
+        ultimoMovimiento: json['ultimo_movimiento'] == null ? null : DateTime.parse(json['ultimo_movimiento'] as String),
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        'unidad': unidad,
+        'existencia': existencia,
+        if (costoPromedio != null) 'costo_promedio': costoPromedio!,
+        'valor': valor,
+        if (ultimoMovimiento != null) 'ultimo_movimiento': ultimoMovimiento!.toUtc().toIso8601String(),
+        'estado': estado,
+      };
+}
+
 class InsumoResponse {
   final String id;
   final String fincaId;
@@ -2659,6 +2747,74 @@ class JornalCreate {
         'dias': dias,
         'valor_jornal': valorJornal,
         if (modalidad != null) 'modalidad': modalidad!,
+      };
+}
+
+class JornalDetalle {
+  final String id;
+  final String? trabajadorId;
+  final String? trabajadorNombre;
+  final String actividadId;
+  final String actividadNombre;
+  final String cicloId;
+  final DateTime fecha;
+  final String obreros;
+  final String dias;
+  final String valorJornal;
+  final String modalidad;
+  final String total;
+  final String estado;
+  final DateTime? pagadoEn;
+
+  const JornalDetalle({
+    required this.id,
+    this.trabajadorId,
+    this.trabajadorNombre,
+    required this.actividadId,
+    required this.actividadNombre,
+    required this.cicloId,
+    required this.fecha,
+    required this.obreros,
+    required this.dias,
+    required this.valorJornal,
+    required this.modalidad,
+    required this.total,
+    required this.estado,
+    this.pagadoEn,
+  });
+
+  factory JornalDetalle.fromJson(Map<String, dynamic> json) => JornalDetalle(
+        id: json['id'] as String,
+        trabajadorId: json['trabajador_id'] == null ? null : json['trabajador_id'] as String,
+        trabajadorNombre: json['trabajador_nombre'] == null ? null : json['trabajador_nombre'] as String,
+        actividadId: json['actividad_id'] as String,
+        actividadNombre: json['actividad_nombre'] as String,
+        cicloId: json['ciclo_id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        obreros: json['obreros'] as String,
+        dias: json['dias'] as String,
+        valorJornal: json['valor_jornal'] as String,
+        modalidad: json['modalidad'] as String,
+        total: json['total'] as String,
+        estado: json['estado'] as String,
+        pagadoEn: json['pagado_en'] == null ? null : DateTime.parse(json['pagado_en'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        if (trabajadorId != null) 'trabajador_id': trabajadorId!,
+        if (trabajadorNombre != null) 'trabajador_nombre': trabajadorNombre!,
+        'actividad_id': actividadId,
+        'actividad_nombre': actividadNombre,
+        'ciclo_id': cicloId,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'obreros': obreros,
+        'dias': dias,
+        'valor_jornal': valorJornal,
+        'modalidad': modalidad,
+        'total': total,
+        'estado': estado,
+        if (pagadoEn != null) 'pagado_en': pagadoEn!.toUtc().toIso8601String(),
       };
 }
 
@@ -3791,6 +3947,58 @@ class ProcesoCreate {
         'materia_prima': materiaPrima,
         'origen_materia': origenMateria,
         'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+      };
+}
+
+class ProcesoDetalle {
+  final String id;
+  final String nombre;
+  final String producto;
+  final String materiaPrima;
+  final String origenMateria;
+  final DateTime fechaInicio;
+  final DateTime? fechaFin;
+  final int etapas;
+  final int etapasFinalizadas;
+  final String estado;
+
+  const ProcesoDetalle({
+    required this.id,
+    required this.nombre,
+    required this.producto,
+    required this.materiaPrima,
+    required this.origenMateria,
+    required this.fechaInicio,
+    this.fechaFin,
+    required this.etapas,
+    required this.etapasFinalizadas,
+    required this.estado,
+  });
+
+  factory ProcesoDetalle.fromJson(Map<String, dynamic> json) => ProcesoDetalle(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+        producto: json['producto'] as String,
+        materiaPrima: json['materia_prima'] as String,
+        origenMateria: json['origen_materia'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+        etapas: json['etapas'] as int,
+        etapasFinalizadas: json['etapas_finalizadas'] as int,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        'producto': producto,
+        'materia_prima': materiaPrima,
+        'origen_materia': origenMateria,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+        'etapas': etapas,
+        'etapas_finalizadas': etapasFinalizadas,
+        'estado': estado,
       };
 }
 

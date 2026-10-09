@@ -1,8 +1,9 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
+from app.schemas.auth import COMMON_PASSWORDS
 from app.schemas.common import Entrada, Salida
 
 
@@ -31,3 +32,15 @@ class ConsentimientoSalida(Salida):
     version_politica: str
     aceptado_en: datetime
     acepta_transferencia_ia: bool
+
+
+class CambioClaveEntrada(Entrada):
+    clave_actual: str
+    clave_nueva: str = Field(min_length=10)
+
+    @field_validator("clave_nueva")
+    @classmethod
+    def rechazar_clave_comun(cls, valor: str) -> str:
+        if valor.lower() in COMMON_PASSWORDS:
+            raise ValueError("La contraseña es demasiado común")
+        return valor

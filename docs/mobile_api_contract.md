@@ -87,6 +87,7 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `POST` | `/consultas` | admin, agricultor | Consultar e Historial de consultas | Preguntarle al asistente |
 | `GET` | `/consultas/{consulta_id}` | admin, agricultor | Consultar | Una consulta y su respuesta |
 | `POST` | `/consultas/{consulta_id}/retroalimentacion` | admin, agricultor | Consultar | Decir si la respuesta sirvió |
+| `POST` | `/cuenta/cambiar-clave` | cualquier usuario con sesión |  | Cambiar mi contraseña |
 | `GET` | `/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Última autorización aceptada |
 | `POST` | `/cuenta/consentimiento` | cualquier usuario con sesión | Autorización de datos | Aceptar el tratamiento de datos |
 | `GET` | `/cultivos` | admin, agricultor | Catálogo de cultivos | Buscar cultivos |
@@ -129,9 +130,11 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `GET` | `/fincas/{finca_id}/ingresos` | cualquier usuario con sesión |  | Income List |
 | `POST` | `/fincas/{finca_id}/ingresos` | cualquier usuario con sesión |  | Income Route |
 | `POST` | `/fincas/{finca_id}/ingresos/{income_id}/anular` | cualquier usuario con sesión |  | Cancel Income Route |
+| `GET` | `/fincas/{finca_id}/insumos` | admin, agricultor, contador |  | Inventario de insumos con existencia y costo promedio |
 | `POST` | `/fincas/{finca_id}/insumos` | cualquier usuario con sesión |  | Supply Route |
 | `POST` | `/fincas/{finca_id}/insumos/consumo` | cualquier usuario con sesión |  | Output Route |
 | `POST` | `/fincas/{finca_id}/insumos/entrada` | cualquier usuario con sesión |  | Input Route |
+| `GET` | `/fincas/{finca_id}/jornales` | admin, agricultor, contador |  | Jornales de la finca, con quién trabajó y en qué labor |
 | `POST` | `/fincas/{finca_id}/jornales` | cualquier usuario con sesión |  | Jornal Route |
 | `POST` | `/fincas/{finca_id}/jornales/{jornal_id}/pagar` | cualquier usuario con sesión |  | Pay Route |
 | `GET` | `/fincas/{finca_id}/lotes` | cualquier usuario con sesión |  | List Lots |
@@ -141,7 +144,9 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `GET` | `/fincas/{finca_id}/movimientos-insumo` | cualquier usuario con sesión |  | Movement List |
 | `GET` | `/fincas/{finca_id}/precios` | cualquier usuario con sesión |  | Price List |
 | `POST` | `/fincas/{finca_id}/precios` | cualquier usuario con sesión |  | Price Route |
+| `GET` | `/fincas/{finca_id}/procesos` | admin, agricultor, contador |  | Procesos de transformación de la finca |
 | `POST` | `/fincas/{finca_id}/procesos` | cualquier usuario con sesión |  | Process Route |
+| `GET` | `/fincas/{finca_id}/procesos/{process_id}/etapas` | admin, agricultor, contador |  | Etapas de un proceso |
 | `POST` | `/fincas/{finca_id}/procesos/{process_id}/etapas` | cualquier usuario con sesión |  | Stage Route |
 | `GET` | `/fincas/{finca_id}/procesos/{process_id}/etapas/metricas` | cualquier usuario con sesión |  | Stage Metrics Route |
 | `GET` | `/fincas/{finca_id}/produccion-animal` | cualquier usuario con sesión |  | Production List |
@@ -285,6 +290,8 @@ try {
 | `CICLO_NO_VALIDO` | 422 | Ese ciclo no pertenece a la finca. |  |
 | `CICLO_SIN_COSECHA` | 422 | Registre una cosecha o explique el motivo de la pérdida para cerrar el ciclo. |  |
 | `CICLO_TIPO_NO_VALIDO` | 422 | Este cultivo tiene un solo ciclo. |  |
+| `CLAVE_ACTUAL_INCORRECTA` | 422 | La clave actual no coincide. |  |
+| `CLAVE_REPETIDA` | 422 | La clave nueva debe ser distinta de la actual. |  |
 | `CONSENTIMIENTO_REQUERIDO` | 422 | Sin aceptar el tratamiento de datos no se puede continuar. |  |
 | `CONTEO_INVALIDO` | 422 | Las plantas vivas no pueden superar las … sembradas y resembradas. |  |
 | `CONTEO_NO_APLICA` | 422 | Este cultivo se trabaja por área, no por planta. |  |
