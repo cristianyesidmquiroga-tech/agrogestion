@@ -91,3 +91,37 @@ class EstadisticaZona(Salida):
     utilidad: Decimal2
     gasto_por_ha: Decimal2 | None
     cultivos_principales: list[str]
+
+
+class CosechaRegistrada(Salida):
+    id: uuid.UUID
+    fecha: date
+    cultivo: str
+    cantidad: Decimal2
+    unidad: str
+    calidad: str | None
+    finca: str
+    zona: str
+    agricultor: str | None
+
+
+class SiembraRegistrada(Salida):
+    id: uuid.UUID
+    cultivo: str
+    estado: str
+    area_ha: Decimal2
+    plantas: int | None
+    fecha_plan: date
+    inicio_ciclo: date | None
+    finca: str
+    zona: str
+    agricultor: str | None
+
+
+class Productor(Salida):
+    usuario_id: uuid.UUID
+    nombre: str
+    fincas: int
+    cosechas: int
+    produccion: list[CantidadPorUnidad]
+    ultima_cosecha: date | None

@@ -116,6 +116,7 @@ class Fabrica:
             plantas_sembradas=plantas,
             fecha_plan=date.today(),
             estado=estado,
+            creado_por=finca.creado_por,
         )
         self.s.add(s)
         await self.s.flush()
