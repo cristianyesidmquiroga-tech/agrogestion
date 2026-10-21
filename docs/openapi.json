@@ -11805,6 +11805,252 @@
         ]
       }
     },
+    "/estadisticas/resumen": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Totales de toda la aplicación",
+        "operationId": "resumen_estadisticas_resumen_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResumenGeneral"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/estadisticas/crecimiento": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Crecimiento por mes",
+        "operationId": "crecimiento_estadisticas_crecimiento_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "meses",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 36,
+              "minimum": 1,
+              "default": 12,
+              "title": "Meses"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PuntoMensual"
+                  },
+                  "title": "Response Crecimiento Estadisticas Crecimiento Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estadisticas/costos": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Gastos e ingresos por categoría",
+        "operationId": "costos_estadisticas_costos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CostosGenerales"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -13509,6 +13755,69 @@
           "fecha"
         ],
         "title": "CosechaResponse"
+      },
+      "CostosGenerales": {
+        "properties": {
+          "gastos_por_categoria": {
+            "items": {
+              "$ref": "#/components/schemas/TotalPorCategoria"
+            },
+            "type": "array",
+            "title": "Gastos Por Categoria"
+          },
+          "ingresos_por_categoria": {
+            "items": {
+              "$ref": "#/components/schemas/TotalPorCategoria"
+            },
+            "type": "array",
+            "title": "Ingresos Por Categoria"
+          },
+          "gastos": {
+            "type": "number",
+            "title": "Gastos"
+          },
+          "ingresos": {
+            "type": "number",
+            "title": "Ingresos"
+          },
+          "area_sembrada_ha": {
+            "type": "number",
+            "title": "Area Sembrada Ha"
+          },
+          "gasto_por_ha": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gasto Por Ha"
+          },
+          "ingreso_por_ha": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ingreso Por Ha"
+          }
+        },
+        "type": "object",
+        "required": [
+          "gastos_por_categoria",
+          "ingresos_por_categoria",
+          "gastos",
+          "ingresos",
+          "area_sembrada_ha",
+          "gasto_por_ha",
+          "ingreso_por_ha"
+        ],
+        "title": "CostosGenerales"
       },
       "CronogramaSalida": {
         "properties": {
@@ -18568,6 +18877,49 @@
         ],
         "title": "ProyeccionAgricolaSalida"
       },
+      "PuntoMensual": {
+        "properties": {
+          "mes": {
+            "type": "string",
+            "title": "Mes"
+          },
+          "usuarios": {
+            "type": "integer",
+            "title": "Usuarios"
+          },
+          "fincas": {
+            "type": "integer",
+            "title": "Fincas"
+          },
+          "siembras": {
+            "type": "integer",
+            "title": "Siembras"
+          },
+          "cosechas": {
+            "type": "integer",
+            "title": "Cosechas"
+          },
+          "gastos": {
+            "type": "number",
+            "title": "Gastos"
+          },
+          "ingresos": {
+            "type": "number",
+            "title": "Ingresos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mes",
+          "usuarios",
+          "fincas",
+          "siembras",
+          "cosechas",
+          "gastos",
+          "ingresos"
+        ],
+        "title": "PuntoMensual"
+      },
       "ReadyResponse": {
         "properties": {
           "status": {
@@ -18803,6 +19155,100 @@
         ],
         "title": "RespuestaAsistente",
         "description": "Lo que el asistente entiende de la descripción y lo que hay validado para ese cultivo."
+      },
+      "ResumenGeneral": {
+        "properties": {
+          "usuarios": {
+            "type": "integer",
+            "title": "Usuarios"
+          },
+          "usuarios_activos": {
+            "type": "integer",
+            "title": "Usuarios Activos"
+          },
+          "usuarios_por_rol": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Usuarios Por Rol"
+          },
+          "fincas": {
+            "type": "integer",
+            "title": "Fincas"
+          },
+          "area_ha_fincas": {
+            "type": "number",
+            "title": "Area Ha Fincas"
+          },
+          "siembras": {
+            "type": "integer",
+            "title": "Siembras"
+          },
+          "siembras_por_estado": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Siembras Por Estado"
+          },
+          "ciclos_abiertos": {
+            "type": "integer",
+            "title": "Ciclos Abiertos"
+          },
+          "ciclos_cerrados": {
+            "type": "integer",
+            "title": "Ciclos Cerrados"
+          },
+          "cosechas": {
+            "type": "integer",
+            "title": "Cosechas"
+          },
+          "trabajadores": {
+            "type": "integer",
+            "title": "Trabajadores"
+          },
+          "gastos": {
+            "type": "number",
+            "title": "Gastos"
+          },
+          "ingresos": {
+            "type": "number",
+            "title": "Ingresos"
+          },
+          "utilidad": {
+            "type": "number",
+            "title": "Utilidad"
+          },
+          "eventos_adversos": {
+            "type": "integer",
+            "title": "Eventos Adversos"
+          },
+          "perdida_estimada": {
+            "type": "number",
+            "title": "Perdida Estimada"
+          }
+        },
+        "type": "object",
+        "required": [
+          "usuarios",
+          "usuarios_activos",
+          "usuarios_por_rol",
+          "fincas",
+          "area_ha_fincas",
+          "siembras",
+          "siembras_por_estado",
+          "ciclos_abiertos",
+          "ciclos_cerrados",
+          "cosechas",
+          "trabajadores",
+          "gastos",
+          "ingresos",
+          "utilidad",
+          "eventos_adversos",
+          "perdida_estimada"
+        ],
+        "title": "ResumenGeneral"
       },
       "RetroalimentacionEntrada": {
         "properties": {
@@ -19298,6 +19744,29 @@
           "nombre"
         ],
         "title": "TokenResponse"
+      },
+      "TotalPorCategoria": {
+        "properties": {
+          "categoria": {
+            "type": "string",
+            "title": "Categoria"
+          },
+          "registros": {
+            "type": "integer",
+            "title": "Registros"
+          },
+          "total": {
+            "type": "number",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "categoria",
+          "registros",
+          "total"
+        ],
+        "title": "TotalPorCategoria"
       },
       "TrabajadorCreate": {
         "properties": {
@@ -19988,6 +20457,10 @@
     {
       "name": "17. Proyecciones",
       "description": "Cálculo de costos e ingresos esperados de una siembra."
+    },
+    {
+      "name": "18. Estadísticas",
+      "description": "Totales y comparativos de toda la aplicación, solo administrador."
     }
   ]
 }

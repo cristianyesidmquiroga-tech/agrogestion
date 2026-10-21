@@ -1130,6 +1130,46 @@ class CosechaResponse {
       };
 }
 
+class CostosGenerales {
+  final List<TotalPorCategoria> gastosPorCategoria;
+  final List<TotalPorCategoria> ingresosPorCategoria;
+  final double gastos;
+  final double ingresos;
+  final double areaSembradaHa;
+  final double? gastoPorHa;
+  final double? ingresoPorHa;
+
+  const CostosGenerales({
+    required this.gastosPorCategoria,
+    required this.ingresosPorCategoria,
+    required this.gastos,
+    required this.ingresos,
+    required this.areaSembradaHa,
+    this.gastoPorHa,
+    this.ingresoPorHa,
+  });
+
+  factory CostosGenerales.fromJson(Map<String, dynamic> json) => CostosGenerales(
+        gastosPorCategoria: (json['gastos_por_categoria'] as List<dynamic>).map((x) => TotalPorCategoria.fromJson(x as Map<String, dynamic>)).toList(),
+        ingresosPorCategoria: (json['ingresos_por_categoria'] as List<dynamic>).map((x) => TotalPorCategoria.fromJson(x as Map<String, dynamic>)).toList(),
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        areaSembradaHa: (json['area_sembrada_ha'] as num).toDouble(),
+        gastoPorHa: json['gasto_por_ha'] == null ? null : (json['gasto_por_ha'] as num).toDouble(),
+        ingresoPorHa: json['ingreso_por_ha'] == null ? null : (json['ingreso_por_ha'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'gastos_por_categoria': gastosPorCategoria.map((x) => x.toJson()).toList(),
+        'ingresos_por_categoria': ingresosPorCategoria.map((x) => x.toJson()).toList(),
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'area_sembrada_ha': areaSembradaHa,
+        if (gastoPorHa != null) 'gasto_por_ha': gastoPorHa!,
+        if (ingresoPorHa != null) 'ingreso_por_ha': ingresoPorHa!,
+      };
+}
+
 class CronogramaSalida {
   final String cicloId;
   final String tipo;
@@ -4378,6 +4418,46 @@ class ProyeccionAgricolaSalida {
       };
 }
 
+class PuntoMensual {
+  final String mes;
+  final int usuarios;
+  final int fincas;
+  final int siembras;
+  final int cosechas;
+  final double gastos;
+  final double ingresos;
+
+  const PuntoMensual({
+    required this.mes,
+    required this.usuarios,
+    required this.fincas,
+    required this.siembras,
+    required this.cosechas,
+    required this.gastos,
+    required this.ingresos,
+  });
+
+  factory PuntoMensual.fromJson(Map<String, dynamic> json) => PuntoMensual(
+        mes: json['mes'] as String,
+        usuarios: json['usuarios'] as int,
+        fincas: json['fincas'] as int,
+        siembras: json['siembras'] as int,
+        cosechas: json['cosechas'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'mes': mes,
+        'usuarios': usuarios,
+        'fincas': fincas,
+        'siembras': siembras,
+        'cosechas': cosechas,
+        'gastos': gastos,
+        'ingresos': ingresos,
+      };
+}
+
 class ReadyResponse {
   final String status;
   final String service;
@@ -4555,6 +4635,82 @@ class RespuestaAsistente {
         'cuando_llamar_al_tecnico': cuandoLlamarAlTecnico,
         'aviso': aviso,
         'hay_informacion': hayInformacion,
+      };
+}
+
+class ResumenGeneral {
+  final int usuarios;
+  final int usuariosActivos;
+  final Map<String, dynamic> usuariosPorRol;
+  final int fincas;
+  final double areaHaFincas;
+  final int siembras;
+  final Map<String, dynamic> siembrasPorEstado;
+  final int ciclosAbiertos;
+  final int ciclosCerrados;
+  final int cosechas;
+  final int trabajadores;
+  final double gastos;
+  final double ingresos;
+  final double utilidad;
+  final int eventosAdversos;
+  final double perdidaEstimada;
+
+  const ResumenGeneral({
+    required this.usuarios,
+    required this.usuariosActivos,
+    required this.usuariosPorRol,
+    required this.fincas,
+    required this.areaHaFincas,
+    required this.siembras,
+    required this.siembrasPorEstado,
+    required this.ciclosAbiertos,
+    required this.ciclosCerrados,
+    required this.cosechas,
+    required this.trabajadores,
+    required this.gastos,
+    required this.ingresos,
+    required this.utilidad,
+    required this.eventosAdversos,
+    required this.perdidaEstimada,
+  });
+
+  factory ResumenGeneral.fromJson(Map<String, dynamic> json) => ResumenGeneral(
+        usuarios: json['usuarios'] as int,
+        usuariosActivos: json['usuarios_activos'] as int,
+        usuariosPorRol: json['usuarios_por_rol'] as Map<String, dynamic>,
+        fincas: json['fincas'] as int,
+        areaHaFincas: (json['area_ha_fincas'] as num).toDouble(),
+        siembras: json['siembras'] as int,
+        siembrasPorEstado: json['siembras_por_estado'] as Map<String, dynamic>,
+        ciclosAbiertos: json['ciclos_abiertos'] as int,
+        ciclosCerrados: json['ciclos_cerrados'] as int,
+        cosechas: json['cosechas'] as int,
+        trabajadores: json['trabajadores'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        utilidad: (json['utilidad'] as num).toDouble(),
+        eventosAdversos: json['eventos_adversos'] as int,
+        perdidaEstimada: (json['perdida_estimada'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'usuarios': usuarios,
+        'usuarios_activos': usuariosActivos,
+        'usuarios_por_rol': usuariosPorRol,
+        'fincas': fincas,
+        'area_ha_fincas': areaHaFincas,
+        'siembras': siembras,
+        'siembras_por_estado': siembrasPorEstado,
+        'ciclos_abiertos': ciclosAbiertos,
+        'ciclos_cerrados': ciclosCerrados,
+        'cosechas': cosechas,
+        'trabajadores': trabajadores,
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'utilidad': utilidad,
+        'eventos_adversos': eventosAdversos,
+        'perdida_estimada': perdidaEstimada,
       };
 }
 
@@ -4907,6 +5063,30 @@ class TokenResponse {
         'expires_in': expiresIn,
         'rol': rol,
         'nombre': nombre,
+      };
+}
+
+class TotalPorCategoria {
+  final String categoria;
+  final int registros;
+  final double total;
+
+  const TotalPorCategoria({
+    required this.categoria,
+    required this.registros,
+    required this.total,
+  });
+
+  factory TotalPorCategoria.fromJson(Map<String, dynamic> json) => TotalPorCategoria(
+        categoria: json['categoria'] as String,
+        registros: json['registros'] as int,
+        total: (json['total'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'categoria': categoria,
+        'registros': registros,
+        'total': total,
       };
 }
 

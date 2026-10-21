@@ -99,6 +99,9 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `GET` | `/cultivos/{cultivo_id}/metodos` | admin, agricultor | Ficha del cultivo | Métodos de propagación |
 | `GET` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Riesgos del cultivo |
 | `PUT` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Reemplazar los riesgos del cultivo |
+| `GET` | `/estadisticas/costos` | admin |  | Gastos e ingresos por categoría |
+| `GET` | `/estadisticas/crecimiento` | admin |  | Crecimiento por mes |
+| `GET` | `/estadisticas/resumen` | admin |  | Totales de toda la aplicación |
 | `GET` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Eventos adversos |
 | `POST` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Registrar un evento adverso |
 | `GET` | `/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Detalle de un evento |

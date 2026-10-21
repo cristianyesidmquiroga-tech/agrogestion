@@ -11,6 +11,7 @@ os.environ.setdefault("RATE_LIMIT", "1000000")
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -25,6 +26,7 @@ from app.main import create_app
 from app.models import (
     Base,
     Ciclo,
+    Cosecha,
     Cultivo,
     CultivoDosis,
     CultivoFase,
@@ -33,6 +35,8 @@ from app.models import (
     Finca,
     FincaUsuario,
     Fuente,
+    Gasto,
+    Ingreso,
     Lote,
     Manejo,
     ProblemaSanitario,
@@ -124,6 +128,51 @@ class Fabrica:
         )
         await self.s.commit()
         return s
+
+    async def ciclo_de(self, siembra):
+        return await self.s.scalar(select(Ciclo).where(Ciclo.siembra_id == siembra.id))
+
+    async def cosecha(self, finca, ciclo, cantidad="10", fecha=None, unidad="kilo"):
+        fila = Cosecha(
+            finca_id=finca.id,
+            ciclo_id=ciclo.id,
+            cantidad=Decimal(cantidad),
+            unidad=unidad,
+            fecha=fecha or datetime.now(UTC),
+            creado_por=finca.creado_por,
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def gasto(
+        self, finca, monto, categoria="Insumos", ciclo=None, fecha=None, estado="activo"
+    ):
+        fila = Gasto(
+            finca_id=finca.id,
+            ciclo_id=ciclo.id if ciclo else None,
+            categoria=categoria,
+            monto=Decimal(monto),
+            fecha=fecha or datetime.now(UTC),
+            estado=estado,
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def ingreso(self, finca, total, categoria="Venta", ciclo=None, fecha=None):
+        fila = Ingreso(
+            finca_id=finca.id,
+            ciclo_id=ciclo.id if ciclo else None,
+            categoria=categoria,
+            cantidad=Decimal(1),
+            precio_unitario=Decimal(total),
+            total=Decimal(total),
+            fecha=fecha or datetime.now(UTC),
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
 
     async def fuente(self, nombre="Fuente de prueba"):
         f = Fuente(nombre=nombre, url="https://ejemplo.test/fuente")
