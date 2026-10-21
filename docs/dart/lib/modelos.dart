@@ -1110,6 +1110,54 @@ class CosechaCreate {
       };
 }
 
+class CosechaRegistrada {
+  final String id;
+  final DateTime fecha;
+  final String cultivo;
+  final double cantidad;
+  final String unidad;
+  final String? calidad;
+  final String finca;
+  final String zona;
+  final String? agricultor;
+
+  const CosechaRegistrada({
+    required this.id,
+    required this.fecha,
+    required this.cultivo,
+    required this.cantidad,
+    required this.unidad,
+    this.calidad,
+    required this.finca,
+    required this.zona,
+    this.agricultor,
+  });
+
+  factory CosechaRegistrada.fromJson(Map<String, dynamic> json) => CosechaRegistrada(
+        id: json['id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        cultivo: json['cultivo'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        unidad: json['unidad'] as String,
+        calidad: json['calidad'] == null ? null : json['calidad'] as String,
+        finca: json['finca'] as String,
+        zona: json['zona'] as String,
+        agricultor: json['agricultor'] == null ? null : json['agricultor'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'fecha': fecha.toIso8601String().substring(0, 10),
+        'cultivo': cultivo,
+        'cantidad': cantidad,
+        'unidad': unidad,
+        if (calidad != null) 'calidad': calidad!,
+        'finca': finca,
+        'zona': zona,
+        if (agricultor != null) 'agricultor': agricultor!,
+      };
+}
+
 class CosechaResponse {
   final String id;
   final String fincaId;
@@ -3698,6 +3746,38 @@ class PageConsultaResumen {
       };
 }
 
+class PageCosechaRegistrada {
+  final List<CosechaRegistrada> items;
+  final int total;
+  final int page;
+  final int size;
+  final bool hasMore;
+
+  const PageCosechaRegistrada({
+    required this.items,
+    required this.total,
+    required this.page,
+    required this.size,
+    required this.hasMore,
+  });
+
+  factory PageCosechaRegistrada.fromJson(Map<String, dynamic> json) => PageCosechaRegistrada(
+        items: (json['items'] as List<dynamic>).map((x) => CosechaRegistrada.fromJson(x as Map<String, dynamic>)).toList(),
+        total: json['total'] as int,
+        page: json['page'] as int,
+        size: json['size'] as int,
+        hasMore: json['has_more'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'items': items.map((x) => x.toJson()).toList(),
+        'total': total,
+        'page': page,
+        'size': size,
+        'has_more': hasMore,
+      };
+}
+
 class PageCultivoResumen {
   final List<CultivoResumen> items;
   final int total;
@@ -3843,6 +3923,38 @@ class PagePropagacionSalida {
 
   factory PagePropagacionSalida.fromJson(Map<String, dynamic> json) => PagePropagacionSalida(
         items: (json['items'] as List<dynamic>).map((x) => PropagacionSalida.fromJson(x as Map<String, dynamic>)).toList(),
+        total: json['total'] as int,
+        page: json['page'] as int,
+        size: json['size'] as int,
+        hasMore: json['has_more'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'items': items.map((x) => x.toJson()).toList(),
+        'total': total,
+        'page': page,
+        'size': size,
+        'has_more': hasMore,
+      };
+}
+
+class PageSiembraRegistrada {
+  final List<SiembraRegistrada> items;
+  final int total;
+  final int page;
+  final int size;
+  final bool hasMore;
+
+  const PageSiembraRegistrada({
+    required this.items,
+    required this.total,
+    required this.page,
+    required this.size,
+    required this.hasMore,
+  });
+
+  factory PageSiembraRegistrada.fromJson(Map<String, dynamic> json) => PageSiembraRegistrada(
+        items: (json['items'] as List<dynamic>).map((x) => SiembraRegistrada.fromJson(x as Map<String, dynamic>)).toList(),
         total: json['total'] as int,
         page: json['page'] as int,
         size: json['size'] as int,
@@ -4411,6 +4523,42 @@ class ProduccionResponse {
         'tipo': tipo,
         'cantidad': cantidad,
         'unidad': unidad,
+      };
+}
+
+class Productor {
+  final String usuarioId;
+  final String nombre;
+  final int fincas;
+  final int cosechas;
+  final List<CantidadPorUnidad> produccion;
+  final DateTime? ultimaCosecha;
+
+  const Productor({
+    required this.usuarioId,
+    required this.nombre,
+    required this.fincas,
+    required this.cosechas,
+    required this.produccion,
+    this.ultimaCosecha,
+  });
+
+  factory Productor.fromJson(Map<String, dynamic> json) => Productor(
+        usuarioId: json['usuario_id'] as String,
+        nombre: json['nombre'] as String,
+        fincas: json['fincas'] as int,
+        cosechas: json['cosechas'] as int,
+        produccion: (json['produccion'] as List<dynamic>).map((x) => CantidadPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        ultimaCosecha: json['ultima_cosecha'] == null ? null : DateTime.parse(json['ultima_cosecha'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'usuario_id': usuarioId,
+        'nombre': nombre,
+        'fincas': fincas,
+        'cosechas': cosechas,
+        'produccion': produccion.map((x) => x.toJson()).toList(),
+        if (ultimaCosecha != null) 'ultima_cosecha': ultimaCosecha!.toIso8601String().substring(0, 10),
       };
 }
 
@@ -5027,6 +5175,58 @@ class SiembraCrear {
         if (plantasSembradas != null) 'plantas_sembradas': plantasSembradas!,
         'fecha_plan': fechaPlan.toIso8601String().substring(0, 10),
         if (presupuesto != null) 'presupuesto': presupuesto!,
+      };
+}
+
+class SiembraRegistrada {
+  final String id;
+  final String cultivo;
+  final String estado;
+  final double areaHa;
+  final int? plantas;
+  final DateTime fechaPlan;
+  final DateTime? inicioCiclo;
+  final String finca;
+  final String zona;
+  final String? agricultor;
+
+  const SiembraRegistrada({
+    required this.id,
+    required this.cultivo,
+    required this.estado,
+    required this.areaHa,
+    this.plantas,
+    required this.fechaPlan,
+    this.inicioCiclo,
+    required this.finca,
+    required this.zona,
+    this.agricultor,
+  });
+
+  factory SiembraRegistrada.fromJson(Map<String, dynamic> json) => SiembraRegistrada(
+        id: json['id'] as String,
+        cultivo: json['cultivo'] as String,
+        estado: json['estado'] as String,
+        areaHa: (json['area_ha'] as num).toDouble(),
+        plantas: json['plantas'] == null ? null : json['plantas'] as int,
+        fechaPlan: DateTime.parse(json['fecha_plan'] as String),
+        inicioCiclo: json['inicio_ciclo'] == null ? null : DateTime.parse(json['inicio_ciclo'] as String),
+        finca: json['finca'] as String,
+        zona: json['zona'] as String,
+        agricultor: json['agricultor'] == null ? null : json['agricultor'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'cultivo': cultivo,
+        'estado': estado,
+        'area_ha': areaHa,
+        if (plantas != null) 'plantas': plantas!,
+        'fecha_plan': fechaPlan.toIso8601String().substring(0, 10),
+        if (inicioCiclo != null) 'inicio_ciclo': inicioCiclo!.toIso8601String().substring(0, 10),
+        'finca': finca,
+        'zona': zona,
+        if (agricultor != null) 'agricultor': agricultor!,
       };
 }
 

@@ -1,18 +1,25 @@
+import uuid
+from datetime import date
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Query
 
 from app.core.etiquetas import ESTADISTICAS
 from app.dependencies import SoloAdmin
-from app.routers.dependencias import BD
+from app.routers.dependencias import BD, Pagina, armar_pagina
+from app.schemas.common import Page
 from app.schemas.estadisticas import (
+    CosechaRegistrada,
     CostosGenerales,
     EstadisticaCultivo,
     EstadisticaZona,
+    Productor,
     PuntoMensual,
     ResumenGeneral,
+    SiembraRegistrada,
 )
 from app.services import estadisticas_cultivos_service as cultivos_zonas
+from app.services import estadisticas_produccion_service as produccion
 from app.services import estadisticas_service as servicio
 
 router = APIRouter(prefix="/estadisticas", tags=[ESTADISTICAS])
@@ -45,3 +52,37 @@ async def zonas(
     db: BD, _: SoloAdmin, nivel: Literal["departamento", "municipio"] = "departamento"
 ) -> list[EstadisticaZona]:
     return await cultivos_zonas.zonas(db, nivel)
+
+
+@router.get("/produccion", response_model=Page[CosechaRegistrada], summary="Cosechas registradas")
+async def producciones(
+    db: BD,
+    _: SoloAdmin,
+    pag: Pagina,
+    cultivo_id: uuid.UUID | None = None,
+    zona: Annotated[str | None, Query(min_length=2, max_length=5)] = None,
+    desde: date | None = None,
+    hasta: date | None = None,
+) -> Page[CosechaRegistrada]:
+    items, total = await produccion.producciones(
+        db, cultivo_id, zona, desde, hasta, pag.skip, pag.limit
+    )
+    return armar_pagina(items, total, pag)
+
+
+@router.get("/siembras", response_model=Page[SiembraRegistrada], summary="Siembras registradas")
+async def siembras(
+    db: BD,
+    _: SoloAdmin,
+    pag: Pagina,
+    cultivo_id: uuid.UUID | None = None,
+    estado: Literal["planeada", "en_curso", "cerrada", "cancelada"] | None = None,
+    zona: Annotated[str | None, Query(min_length=2, max_length=5)] = None,
+) -> Page[SiembraRegistrada]:
+    items, total = await produccion.siembras(db, cultivo_id, estado, zona, pag.skip, pag.limit)
+    return armar_pagina(items, total, pag)
+
+
+@router.get("/productores", response_model=list[Productor], summary="Quién produce más")
+async def productores(db: BD, _: SoloAdmin) -> list[Productor]:
+    return await produccion.productores(db)

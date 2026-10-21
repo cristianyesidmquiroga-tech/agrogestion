@@ -1,6 +1,15 @@
 """Vista: Panel de estadísticas (solo administrador)."""
 
-RUTAS = ["resumen", "crecimiento", "costos", "cultivos", "zonas"]
+RUTAS = [
+    "resumen",
+    "crecimiento",
+    "costos",
+    "cultivos",
+    "zonas",
+    "produccion",
+    "siembras",
+    "productores",
+]
 
 
 async def test_acceso_segun_el_rol(cliente, entrar_como, clave):
@@ -27,3 +36,11 @@ async def test_las_listas_vacias_no_fallan(cliente, entrar_como):
     await entrar_como("admin")
     for ruta in ("cultivos", "zonas"):
         assert (await cliente.get(f"/estadisticas/{ruta}")).json() == []
+
+
+async def test_los_listados_paginados_vacios_traen_total_cero(cliente, entrar_como):
+    await entrar_como("admin")
+    for ruta in ("produccion", "siembras"):
+        cuerpo = (await cliente.get(f"/estadisticas/{ruta}")).json()
+        assert (cuerpo["items"], cuerpo["total"], cuerpo["has_more"]) == ([], 0, False)
+    assert (await cliente.get("/estadisticas/productores")).json() == []

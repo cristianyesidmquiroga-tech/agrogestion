@@ -4126,6 +4126,81 @@
           }
         },
         {
+          "name": "GET Cosechas registradas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/produccion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/produccion"
+              ],
+              "query": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "zona",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "desde",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Cosechas registradas"
+          }
+        },
+        {
+          "name": "GET Quién produce más",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/productores",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/productores"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Quién produce más"
+          }
+        },
+        {
           "name": "GET Totales de toda la aplicación",
           "request": {
             "method": "GET",
@@ -4142,6 +4217,56 @@
               "variable": []
             },
             "description": "Totales de toda la aplicación"
+          }
+        },
+        {
+          "name": "GET Siembras registradas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/siembras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/siembras"
+              ],
+              "query": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "estado",
+                  "value": "planeada",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "zona",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Siembras registradas"
           }
         },
         {
