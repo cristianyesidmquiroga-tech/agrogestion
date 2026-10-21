@@ -4107,6 +4107,25 @@
           }
         },
         {
+          "name": "GET Comparativo por cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/cultivos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/cultivos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Comparativo por cultivo"
+          }
+        },
+        {
           "name": "GET Totales de toda la aplicación",
           "request": {
             "method": "GET",
@@ -4123,6 +4142,32 @@
               "variable": []
             },
             "description": "Totales de toda la aplicación"
+          }
+        },
+        {
+          "name": "GET Comparativo por zona",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/zonas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/zonas"
+              ],
+              "query": [
+                {
+                  "key": "nivel",
+                  "value": "departamento",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Comparativo por zona"
           }
         }
       ]

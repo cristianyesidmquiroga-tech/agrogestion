@@ -1,11 +1,18 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Query
 
 from app.core.etiquetas import ESTADISTICAS
 from app.dependencies import SoloAdmin
 from app.routers.dependencias import BD
-from app.schemas.estadisticas import CostosGenerales, PuntoMensual, ResumenGeneral
+from app.schemas.estadisticas import (
+    CostosGenerales,
+    EstadisticaCultivo,
+    EstadisticaZona,
+    PuntoMensual,
+    ResumenGeneral,
+)
+from app.services import estadisticas_cultivos_service as cultivos_zonas
 from app.services import estadisticas_service as servicio
 
 router = APIRouter(prefix="/estadisticas", tags=[ESTADISTICAS])
@@ -26,3 +33,15 @@ async def crecimiento(
 @router.get("/costos", response_model=CostosGenerales, summary="Gastos e ingresos por categoría")
 async def costos(db: BD, _: SoloAdmin) -> CostosGenerales:
     return await servicio.costos(db)
+
+
+@router.get("/cultivos", response_model=list[EstadisticaCultivo], summary="Comparativo por cultivo")
+async def cultivos(db: BD, _: SoloAdmin) -> list[EstadisticaCultivo]:
+    return await cultivos_zonas.cultivos(db)
+
+
+@router.get("/zonas", response_model=list[EstadisticaZona], summary="Comparativo por zona")
+async def zonas(
+    db: BD, _: SoloAdmin, nivel: Literal["departamento", "municipio"] = "departamento"
+) -> list[EstadisticaZona]:
+    return await cultivos_zonas.zonas(db, nivel)
