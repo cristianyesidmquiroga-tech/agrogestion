@@ -170,15 +170,20 @@
         ],
         "summary": "Create",
         "operationId": "create_usuarios_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UsuarioCreate"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
@@ -241,12 +246,255 @@
               }
             }
           }
-        },
+        }
+      },
+      "get": {
+        "tags": [
+          "14. Usuarios"
+        ],
+        "summary": "Perfiles de los usuarios",
+        "operationId": "listar_usuarios_get",
         "security": [
           {
             "HTTPBearer": []
           }
-        ]
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Texto en nombre o correo",
+              "title": "Q"
+            },
+            "description": "Texto en nombre o correo"
+          },
+          {
+            "name": "rol",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "admin",
+                    "agricultor",
+                    "contador",
+                    "experto"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Rol"
+            }
+          },
+          {
+            "name": "activo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Activo"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Registros a saltar",
+              "default": 0,
+              "title": "Skip"
+            },
+            "description": "Registros a saltar"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Tamaño de página, máximo 50",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Tamaño de página, máximo 50"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_UsuarioResumen_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/{usuario_id}": {
+      "get": {
+        "tags": [
+          "14. Usuarios"
+        ],
+        "summary": "Perfil de un usuario",
+        "operationId": "detalle_usuarios__usuario_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "usuario_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Usuario Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDetalle"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/fincas": {
@@ -15177,6 +15425,81 @@
         ],
         "title": "FincaCreate"
       },
+      "FincaDeUsuario": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "departamento_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departamento Dane"
+          },
+          "municipio_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Municipio Dane"
+          },
+          "area_ha": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Ha"
+          },
+          "siembras": {
+            "type": "integer",
+            "title": "Siembras"
+          },
+          "cosechas": {
+            "type": "integer",
+            "title": "Cosechas"
+          },
+          "gastos": {
+            "type": "number",
+            "title": "Gastos"
+          },
+          "ingresos": {
+            "type": "number",
+            "title": "Ingresos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "departamento_dane",
+          "municipio_dane",
+          "area_ha",
+          "siembras",
+          "cosechas",
+          "gastos",
+          "ingresos"
+        ],
+        "title": "FincaDeUsuario"
+      },
       "FincaResponse": {
         "properties": {
           "id": {
@@ -17265,6 +17588,42 @@
         ],
         "title": "Page[SiembraResumen]"
       },
+      "Page_UsuarioResumen_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/UsuarioResumen"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "has_more"
+        ],
+        "title": "Page[UsuarioResumen]"
+      },
       "PerfilResponse": {
         "properties": {
           "id": {
@@ -19221,6 +19580,109 @@
         ],
         "title": "UsuarioCreate"
       },
+      "UsuarioDetalle": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "rol": {
+            "type": "string",
+            "title": "Rol"
+          },
+          "activo": {
+            "type": "boolean",
+            "title": "Activo"
+          },
+          "creado_en": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Creado En"
+          },
+          "ultimo_acceso": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ultimo Acceso"
+          },
+          "municipio_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Municipio Dane"
+          },
+          "fincas": {
+            "type": "integer",
+            "title": "Fincas"
+          },
+          "siembras": {
+            "type": "integer",
+            "title": "Siembras"
+          },
+          "bloqueado": {
+            "type": "boolean",
+            "title": "Bloqueado"
+          },
+          "cosechas": {
+            "type": "integer",
+            "title": "Cosechas"
+          },
+          "gastos": {
+            "type": "number",
+            "title": "Gastos"
+          },
+          "ingresos": {
+            "type": "number",
+            "title": "Ingresos"
+          },
+          "detalle_fincas": {
+            "items": {
+              "$ref": "#/components/schemas/FincaDeUsuario"
+            },
+            "type": "array",
+            "title": "Detalle Fincas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "nombre",
+          "rol",
+          "activo",
+          "creado_en",
+          "ultimo_acceso",
+          "municipio_dane",
+          "fincas",
+          "siembras",
+          "bloqueado",
+          "cosechas",
+          "gastos",
+          "ingresos",
+          "detalle_fincas"
+        ],
+        "title": "UsuarioDetalle"
+      },
       "UsuarioResponse": {
         "properties": {
           "id": {
@@ -19255,6 +19717,81 @@
           "activo"
         ],
         "title": "UsuarioResponse"
+      },
+      "UsuarioResumen": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "rol": {
+            "type": "string",
+            "title": "Rol"
+          },
+          "activo": {
+            "type": "boolean",
+            "title": "Activo"
+          },
+          "creado_en": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Creado En"
+          },
+          "ultimo_acceso": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ultimo Acceso"
+          },
+          "municipio_dane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Municipio Dane"
+          },
+          "fincas": {
+            "type": "integer",
+            "title": "Fincas"
+          },
+          "siembras": {
+            "type": "integer",
+            "title": "Siembras"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "nombre",
+          "rol",
+          "activo",
+          "creado_en",
+          "ultimo_acceso",
+          "municipio_dane",
+          "fincas",
+          "siembras"
+        ],
+        "title": "UsuarioResumen"
       },
       "ValidacionSalida": {
         "properties": {
