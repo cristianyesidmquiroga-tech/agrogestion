@@ -101,7 +101,9 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `PUT` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Reemplazar los riesgos del cultivo |
 | `GET` | `/estadisticas/costos` | admin |  | Gastos e ingresos por categoría |
 | `GET` | `/estadisticas/crecimiento` | admin |  | Crecimiento por mes |
+| `GET` | `/estadisticas/cultivos` | admin |  | Comparativo por cultivo |
 | `GET` | `/estadisticas/resumen` | admin |  | Totales de toda la aplicación |
+| `GET` | `/estadisticas/zonas` | admin |  | Comparativo por zona |
 | `GET` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Eventos adversos |
 | `POST` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Registrar un evento adverso |
 | `GET` | `/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Detalle de un evento |
@@ -335,6 +337,7 @@ try {
 | `fase` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `fase_critica` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `metodo` | `semilla`, `esqueje`, `estaca`, `injerto`, `hijuelo`, `acodo`, `in_vitro` |
+| `nivel` | `departamento`, `municipio` |
 | `pago_cosecha_sugerido` | `por_kilo`, `por_jornal`, `por_destajo` |
 | `rol` | `admin`, `agricultor`, `contador`, `experto` |
 | `severidad` | `leve`, `moderada`, `severa` |

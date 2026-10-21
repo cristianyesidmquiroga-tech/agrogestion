@@ -71,13 +71,19 @@ class Fabrica:
     def cabecera(self, usuario: Usuario) -> dict[str, str]:
         return {"Authorization": f"Bearer {create_access_token(usuario.id)}"}
 
-    async def finca(self, *usuarios: Usuario, area: str = "10") -> Finca:
+    async def finca(
+        self,
+        *usuarios: Usuario,
+        area: str = "10",
+        departamento: str = "05",
+        municipio: str = "05001",
+    ) -> Finca:
         creador = usuarios[0] if usuarios else await self.usuario("admin")
         f = Finca(
             creado_por=creador.id,
             nombre="Finca de prueba",
-            departamento_dane="05",
-            municipio_dane="05001",
+            departamento_dane=departamento,
+            municipio_dane=municipio,
             area_ha=Decimal(area),
         )
         self.s.add(f)

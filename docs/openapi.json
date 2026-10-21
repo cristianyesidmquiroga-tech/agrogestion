@@ -12051,6 +12051,182 @@
         ]
       }
     },
+    "/estadisticas/cultivos": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Comparativo por cultivo",
+        "operationId": "cultivos_estadisticas_cultivos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EstadisticaCultivo"
+                  },
+                  "type": "array",
+                  "title": "Response Cultivos Estadisticas Cultivos Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/estadisticas/zonas": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Comparativo por zona",
+        "operationId": "zonas_estadisticas_zonas_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "nivel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "departamento",
+                "municipio"
+              ],
+              "type": "string",
+              "default": "departamento",
+              "title": "Nivel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EstadisticaZona"
+                  },
+                  "title": "Response Zonas Estadisticas Zonas Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -12924,6 +13100,24 @@
           "clave_nueva"
         ],
         "title": "CambioClaveEntrada"
+      },
+      "CantidadPorUnidad": {
+        "properties": {
+          "unidad": {
+            "type": "string",
+            "title": "Unidad"
+          },
+          "cantidad": {
+            "type": "number",
+            "title": "Cantidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unidad",
+          "cantidad"
+        ],
+        "title": "CantidadPorUnidad"
       },
       "CausaProbable": {
         "properties": {
@@ -14754,6 +14948,241 @@
           "descripcion"
         ],
         "title": "EspecieResponse"
+      },
+      "EstadisticaCultivo": {
+        "properties": {
+          "cultivo_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Cultivo Id"
+          },
+          "cultivo": {
+            "type": "string",
+            "title": "Cultivo"
+          },
+          "grupo": {
+            "type": "string",
+            "title": "Grupo"
+          },
+          "siembras": {
+            "type": "integer",
+            "title": "Siembras"
+          },
+          "fincas": {
+            "type": "integer",
+            "title": "Fincas"
+          },
+          "agricultores": {
+            "type": "integer",
+            "title": "Agricultores"
+          },
+          "area_ha": {
+            "type": "number",
+            "title": "Area Ha"
+          },
+          "plantas": {
+            "type": "integer",
+            "title": "Plantas"
+          },
+          "ciclos_abiertos": {
+            "type": "integer",
+            "title": "Ciclos Abiertos"
+          },
+          "ciclos_cerrados": {
+            "type": "integer",
+            "title": "Ciclos Cerrados"
+          },
+          "duracion_media_dias": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duracion Media Dias"
+          },
+          "ciclo_mas_largo_dias": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ciclo Mas Largo Dias"
+          },
+          "cosechas": {
+            "type": "integer",
+            "title": "Cosechas"
+          },
+          "produccion": {
+            "items": {
+              "$ref": "#/components/schemas/CantidadPorUnidad"
+            },
+            "type": "array",
+            "title": "Produccion"
+          },
+          "primera_cosecha": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primera Cosecha"
+          },
+          "ultima_cosecha": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ultima Cosecha"
+          },
+          "dias_entre_cosechas": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dias Entre Cosechas"
+          },
+          "gastos": {
+            "type": "number",
+            "title": "Gastos"
+          },
+          "ingresos": {
+            "type": "number",
+            "title": "Ingresos"
+          },
+          "utilidad": {
+            "type": "number",
+            "title": "Utilidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cultivo_id",
+          "cultivo",
+          "grupo",
+          "siembras",
+          "fincas",
+          "agricultores",
+          "area_ha",
+          "plantas",
+          "ciclos_abiertos",
+          "ciclos_cerrados",
+          "duracion_media_dias",
+          "ciclo_mas_largo_dias",
+          "cosechas",
+          "produccion",
+          "primera_cosecha",
+          "ultima_cosecha",
+          "dias_entre_cosechas",
+          "gastos",
+          "ingresos",
+          "utilidad"
+        ],
+        "title": "EstadisticaCultivo"
+      },
+      "EstadisticaZona": {
+        "properties": {
+          "zona": {
+            "type": "string",
+            "title": "Zona"
+          },
+          "fincas": {
+            "type": "integer",
+            "title": "Fincas"
+          },
+          "agricultores": {
+            "type": "integer",
+            "title": "Agricultores"
+          },
+          "area_ha_fincas": {
+            "type": "number",
+            "title": "Area Ha Fincas"
+          },
+          "siembras": {
+            "type": "integer",
+            "title": "Siembras"
+          },
+          "area_sembrada_ha": {
+            "type": "number",
+            "title": "Area Sembrada Ha"
+          },
+          "cosechas": {
+            "type": "integer",
+            "title": "Cosechas"
+          },
+          "produccion": {
+            "items": {
+              "$ref": "#/components/schemas/CantidadPorUnidad"
+            },
+            "type": "array",
+            "title": "Produccion"
+          },
+          "gastos": {
+            "type": "number",
+            "title": "Gastos"
+          },
+          "ingresos": {
+            "type": "number",
+            "title": "Ingresos"
+          },
+          "utilidad": {
+            "type": "number",
+            "title": "Utilidad"
+          },
+          "gasto_por_ha": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gasto Por Ha"
+          },
+          "cultivos_principales": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cultivos Principales"
+          }
+        },
+        "type": "object",
+        "required": [
+          "zona",
+          "fincas",
+          "agricultores",
+          "area_ha_fincas",
+          "siembras",
+          "area_sembrada_ha",
+          "cosechas",
+          "produccion",
+          "gastos",
+          "ingresos",
+          "utilidad",
+          "gasto_por_ha",
+          "cultivos_principales"
+        ],
+        "title": "EstadisticaZona"
       },
       "EtapaCreate": {
         "properties": {

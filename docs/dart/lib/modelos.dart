@@ -550,6 +550,26 @@ class CambioClaveEntrada {
       };
 }
 
+class CantidadPorUnidad {
+  final String unidad;
+  final double cantidad;
+
+  const CantidadPorUnidad({
+    required this.unidad,
+    required this.cantidad,
+  });
+
+  factory CantidadPorUnidad.fromJson(Map<String, dynamic> json) => CantidadPorUnidad(
+        unidad: json['unidad'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'unidad': unidad,
+        'cantidad': cantidad,
+      };
+}
+
 class CausaProbable {
   final String problemaId;
   final String problema;
@@ -1715,6 +1735,162 @@ class EspecieResponse {
         'finca_id': fincaId,
         'nombre': nombre,
         if (descripcion != null) 'descripcion': descripcion!,
+      };
+}
+
+class EstadisticaCultivo {
+  final String cultivoId;
+  final String cultivo;
+  final String grupo;
+  final int siembras;
+  final int fincas;
+  final int agricultores;
+  final double areaHa;
+  final int plantas;
+  final int ciclosAbiertos;
+  final int ciclosCerrados;
+  final double? duracionMediaDias;
+  final int? cicloMasLargoDias;
+  final int cosechas;
+  final List<CantidadPorUnidad> produccion;
+  final DateTime? primeraCosecha;
+  final DateTime? ultimaCosecha;
+  final double? diasEntreCosechas;
+  final double gastos;
+  final double ingresos;
+  final double utilidad;
+
+  const EstadisticaCultivo({
+    required this.cultivoId,
+    required this.cultivo,
+    required this.grupo,
+    required this.siembras,
+    required this.fincas,
+    required this.agricultores,
+    required this.areaHa,
+    required this.plantas,
+    required this.ciclosAbiertos,
+    required this.ciclosCerrados,
+    this.duracionMediaDias,
+    this.cicloMasLargoDias,
+    required this.cosechas,
+    required this.produccion,
+    this.primeraCosecha,
+    this.ultimaCosecha,
+    this.diasEntreCosechas,
+    required this.gastos,
+    required this.ingresos,
+    required this.utilidad,
+  });
+
+  factory EstadisticaCultivo.fromJson(Map<String, dynamic> json) => EstadisticaCultivo(
+        cultivoId: json['cultivo_id'] as String,
+        cultivo: json['cultivo'] as String,
+        grupo: json['grupo'] as String,
+        siembras: json['siembras'] as int,
+        fincas: json['fincas'] as int,
+        agricultores: json['agricultores'] as int,
+        areaHa: (json['area_ha'] as num).toDouble(),
+        plantas: json['plantas'] as int,
+        ciclosAbiertos: json['ciclos_abiertos'] as int,
+        ciclosCerrados: json['ciclos_cerrados'] as int,
+        duracionMediaDias: json['duracion_media_dias'] == null ? null : (json['duracion_media_dias'] as num).toDouble(),
+        cicloMasLargoDias: json['ciclo_mas_largo_dias'] == null ? null : json['ciclo_mas_largo_dias'] as int,
+        cosechas: json['cosechas'] as int,
+        produccion: (json['produccion'] as List<dynamic>).map((x) => CantidadPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        primeraCosecha: json['primera_cosecha'] == null ? null : DateTime.parse(json['primera_cosecha'] as String),
+        ultimaCosecha: json['ultima_cosecha'] == null ? null : DateTime.parse(json['ultima_cosecha'] as String),
+        diasEntreCosechas: json['dias_entre_cosechas'] == null ? null : (json['dias_entre_cosechas'] as num).toDouble(),
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        utilidad: (json['utilidad'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'cultivo_id': cultivoId,
+        'cultivo': cultivo,
+        'grupo': grupo,
+        'siembras': siembras,
+        'fincas': fincas,
+        'agricultores': agricultores,
+        'area_ha': areaHa,
+        'plantas': plantas,
+        'ciclos_abiertos': ciclosAbiertos,
+        'ciclos_cerrados': ciclosCerrados,
+        if (duracionMediaDias != null) 'duracion_media_dias': duracionMediaDias!,
+        if (cicloMasLargoDias != null) 'ciclo_mas_largo_dias': cicloMasLargoDias!,
+        'cosechas': cosechas,
+        'produccion': produccion.map((x) => x.toJson()).toList(),
+        if (primeraCosecha != null) 'primera_cosecha': primeraCosecha!.toIso8601String().substring(0, 10),
+        if (ultimaCosecha != null) 'ultima_cosecha': ultimaCosecha!.toIso8601String().substring(0, 10),
+        if (diasEntreCosechas != null) 'dias_entre_cosechas': diasEntreCosechas!,
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'utilidad': utilidad,
+      };
+}
+
+class EstadisticaZona {
+  final String zona;
+  final int fincas;
+  final int agricultores;
+  final double areaHaFincas;
+  final int siembras;
+  final double areaSembradaHa;
+  final int cosechas;
+  final List<CantidadPorUnidad> produccion;
+  final double gastos;
+  final double ingresos;
+  final double utilidad;
+  final double? gastoPorHa;
+  final List<String> cultivosPrincipales;
+
+  const EstadisticaZona({
+    required this.zona,
+    required this.fincas,
+    required this.agricultores,
+    required this.areaHaFincas,
+    required this.siembras,
+    required this.areaSembradaHa,
+    required this.cosechas,
+    required this.produccion,
+    required this.gastos,
+    required this.ingresos,
+    required this.utilidad,
+    this.gastoPorHa,
+    required this.cultivosPrincipales,
+  });
+
+  factory EstadisticaZona.fromJson(Map<String, dynamic> json) => EstadisticaZona(
+        zona: json['zona'] as String,
+        fincas: json['fincas'] as int,
+        agricultores: json['agricultores'] as int,
+        areaHaFincas: (json['area_ha_fincas'] as num).toDouble(),
+        siembras: json['siembras'] as int,
+        areaSembradaHa: (json['area_sembrada_ha'] as num).toDouble(),
+        cosechas: json['cosechas'] as int,
+        produccion: (json['produccion'] as List<dynamic>).map((x) => CantidadPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        utilidad: (json['utilidad'] as num).toDouble(),
+        gastoPorHa: json['gasto_por_ha'] == null ? null : (json['gasto_por_ha'] as num).toDouble(),
+        cultivosPrincipales: (json['cultivos_principales'] as List<dynamic>).map((x) => x as String).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'zona': zona,
+        'fincas': fincas,
+        'agricultores': agricultores,
+        'area_ha_fincas': areaHaFincas,
+        'siembras': siembras,
+        'area_sembrada_ha': areaSembradaHa,
+        'cosechas': cosechas,
+        'produccion': produccion.map((x) => x.toJson()).toList(),
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'utilidad': utilidad,
+        if (gastoPorHa != null) 'gasto_por_ha': gastoPorHa!,
+        'cultivos_principales': cultivosPrincipales.map((x) => x).toList(),
       };
 }
 
