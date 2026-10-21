@@ -4057,6 +4057,75 @@
           }
         }
       ]
+    },
+    {
+      "name": "18. Estadísticas",
+      "item": [
+        {
+          "name": "GET Gastos e ingresos por categoría",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/costos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/costos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Gastos e ingresos por categoría"
+          }
+        },
+        {
+          "name": "GET Crecimiento por mes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/crecimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/crecimiento"
+              ],
+              "query": [
+                {
+                  "key": "meses",
+                  "value": "12",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Crecimiento por mes"
+          }
+        },
+        {
+          "name": "GET Totales de toda la aplicación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/resumen",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/resumen"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Totales de toda la aplicación"
+          }
+        }
+      ]
     }
   ]
 }
