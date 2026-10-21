@@ -3,13 +3,13 @@
 <details>
 <summary><b>Read this in English</b></summary>
 
-REST API for crop and livestock management built with FastAPI, PostgreSQL 16, SQLAlchemy 2.0 and `asyncpg`. It covers farms and plots, a crop catalogue with profiles, plantings and cycles, plant counts, nursery batches, adverse events, knowledge base, assistant, regional news, labour, inputs, harvests, processes, accounting and livestock.
+REST API for crop and livestock management built with FastAPI, PostgreSQL 16, SQLAlchemy 2.0 and `asyncpg`. It covers farms and plots, a crop catalogue with profiles, plantings and cycles, plant counts, nursery batches, adverse events, knowledge base, assistant, regional news, labour, inputs, harvests, processes, accounting and livestock, plus application-wide statistics for the administrator (`/usuarios` and `/estadisticas`). The plan to bring it to Flutter is in `docs/plan_flutter_panel_admin.md`.
 
 Quick start: copy `.env.example` to `.env`, run `python -m pip install -e ".[dev]"`, then `alembic upgrade head` and `uvicorn app.main:app --reload`. Interactive docs are served at `/docs` with a login panel. Run `./verificar.ps1` before every pull request.
 
 </details>
 
-API REST para la gestión de cultivos y ganadería con FastAPI, PostgreSQL 16, SQLAlchemy 2.0 y `asyncpg`. Cubre fincas y lotes, catálogo de cultivos con perfil, siembras y ciclos, conteo de plantas, vivero, eventos adversos, base de conocimiento, asistente, noticias regionales, mano de obra, insumos, cosechas, procesos, contabilidad y pecuario.
+API REST para la gestión de cultivos y ganadería con FastAPI, PostgreSQL 16, SQLAlchemy 2.0 y `asyncpg`. Cubre fincas y lotes, catálogo de cultivos con perfil, siembras y ciclos, conteo de plantas, vivero, eventos adversos, base de conocimiento, asistente, noticias regionales, mano de obra, insumos, cosechas, procesos, contabilidad y pecuario, y estadísticas de toda la aplicación para el administrador (`/usuarios` y `/estadisticas`). El plan para llevarlo a Flutter está en `docs/plan_flutter_panel_admin.md`.
 
 ## Inicio
 
