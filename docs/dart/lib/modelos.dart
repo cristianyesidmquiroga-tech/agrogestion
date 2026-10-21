@@ -2206,6 +2206,54 @@ class FincaCreate {
       };
 }
 
+class FincaDeUsuario {
+  final String id;
+  final String nombre;
+  final String? departamentoDane;
+  final String? municipioDane;
+  final double? areaHa;
+  final int siembras;
+  final int cosechas;
+  final double gastos;
+  final double ingresos;
+
+  const FincaDeUsuario({
+    required this.id,
+    required this.nombre,
+    this.departamentoDane,
+    this.municipioDane,
+    this.areaHa,
+    required this.siembras,
+    required this.cosechas,
+    required this.gastos,
+    required this.ingresos,
+  });
+
+  factory FincaDeUsuario.fromJson(Map<String, dynamic> json) => FincaDeUsuario(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+        departamentoDane: json['departamento_dane'] == null ? null : json['departamento_dane'] as String,
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        areaHa: json['area_ha'] == null ? null : (json['area_ha'] as num).toDouble(),
+        siembras: json['siembras'] as int,
+        cosechas: json['cosechas'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        if (departamentoDane != null) 'departamento_dane': departamentoDane!,
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        if (areaHa != null) 'area_ha': areaHa!,
+        'siembras': siembras,
+        'cosechas': cosechas,
+        'gastos': gastos,
+        'ingresos': ingresos,
+      };
+}
+
 class FincaResponse {
   final String id;
   final String nombre;
@@ -3626,6 +3674,38 @@ class PageSiembraResumen {
       };
 }
 
+class PageUsuarioResumen {
+  final List<UsuarioResumen> items;
+  final int total;
+  final int page;
+  final int size;
+  final bool hasMore;
+
+  const PageUsuarioResumen({
+    required this.items,
+    required this.total,
+    required this.page,
+    required this.size,
+    required this.hasMore,
+  });
+
+  factory PageUsuarioResumen.fromJson(Map<String, dynamic> json) => PageUsuarioResumen(
+        items: (json['items'] as List<dynamic>).map((x) => UsuarioResumen.fromJson(x as Map<String, dynamic>)).toList(),
+        total: json['total'] as int,
+        page: json['page'] as int,
+        size: json['size'] as int,
+        hasMore: json['has_more'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'items': items.map((x) => x.toJson()).toList(),
+        'total': total,
+        'page': page,
+        'size': size,
+        'has_more': hasMore,
+      };
+}
+
 class PerfilResponse {
   final String id;
   final String email;
@@ -5014,6 +5094,78 @@ class UsuarioCreate {
       };
 }
 
+class UsuarioDetalle {
+  final String id;
+  final String email;
+  final String nombre;
+  final String rol;
+  final bool activo;
+  final DateTime creadoEn;
+  final DateTime? ultimoAcceso;
+  final String? municipioDane;
+  final int fincas;
+  final int siembras;
+  final bool bloqueado;
+  final int cosechas;
+  final double gastos;
+  final double ingresos;
+  final List<FincaDeUsuario> detalleFincas;
+
+  const UsuarioDetalle({
+    required this.id,
+    required this.email,
+    required this.nombre,
+    required this.rol,
+    required this.activo,
+    required this.creadoEn,
+    this.ultimoAcceso,
+    this.municipioDane,
+    required this.fincas,
+    required this.siembras,
+    required this.bloqueado,
+    required this.cosechas,
+    required this.gastos,
+    required this.ingresos,
+    required this.detalleFincas,
+  });
+
+  factory UsuarioDetalle.fromJson(Map<String, dynamic> json) => UsuarioDetalle(
+        id: json['id'] as String,
+        email: json['email'] as String,
+        nombre: json['nombre'] as String,
+        rol: json['rol'] as String,
+        activo: json['activo'] as bool,
+        creadoEn: DateTime.parse(json['creado_en'] as String),
+        ultimoAcceso: json['ultimo_acceso'] == null ? null : DateTime.parse(json['ultimo_acceso'] as String),
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        fincas: json['fincas'] as int,
+        siembras: json['siembras'] as int,
+        bloqueado: json['bloqueado'] as bool,
+        cosechas: json['cosechas'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        detalleFincas: (json['detalle_fincas'] as List<dynamic>).map((x) => FincaDeUsuario.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'email': email,
+        'nombre': nombre,
+        'rol': rol,
+        'activo': activo,
+        'creado_en': creadoEn.toUtc().toIso8601String(),
+        if (ultimoAcceso != null) 'ultimo_acceso': ultimoAcceso!.toUtc().toIso8601String(),
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        'fincas': fincas,
+        'siembras': siembras,
+        'bloqueado': bloqueado,
+        'cosechas': cosechas,
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'detalle_fincas': detalleFincas.map((x) => x.toJson()).toList(),
+      };
+}
+
 class UsuarioResponse {
   final String id;
   final String email;
@@ -5043,6 +5195,58 @@ class UsuarioResponse {
         'nombre': nombre,
         'rol': rol,
         'activo': activo,
+      };
+}
+
+class UsuarioResumen {
+  final String id;
+  final String email;
+  final String nombre;
+  final String rol;
+  final bool activo;
+  final DateTime creadoEn;
+  final DateTime? ultimoAcceso;
+  final String? municipioDane;
+  final int fincas;
+  final int siembras;
+
+  const UsuarioResumen({
+    required this.id,
+    required this.email,
+    required this.nombre,
+    required this.rol,
+    required this.activo,
+    required this.creadoEn,
+    this.ultimoAcceso,
+    this.municipioDane,
+    required this.fincas,
+    required this.siembras,
+  });
+
+  factory UsuarioResumen.fromJson(Map<String, dynamic> json) => UsuarioResumen(
+        id: json['id'] as String,
+        email: json['email'] as String,
+        nombre: json['nombre'] as String,
+        rol: json['rol'] as String,
+        activo: json['activo'] as bool,
+        creadoEn: DateTime.parse(json['creado_en'] as String),
+        ultimoAcceso: json['ultimo_acceso'] == null ? null : DateTime.parse(json['ultimo_acceso'] as String),
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        fincas: json['fincas'] as int,
+        siembras: json['siembras'] as int,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'email': email,
+        'nombre': nombre,
+        'rol': rol,
+        'activo': activo,
+        'creado_en': creadoEn.toUtc().toIso8601String(),
+        if (ultimoAcceso != null) 'ultimo_acceso': ultimoAcceso!.toUtc().toIso8601String(),
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        'fincas': fincas,
+        'siembras': siembras,
       };
 }
 

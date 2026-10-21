@@ -2163,6 +2163,56 @@
       "name": "14. Usuarios",
       "item": [
         {
+          "name": "GET Perfiles de los usuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto en nombre o correo"
+                },
+                {
+                  "key": "rol",
+                  "value": "admin",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "activo",
+                  "value": "True",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Perfiles de los usuarios"
+          }
+        },
+        {
           "name": "POST Create",
           "request": {
             "method": "POST",
@@ -2193,6 +2243,31 @@
                 }
               }
             }
+          }
+        },
+        {
+          "name": "GET Perfil de un usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios/:usuario_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios/:usuario_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "usuario_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Perfil de un usuario"
           }
         }
       ]

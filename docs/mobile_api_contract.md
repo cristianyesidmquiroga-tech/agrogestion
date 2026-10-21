@@ -187,7 +187,9 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `GET` | `/siembras/{siembra_id}/indices` | admin, agricultor, contador | Detalle de siembra (Plantas) | Índices por planta |
 | `POST` | `/siembras/{siembra_id}/iniciar` | admin, agricultor | Detalle de siembra | Iniciar una siembra |
 | `POST` | `/siembras/{siembra_id}/renovar` | admin, agricultor | Detalle de siembra | Abrir el ciclo de renovación (soqueo) |
+| `GET` | `/usuarios` | admin |  | Perfiles de los usuarios |
 | `POST` | `/usuarios` | admin |  | Create |
+| `GET` | `/usuarios/{usuario_id}` | admin |  | Perfil de un usuario |
 
 ## Paginación
 
@@ -269,6 +271,7 @@ try {
 | `RIESGO_NO_ENCONTRADO` | 404 | Uno de los riesgos no existe. |  |
 | `SIEMBRA_NO_ENCONTRADA` | 404 | No encontramos esa siembra. |  |
 | `TRABAJADOR_NO_ENCONTRADO` | 404 | El trabajador no existe. |  |
+| `USUARIO_NO_ENCONTRADO` | 404 | No encontramos ese usuario. |  |
 | `METODO_NO_PERMITIDO` | 405 | Esa acción no está disponible en esta dirección. |  |
 | `CANTIDAD_NO_DISPONIBLE` | 409 | La venta supera la cantidad disponible. |  |
 | `CICLO_ACTIVO` | 409 | Cierre el ciclo actual antes de abrir otro. |  |
@@ -330,6 +333,7 @@ try {
 | `fase_critica` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `metodo` | `semilla`, `esqueje`, `estaca`, `injerto`, `hijuelo`, `acodo`, `in_vitro` |
 | `pago_cosecha_sugerido` | `por_kilo`, `por_jornal`, `por_destajo` |
+| `rol` | `admin`, `agricultor`, `contador`, `experto` |
 | `severidad` | `leve`, `moderada`, `severa` |
 | `susceptibilidad` | `baja`, `media`, `alta` |
 | `tipo` | `levante`, `produccion`, `renovacion` |
