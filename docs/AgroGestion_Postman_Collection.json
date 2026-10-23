@@ -4126,6 +4126,63 @@
           }
         },
         {
+          "name": "GET Insumos y consumos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/inventario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/inventario"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Insumos y consumos"
+          }
+        },
+        {
+          "name": "GET Trabajadores y jornales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/mano-de-obra",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/mano-de-obra"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Trabajadores y jornales"
+          }
+        },
+        {
+          "name": "GET Procesos de transformación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/procesos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/procesos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Procesos de transformación"
+          }
+        },
+        {
           "name": "GET Cosechas registradas",
           "request": {
             "method": "GET",

@@ -1,7 +1,7 @@
 import os
 import uuid
 from collections.abc import AsyncIterator
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 
 os.environ.setdefault("JWT_SECRET", "clave-solo-para-pruebas-0123456789abcdef")
@@ -24,6 +24,7 @@ from app.core.database import get_db
 from app.core.security import create_access_token, hash_password
 from app.main import create_app
 from app.models import (
+    Actividad,
     Base,
     Ciclo,
     Cosecha,
@@ -32,17 +33,23 @@ from app.models import (
     CultivoFase,
     CultivoMetodo,
     CultivoRiesgo,
+    EtapaProceso,
     Finca,
     FincaUsuario,
     Fuente,
     Gasto,
     Ingreso,
+    Insumo,
+    Jornal,
     Lote,
     Manejo,
+    MovimientoInsumo,
     ProblemaSanitario,
+    Proceso,
     Riesgo,
     Siembra,
     Sintoma,
+    Trabajador,
     Usuario,
 )
 
@@ -176,6 +183,98 @@ class Fabrica:
             precio_unitario=Decimal(total),
             total=Decimal(total),
             fecha=fecha or datetime.now(UTC),
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def trabajador(self, finca, tipo="jornalero", estado="activo"):
+        self._n += 1
+        fila = Trabajador(
+            finca_id=finca.id,
+            nombre=f"Trabajador {self._n}",
+            tipo=tipo,
+            jornal_habitual=Decimal(80000),
+            estado=estado,
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def jornal(self, finca, ciclo, total, estado="pendiente", modalidad="jornal", dia=0):
+        actividad = Actividad(
+            finca_id=finca.id,
+            ciclo_id=ciclo.id,
+            nombre="Labor de prueba",
+            fase="mantenimiento",
+            fecha_inicio=datetime.now(UTC),
+            area_trabajada=Decimal(1),
+            creado_por=finca.creado_por,
+        )
+        self.s.add(actividad)
+        await self.s.flush()
+        fila = Jornal(
+            finca_id=finca.id,
+            actividad_id=actividad.id,
+            ciclo_id=ciclo.id,
+            fecha=datetime.now(UTC) + timedelta(days=dia),
+            obreros=Decimal(1),
+            dias=Decimal(1),
+            valor_jornal=Decimal(total),
+            modalidad=modalidad,
+            total=Decimal(total),
+            estado=estado,
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def insumo(self, finca, nombre, unidad="bulto", existencia="0"):
+        fila = Insumo(
+            finca_id=finca.id, nombre=nombre, unidad=unidad, existencia=Decimal(existencia)
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def movimiento(self, finca, insumo, tipo, cantidad, costo="0"):
+        fila = MovimientoInsumo(
+            finca_id=finca.id,
+            insumo_id=insumo.id,
+            tipo=tipo,
+            cantidad=Decimal(cantidad),
+            costo=Decimal(costo),
+            fecha=datetime.now(UTC),
+            creado_por=finca.creado_por,
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def proceso(self, finca, producto, inicio, fin=None, origen="propia"):
+        fila = Proceso(
+            finca_id=finca.id,
+            nombre=f"Proceso de {producto}",
+            producto=producto,
+            materia_prima="Materia prima",
+            origen_materia=origen,
+            fecha_inicio=inicio,
+            fecha_fin=fin,
+            creado_por=finca.creado_por,
+        )
+        self.s.add(fila)
+        await self.s.commit()
+        return fila
+
+    async def etapa(self, proceso, dias_estimados, inicio=None, fin=None):
+        fila = EtapaProceso(
+            proceso_id=proceso.id,
+            finca_id=proceso.finca_id,
+            nombre="Etapa de prueba",
+            dias_estimados=Decimal(dias_estimados),
+            iniciado_en=inicio,
+            finalizado_en=fin,
+            creado_por=proceso.creado_por,
         )
         self.s.add(fila)
         await self.s.commit()

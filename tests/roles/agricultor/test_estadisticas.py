@@ -12,6 +12,9 @@ import pytest
         "produccion",
         "siembras",
         "productores",
+        "mano-de-obra",
+        "inventario",
+        "procesos",
     ],
 )
 async def test_estadisticas(sesion, ruta):

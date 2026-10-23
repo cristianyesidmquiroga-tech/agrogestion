@@ -9,6 +9,9 @@ RUTAS = [
     "produccion",
     "siembras",
     "productores",
+    "mano-de-obra",
+    "inventario",
+    "procesos",
 ]
 
 
@@ -44,3 +47,13 @@ async def test_los_listados_paginados_vacios_traen_total_cero(cliente, entrar_co
         cuerpo = (await cliente.get(f"/estadisticas/{ruta}")).json()
         assert (cuerpo["items"], cuerpo["total"], cuerpo["has_more"]) == ([], 0, False)
     assert (await cliente.get("/estadisticas/productores")).json() == []
+
+
+async def test_los_resumenes_operativos_vacios_traen_ceros(cliente, entrar_como):
+    await entrar_como("admin")
+    mano = (await cliente.get("/estadisticas/mano-de-obra")).json()
+    inventario = (await cliente.get("/estadisticas/inventario")).json()
+    procesos = (await cliente.get("/estadisticas/procesos")).json()
+    assert (mano["trabajadores"], mano["jornales"]) == (0, 0)
+    assert (inventario["insumos"], inventario["consumos"]) == (0, 0)
+    assert (procesos["procesos"], procesos["etapas"]) == (0, 0)

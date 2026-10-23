@@ -12643,6 +12643,234 @@
         ]
       }
     },
+    "/estadisticas/mano-de-obra": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Trabajadores y jornales",
+        "operationId": "mano_de_obra_estadisticas_mano_de_obra_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManoDeObraGeneral"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/estadisticas/inventario": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Insumos y consumos",
+        "operationId": "inventario_estadisticas_inventario_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventarioGeneral"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/estadisticas/procesos": {
+      "get": {
+        "tags": [
+          "18. Estadísticas"
+        ],
+        "summary": "Procesos de transformación",
+        "operationId": "procesos_estadisticas_procesos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcesosGeneral"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sin sesión o sesión vencida.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "El rol no tiene permiso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no pertenece al usuario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con algo que ya existe.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos o regla de negocio.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -16405,6 +16633,29 @@
         ],
         "title": "EventosPorTipo"
       },
+      "ExistenciaPorUnidad": {
+        "properties": {
+          "unidad": {
+            "type": "string",
+            "title": "Unidad"
+          },
+          "insumos": {
+            "type": "integer",
+            "title": "Insumos"
+          },
+          "existencia": {
+            "type": "number",
+            "title": "Existencia"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unidad",
+          "insumos",
+          "existencia"
+        ],
+        "title": "ExistenciaPorUnidad"
+      },
       "FaseCronograma": {
         "properties": {
           "fase": {
@@ -17347,6 +17598,29 @@
         ],
         "title": "InicioSalida"
       },
+      "InsumoConsumido": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "unidad": {
+            "type": "string",
+            "title": "Unidad"
+          },
+          "consumido": {
+            "type": "number",
+            "title": "Consumido"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nombre",
+          "unidad",
+          "consumido"
+        ],
+        "title": "InsumoConsumido"
+      },
       "InsumoCreate": {
         "properties": {
           "nombre": {
@@ -17472,6 +17746,55 @@
           "estado"
         ],
         "title": "InsumoResponse"
+      },
+      "InventarioGeneral": {
+        "properties": {
+          "insumos": {
+            "type": "integer",
+            "title": "Insumos"
+          },
+          "agotados": {
+            "type": "integer",
+            "title": "Agotados"
+          },
+          "entradas": {
+            "type": "integer",
+            "title": "Entradas"
+          },
+          "costo_entradas": {
+            "type": "number",
+            "title": "Costo Entradas"
+          },
+          "consumos": {
+            "type": "integer",
+            "title": "Consumos"
+          },
+          "por_unidad": {
+            "items": {
+              "$ref": "#/components/schemas/ExistenciaPorUnidad"
+            },
+            "type": "array",
+            "title": "Por Unidad"
+          },
+          "mas_consumidos": {
+            "items": {
+              "$ref": "#/components/schemas/InsumoConsumido"
+            },
+            "type": "array",
+            "title": "Mas Consumidos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "insumos",
+          "agotados",
+          "entradas",
+          "costo_entradas",
+          "consumos",
+          "por_unidad",
+          "mas_consumidos"
+        ],
+        "title": "InventarioGeneral"
       },
       "JornalCreate": {
         "properties": {
@@ -18093,6 +18416,101 @@
           "fuente"
         ],
         "title": "ManejoSalida"
+      },
+      "ManoDeObraGeneral": {
+        "properties": {
+          "trabajadores": {
+            "type": "integer",
+            "title": "Trabajadores"
+          },
+          "trabajadores_por_tipo": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Trabajadores Por Tipo"
+          },
+          "jornales": {
+            "type": "integer",
+            "title": "Jornales"
+          },
+          "jornales_pendientes": {
+            "type": "integer",
+            "title": "Jornales Pendientes"
+          },
+          "total_pendiente": {
+            "type": "number",
+            "title": "Total Pendiente"
+          },
+          "jornales_pagados": {
+            "type": "integer",
+            "title": "Jornales Pagados"
+          },
+          "total_pagado": {
+            "type": "number",
+            "title": "Total Pagado"
+          },
+          "por_modalidad": {
+            "items": {
+              "$ref": "#/components/schemas/TotalPorCategoria"
+            },
+            "type": "array",
+            "title": "Por Modalidad"
+          },
+          "por_zona": {
+            "items": {
+              "$ref": "#/components/schemas/ManoDeObraZona"
+            },
+            "type": "array",
+            "title": "Por Zona"
+          }
+        },
+        "type": "object",
+        "required": [
+          "trabajadores",
+          "trabajadores_por_tipo",
+          "jornales",
+          "jornales_pendientes",
+          "total_pendiente",
+          "jornales_pagados",
+          "total_pagado",
+          "por_modalidad",
+          "por_zona"
+        ],
+        "title": "ManoDeObraGeneral"
+      },
+      "ManoDeObraZona": {
+        "properties": {
+          "zona": {
+            "type": "string",
+            "title": "Zona"
+          },
+          "trabajadores": {
+            "type": "integer",
+            "title": "Trabajadores"
+          },
+          "jornales": {
+            "type": "integer",
+            "title": "Jornales"
+          },
+          "pendiente": {
+            "type": "number",
+            "title": "Pendiente"
+          },
+          "pagado": {
+            "type": "number",
+            "title": "Pagado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "zona",
+          "trabajadores",
+          "jornales",
+          "pendiente",
+          "pagado"
+        ],
+        "title": "ManoDeObraZona"
       },
       "MetodoEntrada": {
         "properties": {
@@ -19450,6 +19868,41 @@
         ],
         "title": "ProcesoDetalle"
       },
+      "ProcesoPorProducto": {
+        "properties": {
+          "producto": {
+            "type": "string",
+            "title": "Producto"
+          },
+          "procesos": {
+            "type": "integer",
+            "title": "Procesos"
+          },
+          "finalizados": {
+            "type": "integer",
+            "title": "Finalizados"
+          },
+          "duracion_media_dias": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duracion Media Dias"
+          }
+        },
+        "type": "object",
+        "required": [
+          "producto",
+          "procesos",
+          "finalizados",
+          "duracion_media_dias"
+        ],
+        "title": "ProcesoPorProducto"
+      },
       "ProcesoResponse": {
         "properties": {
           "id": {
@@ -19508,6 +19961,72 @@
           "fecha_fin"
         ],
         "title": "ProcesoResponse"
+      },
+      "ProcesosGeneral": {
+        "properties": {
+          "procesos": {
+            "type": "integer",
+            "title": "Procesos"
+          },
+          "en_curso": {
+            "type": "integer",
+            "title": "En Curso"
+          },
+          "finalizados": {
+            "type": "integer",
+            "title": "Finalizados"
+          },
+          "duracion_media_dias": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duracion Media Dias"
+          },
+          "por_origen": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Por Origen"
+          },
+          "etapas": {
+            "type": "integer",
+            "title": "Etapas"
+          },
+          "etapas_finalizadas": {
+            "type": "integer",
+            "title": "Etapas Finalizadas"
+          },
+          "etapas_con_retraso": {
+            "type": "integer",
+            "title": "Etapas Con Retraso"
+          },
+          "por_producto": {
+            "items": {
+              "$ref": "#/components/schemas/ProcesoPorProducto"
+            },
+            "type": "array",
+            "title": "Por Producto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "procesos",
+          "en_curso",
+          "finalizados",
+          "duracion_media_dias",
+          "por_origen",
+          "etapas",
+          "etapas_finalizadas",
+          "etapas_con_retraso",
+          "por_producto"
+        ],
+        "title": "ProcesosGeneral"
       },
       "ProduccionCreate": {
         "properties": {
