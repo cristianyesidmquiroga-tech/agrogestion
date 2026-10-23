@@ -102,6 +102,9 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `GET` | `/estadisticas/costos` | admin |  | Gastos e ingresos por categoría |
 | `GET` | `/estadisticas/crecimiento` | admin |  | Crecimiento por mes |
 | `GET` | `/estadisticas/cultivos` | admin |  | Comparativo por cultivo |
+| `GET` | `/estadisticas/inventario` | admin |  | Insumos y consumos |
+| `GET` | `/estadisticas/mano-de-obra` | admin |  | Trabajadores y jornales |
+| `GET` | `/estadisticas/procesos` | admin |  | Procesos de transformación |
 | `GET` | `/estadisticas/produccion` | admin |  | Cosechas registradas |
 | `GET` | `/estadisticas/productores` | admin |  | Quién produce más |
 | `GET` | `/estadisticas/resumen` | admin |  | Totales de toda la aplicación |

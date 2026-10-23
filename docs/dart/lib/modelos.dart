@@ -2334,6 +2334,30 @@ class EventosPorTipo {
       };
 }
 
+class ExistenciaPorUnidad {
+  final String unidad;
+  final int insumos;
+  final double existencia;
+
+  const ExistenciaPorUnidad({
+    required this.unidad,
+    required this.insumos,
+    required this.existencia,
+  });
+
+  factory ExistenciaPorUnidad.fromJson(Map<String, dynamic> json) => ExistenciaPorUnidad(
+        unidad: json['unidad'] as String,
+        insumos: json['insumos'] as int,
+        existencia: (json['existencia'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'unidad': unidad,
+        'insumos': insumos,
+        'existencia': existencia,
+      };
+}
+
 class FaseCronograma {
   final String fase;
   final int orden;
@@ -2918,6 +2942,30 @@ class InicioSalida {
       };
 }
 
+class InsumoConsumido {
+  final String nombre;
+  final String unidad;
+  final double consumido;
+
+  const InsumoConsumido({
+    required this.nombre,
+    required this.unidad,
+    required this.consumido,
+  });
+
+  factory InsumoConsumido.fromJson(Map<String, dynamic> json) => InsumoConsumido(
+        nombre: json['nombre'] as String,
+        unidad: json['unidad'] as String,
+        consumido: (json['consumido'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'unidad': unidad,
+        'consumido': consumido,
+      };
+}
+
 class InsumoCreate {
   final String nombre;
   final String unidad;
@@ -3015,6 +3063,46 @@ class InsumoResponse {
         'unidad': unidad,
         'existencia': existencia,
         'estado': estado,
+      };
+}
+
+class InventarioGeneral {
+  final int insumos;
+  final int agotados;
+  final int entradas;
+  final double costoEntradas;
+  final int consumos;
+  final List<ExistenciaPorUnidad> porUnidad;
+  final List<InsumoConsumido> masConsumidos;
+
+  const InventarioGeneral({
+    required this.insumos,
+    required this.agotados,
+    required this.entradas,
+    required this.costoEntradas,
+    required this.consumos,
+    required this.porUnidad,
+    required this.masConsumidos,
+  });
+
+  factory InventarioGeneral.fromJson(Map<String, dynamic> json) => InventarioGeneral(
+        insumos: json['insumos'] as int,
+        agotados: json['agotados'] as int,
+        entradas: json['entradas'] as int,
+        costoEntradas: (json['costo_entradas'] as num).toDouble(),
+        consumos: json['consumos'] as int,
+        porUnidad: (json['por_unidad'] as List<dynamic>).map((x) => ExistenciaPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        masConsumidos: (json['mas_consumidos'] as List<dynamic>).map((x) => InsumoConsumido.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'insumos': insumos,
+        'agotados': agotados,
+        'entradas': entradas,
+        'costo_entradas': costoEntradas,
+        'consumos': consumos,
+        'por_unidad': porUnidad.map((x) => x.toJson()).toList(),
+        'mas_consumidos': masConsumidos.map((x) => x.toJson()).toList(),
       };
 }
 
@@ -3419,6 +3507,86 @@ class ManejoSalida {
         'descripcion': descripcion,
         if (productoIca != null) 'producto_ica': productoIca!,
         if (fuente != null) 'fuente': fuente!.toJson(),
+      };
+}
+
+class ManoDeObraGeneral {
+  final int trabajadores;
+  final Map<String, dynamic> trabajadoresPorTipo;
+  final int jornales;
+  final int jornalesPendientes;
+  final double totalPendiente;
+  final int jornalesPagados;
+  final double totalPagado;
+  final List<TotalPorCategoria> porModalidad;
+  final List<ManoDeObraZona> porZona;
+
+  const ManoDeObraGeneral({
+    required this.trabajadores,
+    required this.trabajadoresPorTipo,
+    required this.jornales,
+    required this.jornalesPendientes,
+    required this.totalPendiente,
+    required this.jornalesPagados,
+    required this.totalPagado,
+    required this.porModalidad,
+    required this.porZona,
+  });
+
+  factory ManoDeObraGeneral.fromJson(Map<String, dynamic> json) => ManoDeObraGeneral(
+        trabajadores: json['trabajadores'] as int,
+        trabajadoresPorTipo: json['trabajadores_por_tipo'] as Map<String, dynamic>,
+        jornales: json['jornales'] as int,
+        jornalesPendientes: json['jornales_pendientes'] as int,
+        totalPendiente: (json['total_pendiente'] as num).toDouble(),
+        jornalesPagados: json['jornales_pagados'] as int,
+        totalPagado: (json['total_pagado'] as num).toDouble(),
+        porModalidad: (json['por_modalidad'] as List<dynamic>).map((x) => TotalPorCategoria.fromJson(x as Map<String, dynamic>)).toList(),
+        porZona: (json['por_zona'] as List<dynamic>).map((x) => ManoDeObraZona.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'trabajadores': trabajadores,
+        'trabajadores_por_tipo': trabajadoresPorTipo,
+        'jornales': jornales,
+        'jornales_pendientes': jornalesPendientes,
+        'total_pendiente': totalPendiente,
+        'jornales_pagados': jornalesPagados,
+        'total_pagado': totalPagado,
+        'por_modalidad': porModalidad.map((x) => x.toJson()).toList(),
+        'por_zona': porZona.map((x) => x.toJson()).toList(),
+      };
+}
+
+class ManoDeObraZona {
+  final String zona;
+  final int trabajadores;
+  final int jornales;
+  final double pendiente;
+  final double pagado;
+
+  const ManoDeObraZona({
+    required this.zona,
+    required this.trabajadores,
+    required this.jornales,
+    required this.pendiente,
+    required this.pagado,
+  });
+
+  factory ManoDeObraZona.fromJson(Map<String, dynamic> json) => ManoDeObraZona(
+        zona: json['zona'] as String,
+        trabajadores: json['trabajadores'] as int,
+        jornales: json['jornales'] as int,
+        pendiente: (json['pendiente'] as num).toDouble(),
+        pagado: (json['pagado'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'zona': zona,
+        'trabajadores': trabajadores,
+        'jornales': jornales,
+        'pendiente': pendiente,
+        'pagado': pagado,
       };
 }
 
@@ -4410,6 +4578,34 @@ class ProcesoDetalle {
       };
 }
 
+class ProcesoPorProducto {
+  final String producto;
+  final int procesos;
+  final int finalizados;
+  final double? duracionMediaDias;
+
+  const ProcesoPorProducto({
+    required this.producto,
+    required this.procesos,
+    required this.finalizados,
+    this.duracionMediaDias,
+  });
+
+  factory ProcesoPorProducto.fromJson(Map<String, dynamic> json) => ProcesoPorProducto(
+        producto: json['producto'] as String,
+        procesos: json['procesos'] as int,
+        finalizados: json['finalizados'] as int,
+        duracionMediaDias: json['duracion_media_dias'] == null ? null : (json['duracion_media_dias'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'producto': producto,
+        'procesos': procesos,
+        'finalizados': finalizados,
+        if (duracionMediaDias != null) 'duracion_media_dias': duracionMediaDias!,
+      };
+}
+
 class ProcesoResponse {
   final String id;
   final String fincaId;
@@ -4451,6 +4647,54 @@ class ProcesoResponse {
         'origen_materia': origenMateria,
         'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
         if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+      };
+}
+
+class ProcesosGeneral {
+  final int procesos;
+  final int enCurso;
+  final int finalizados;
+  final double? duracionMediaDias;
+  final Map<String, dynamic> porOrigen;
+  final int etapas;
+  final int etapasFinalizadas;
+  final int etapasConRetraso;
+  final List<ProcesoPorProducto> porProducto;
+
+  const ProcesosGeneral({
+    required this.procesos,
+    required this.enCurso,
+    required this.finalizados,
+    this.duracionMediaDias,
+    required this.porOrigen,
+    required this.etapas,
+    required this.etapasFinalizadas,
+    required this.etapasConRetraso,
+    required this.porProducto,
+  });
+
+  factory ProcesosGeneral.fromJson(Map<String, dynamic> json) => ProcesosGeneral(
+        procesos: json['procesos'] as int,
+        enCurso: json['en_curso'] as int,
+        finalizados: json['finalizados'] as int,
+        duracionMediaDias: json['duracion_media_dias'] == null ? null : (json['duracion_media_dias'] as num).toDouble(),
+        porOrigen: json['por_origen'] as Map<String, dynamic>,
+        etapas: json['etapas'] as int,
+        etapasFinalizadas: json['etapas_finalizadas'] as int,
+        etapasConRetraso: json['etapas_con_retraso'] as int,
+        porProducto: (json['por_producto'] as List<dynamic>).map((x) => ProcesoPorProducto.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'procesos': procesos,
+        'en_curso': enCurso,
+        'finalizados': finalizados,
+        if (duracionMediaDias != null) 'duracion_media_dias': duracionMediaDias!,
+        'por_origen': porOrigen,
+        'etapas': etapas,
+        'etapas_finalizadas': etapasFinalizadas,
+        'etapas_con_retraso': etapasConRetraso,
+        'por_producto': porProducto.map((x) => x.toJson()).toList(),
       };
 }
 

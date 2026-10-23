@@ -13,12 +13,16 @@ from app.schemas.estadisticas import (
     CostosGenerales,
     EstadisticaCultivo,
     EstadisticaZona,
+    InventarioGeneral,
+    ManoDeObraGeneral,
+    ProcesosGeneral,
     Productor,
     PuntoMensual,
     ResumenGeneral,
     SiembraRegistrada,
 )
 from app.services import estadisticas_cultivos_service as cultivos_zonas
+from app.services import estadisticas_operacion_service as operacion
 from app.services import estadisticas_produccion_service as produccion
 from app.services import estadisticas_service as servicio
 
@@ -86,3 +90,18 @@ async def siembras(
 @router.get("/productores", response_model=list[Productor], summary="Quién produce más")
 async def productores(db: BD, _: SoloAdmin) -> list[Productor]:
     return await produccion.productores(db)
+
+
+@router.get("/mano-de-obra", response_model=ManoDeObraGeneral, summary="Trabajadores y jornales")
+async def mano_de_obra(db: BD, _: SoloAdmin) -> ManoDeObraGeneral:
+    return await operacion.mano_de_obra(db)
+
+
+@router.get("/inventario", response_model=InventarioGeneral, summary="Insumos y consumos")
+async def inventario(db: BD, _: SoloAdmin) -> InventarioGeneral:
+    return await operacion.inventario(db)
+
+
+@router.get("/procesos", response_model=ProcesosGeneral, summary="Procesos de transformación")
+async def procesos(db: BD, _: SoloAdmin) -> ProcesosGeneral:
+    return await operacion.procesos(db)

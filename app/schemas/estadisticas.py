@@ -125,3 +125,64 @@ class Productor(Salida):
     cosechas: int
     produccion: list[CantidadPorUnidad]
     ultima_cosecha: date | None
+
+
+class ManoDeObraZona(Salida):
+    zona: str
+    trabajadores: int
+    jornales: int
+    pendiente: Decimal2
+    pagado: Decimal2
+
+
+class ManoDeObraGeneral(Salida):
+    trabajadores: int
+    trabajadores_por_tipo: dict[str, int]
+    jornales: int
+    jornales_pendientes: int
+    total_pendiente: Decimal2
+    jornales_pagados: int
+    total_pagado: Decimal2
+    por_modalidad: list[TotalPorCategoria]
+    por_zona: list[ManoDeObraZona]
+
+
+class InsumoConsumido(Salida):
+    nombre: str
+    unidad: str
+    consumido: Decimal2
+
+
+class ExistenciaPorUnidad(Salida):
+    unidad: str
+    insumos: int
+    existencia: Decimal2
+
+
+class InventarioGeneral(Salida):
+    insumos: int
+    agotados: int
+    entradas: int
+    costo_entradas: Decimal2
+    consumos: int
+    por_unidad: list[ExistenciaPorUnidad]
+    mas_consumidos: list[InsumoConsumido]
+
+
+class ProcesoPorProducto(Salida):
+    producto: str
+    procesos: int
+    finalizados: int
+    duracion_media_dias: float | None
+
+
+class ProcesosGeneral(Salida):
+    procesos: int
+    en_curso: int
+    finalizados: int
+    duracion_media_dias: float | None
+    por_origen: dict[str, int]
+    etapas: int
+    etapas_finalizadas: int
+    etapas_con_retraso: int
+    por_producto: list[ProcesoPorProducto]
