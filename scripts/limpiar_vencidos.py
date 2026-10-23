@@ -5,12 +5,12 @@ Uso: python -m scripts.limpiar_vencidos
 
 import asyncio
 
-from app.core.database import get_sessionmaker
+from app.core.database import session_factory
 from app.services import noticia_service
 
 
 async def main() -> None:
-    async with get_sessionmaker()() as db:
+    async with session_factory() as db:
         borradas = await noticia_service.borrar_vencidas(db)
     print(f"Noticias vencidas borradas: {borradas}")
 
