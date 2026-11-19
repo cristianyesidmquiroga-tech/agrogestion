@@ -99,6 +99,17 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `GET` | `/cultivos/{cultivo_id}/metodos` | admin, agricultor | Ficha del cultivo | Métodos de propagación |
 | `GET` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Riesgos del cultivo |
 | `PUT` | `/cultivos/{cultivo_id}/riesgos` | admin, agricultor | Ficha del cultivo | Reemplazar los riesgos del cultivo |
+| `GET` | `/estadisticas/costos` | admin |  | Gastos e ingresos por categoría |
+| `GET` | `/estadisticas/crecimiento` | admin |  | Crecimiento por mes |
+| `GET` | `/estadisticas/cultivos` | admin |  | Comparativo por cultivo |
+| `GET` | `/estadisticas/inventario` | admin |  | Insumos y consumos |
+| `GET` | `/estadisticas/mano-de-obra` | admin |  | Trabajadores y jornales |
+| `GET` | `/estadisticas/procesos` | admin |  | Procesos de transformación |
+| `GET` | `/estadisticas/produccion` | admin |  | Cosechas registradas |
+| `GET` | `/estadisticas/productores` | admin |  | Quién produce más |
+| `GET` | `/estadisticas/resumen` | admin |  | Totales de toda la aplicación |
+| `GET` | `/estadisticas/siembras` | admin |  | Siembras registradas |
+| `GET` | `/estadisticas/zonas` | admin |  | Comparativo por zona |
 | `GET` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Eventos adversos |
 | `POST` | `/eventos-adversos` | admin, agricultor | Eventos adversos | Registrar un evento adverso |
 | `GET` | `/eventos-adversos/{evento_id}` | admin, agricultor | Detalle de evento | Detalle de un evento |
@@ -187,7 +198,9 @@ Un recurso de otra finca responde `404`, nunca `403`, para no confirmar que exis
 | `GET` | `/siembras/{siembra_id}/indices` | admin, agricultor, contador | Detalle de siembra (Plantas) | Índices por planta |
 | `POST` | `/siembras/{siembra_id}/iniciar` | admin, agricultor | Detalle de siembra | Iniciar una siembra |
 | `POST` | `/siembras/{siembra_id}/renovar` | admin, agricultor | Detalle de siembra | Abrir el ciclo de renovación (soqueo) |
+| `GET` | `/usuarios` | admin |  | Perfiles de los usuarios |
 | `POST` | `/usuarios` | admin |  | Create |
+| `GET` | `/usuarios/{usuario_id}` | admin |  | Perfil de un usuario |
 
 ## Paginación
 
@@ -269,6 +282,7 @@ try {
 | `RIESGO_NO_ENCONTRADO` | 404 | Uno de los riesgos no existe. |  |
 | `SIEMBRA_NO_ENCONTRADA` | 404 | No encontramos esa siembra. |  |
 | `TRABAJADOR_NO_ENCONTRADO` | 404 | El trabajador no existe. |  |
+| `USUARIO_NO_ENCONTRADO` | 404 | No encontramos ese usuario. |  |
 | `METODO_NO_PERMITIDO` | 405 | Esa acción no está disponible en esta dirección. |  |
 | `CANTIDAD_NO_DISPONIBLE` | 409 | La venta supera la cantidad disponible. |  |
 | `CICLO_ACTIVO` | 409 | Cierre el ciclo actual antes de abrir otro. |  |
@@ -329,7 +343,9 @@ try {
 | `fase` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `fase_critica` | `preparacion`, `siembra`, `mantenimiento`, `cosecha`, `poscosecha`, `renovacion` |
 | `metodo` | `semilla`, `esqueje`, `estaca`, `injerto`, `hijuelo`, `acodo`, `in_vitro` |
+| `nivel` | `departamento`, `municipio` |
 | `pago_cosecha_sugerido` | `por_kilo`, `por_jornal`, `por_destajo` |
+| `rol` | `admin`, `agricultor`, `contador`, `experto` |
 | `severidad` | `leve`, `moderada`, `severa` |
 | `susceptibilidad` | `baja`, `media`, `alta` |
 | `tipo` | `levante`, `produccion`, `renovacion` |

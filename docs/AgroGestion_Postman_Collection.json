@@ -2163,6 +2163,56 @@
       "name": "14. Usuarios",
       "item": [
         {
+          "name": "GET Perfiles de los usuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": "Texto en nombre o correo"
+                },
+                {
+                  "key": "rol",
+                  "value": "admin",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "activo",
+                  "value": "True",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Perfiles de los usuarios"
+          }
+        },
+        {
           "name": "POST Create",
           "request": {
             "method": "POST",
@@ -2193,6 +2243,31 @@
                 }
               }
             }
+          }
+        },
+        {
+          "name": "GET Perfil de un usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios/:usuario_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios/:usuario_id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "usuario_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "description": "Identificador (uuid)"
+                }
+              ]
+            },
+            "description": "Perfil de un usuario"
           }
         }
       ]
@@ -3979,6 +4054,302 @@
                 }
               }
             }
+          }
+        }
+      ]
+    },
+    {
+      "name": "18. Estadísticas",
+      "item": [
+        {
+          "name": "GET Gastos e ingresos por categoría",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/costos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/costos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Gastos e ingresos por categoría"
+          }
+        },
+        {
+          "name": "GET Crecimiento por mes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/crecimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/crecimiento"
+              ],
+              "query": [
+                {
+                  "key": "meses",
+                  "value": "12",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Crecimiento por mes"
+          }
+        },
+        {
+          "name": "GET Comparativo por cultivo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/cultivos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/cultivos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Comparativo por cultivo"
+          }
+        },
+        {
+          "name": "GET Insumos y consumos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/inventario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/inventario"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Insumos y consumos"
+          }
+        },
+        {
+          "name": "GET Trabajadores y jornales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/mano-de-obra",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/mano-de-obra"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Trabajadores y jornales"
+          }
+        },
+        {
+          "name": "GET Procesos de transformación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/procesos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/procesos"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Procesos de transformación"
+          }
+        },
+        {
+          "name": "GET Cosechas registradas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/produccion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/produccion"
+              ],
+              "query": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "zona",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "desde",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-01-31",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Cosechas registradas"
+          }
+        },
+        {
+          "name": "GET Quién produce más",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/productores",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/productores"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Quién produce más"
+          }
+        },
+        {
+          "name": "GET Totales de toda la aplicación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/resumen",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/resumen"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "Totales de toda la aplicación"
+          }
+        },
+        {
+          "name": "GET Siembras registradas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/siembras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/siembras"
+              ],
+              "query": [
+                {
+                  "key": "cultivo_id",
+                  "value": "00000000-0000-0000-0000-000000000000",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "estado",
+                  "value": "planeada",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "zona",
+                  "value": "texto",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Registros a saltar"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Tamaño de página, máximo 50"
+                }
+              ],
+              "variable": []
+            },
+            "description": "Siembras registradas"
+          }
+        },
+        {
+          "name": "GET Comparativo por zona",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/estadisticas/zonas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "estadisticas/zonas"
+              ],
+              "query": [
+                {
+                  "key": "nivel",
+                  "value": "departamento",
+                  "disabled": true,
+                  "description": ""
+                }
+              ],
+              "variable": []
+            },
+            "description": "Comparativo por zona"
           }
         }
       ]

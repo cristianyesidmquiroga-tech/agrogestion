@@ -16,6 +16,7 @@ from app.routers import (
     cuenta,
     cultivos,
     documentacion,
+    estadisticas,
     eventos,
     health,
     inicio,
@@ -121,6 +122,7 @@ def create_app() -> FastAPI:
         listados.router,
         pecuario.router,
         proyecciones.router,
+        estadisticas.router,
     ):
         app.include_router(router, responses=RESPUESTAS_ERROR)
     app.include_router(health.router)
