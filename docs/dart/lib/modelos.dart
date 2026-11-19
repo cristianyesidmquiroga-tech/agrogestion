@@ -530,6 +530,46 @@ class CambiarEstado {
       };
 }
 
+class CambioClaveEntrada {
+  final String claveActual;
+  final String claveNueva;
+
+  const CambioClaveEntrada({
+    required this.claveActual,
+    required this.claveNueva,
+  });
+
+  factory CambioClaveEntrada.fromJson(Map<String, dynamic> json) => CambioClaveEntrada(
+        claveActual: json['clave_actual'] as String,
+        claveNueva: json['clave_nueva'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'clave_actual': claveActual,
+        'clave_nueva': claveNueva,
+      };
+}
+
+class CantidadPorUnidad {
+  final String unidad;
+  final double cantidad;
+
+  const CantidadPorUnidad({
+    required this.unidad,
+    required this.cantidad,
+  });
+
+  factory CantidadPorUnidad.fromJson(Map<String, dynamic> json) => CantidadPorUnidad(
+        unidad: json['unidad'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'unidad': unidad,
+        'cantidad': cantidad,
+      };
+}
+
 class CausaProbable {
   final String problemaId;
   final String problema;
@@ -893,36 +933,60 @@ class ConsultaSalida {
 class ContableResponse {
   final String id;
   final String fincaId;
+  final String? cicloId;
   final String categoria;
   final String? monto;
   final String? total;
+  final String? cantidad;
+  final String? precioUnitario;
+  final String? comprador;
+  final DateTime? fecha;
   final String estado;
+  final String? motivoAnulacion;
 
   const ContableResponse({
     required this.id,
     required this.fincaId,
+    this.cicloId,
     required this.categoria,
     this.monto,
     this.total,
+    this.cantidad,
+    this.precioUnitario,
+    this.comprador,
+    this.fecha,
     required this.estado,
+    this.motivoAnulacion,
   });
 
   factory ContableResponse.fromJson(Map<String, dynamic> json) => ContableResponse(
         id: json['id'] as String,
         fincaId: json['finca_id'] as String,
+        cicloId: json['ciclo_id'] == null ? null : json['ciclo_id'] as String,
         categoria: json['categoria'] as String,
         monto: json['monto'] == null ? null : json['monto'] as String,
         total: json['total'] == null ? null : json['total'] as String,
+        cantidad: json['cantidad'] == null ? null : json['cantidad'] as String,
+        precioUnitario: json['precio_unitario'] == null ? null : json['precio_unitario'] as String,
+        comprador: json['comprador'] == null ? null : json['comprador'] as String,
+        fecha: json['fecha'] == null ? null : DateTime.parse(json['fecha'] as String),
         estado: json['estado'] as String,
+        motivoAnulacion: json['motivo_anulacion'] == null ? null : json['motivo_anulacion'] as String,
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'finca_id': fincaId,
+        if (cicloId != null) 'ciclo_id': cicloId!,
         'categoria': categoria,
         if (monto != null) 'monto': monto!,
         if (total != null) 'total': total!,
+        if (cantidad != null) 'cantidad': cantidad!,
+        if (precioUnitario != null) 'precio_unitario': precioUnitario!,
+        if (comprador != null) 'comprador': comprador!,
+        if (fecha != null) 'fecha': fecha!.toUtc().toIso8601String(),
         'estado': estado,
+        if (motivoAnulacion != null) 'motivo_anulacion': motivoAnulacion!,
       };
 }
 
@@ -1046,6 +1110,54 @@ class CosechaCreate {
       };
 }
 
+class CosechaRegistrada {
+  final String id;
+  final DateTime fecha;
+  final String cultivo;
+  final double cantidad;
+  final String unidad;
+  final String? calidad;
+  final String finca;
+  final String zona;
+  final String? agricultor;
+
+  const CosechaRegistrada({
+    required this.id,
+    required this.fecha,
+    required this.cultivo,
+    required this.cantidad,
+    required this.unidad,
+    this.calidad,
+    required this.finca,
+    required this.zona,
+    this.agricultor,
+  });
+
+  factory CosechaRegistrada.fromJson(Map<String, dynamic> json) => CosechaRegistrada(
+        id: json['id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        cultivo: json['cultivo'] as String,
+        cantidad: (json['cantidad'] as num).toDouble(),
+        unidad: json['unidad'] as String,
+        calidad: json['calidad'] == null ? null : json['calidad'] as String,
+        finca: json['finca'] as String,
+        zona: json['zona'] as String,
+        agricultor: json['agricultor'] == null ? null : json['agricultor'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'fecha': fecha.toIso8601String().substring(0, 10),
+        'cultivo': cultivo,
+        'cantidad': cantidad,
+        'unidad': unidad,
+        if (calidad != null) 'calidad': calidad!,
+        'finca': finca,
+        'zona': zona,
+        if (agricultor != null) 'agricultor': agricultor!,
+      };
+}
+
 class CosechaResponse {
   final String id;
   final String fincaId;
@@ -1083,6 +1195,46 @@ class CosechaResponse {
         'unidad': unidad,
         if (calidad != null) 'calidad': calidad!,
         'fecha': fecha.toUtc().toIso8601String(),
+      };
+}
+
+class CostosGenerales {
+  final List<TotalPorCategoria> gastosPorCategoria;
+  final List<TotalPorCategoria> ingresosPorCategoria;
+  final double gastos;
+  final double ingresos;
+  final double areaSembradaHa;
+  final double? gastoPorHa;
+  final double? ingresoPorHa;
+
+  const CostosGenerales({
+    required this.gastosPorCategoria,
+    required this.ingresosPorCategoria,
+    required this.gastos,
+    required this.ingresos,
+    required this.areaSembradaHa,
+    this.gastoPorHa,
+    this.ingresoPorHa,
+  });
+
+  factory CostosGenerales.fromJson(Map<String, dynamic> json) => CostosGenerales(
+        gastosPorCategoria: (json['gastos_por_categoria'] as List<dynamic>).map((x) => TotalPorCategoria.fromJson(x as Map<String, dynamic>)).toList(),
+        ingresosPorCategoria: (json['ingresos_por_categoria'] as List<dynamic>).map((x) => TotalPorCategoria.fromJson(x as Map<String, dynamic>)).toList(),
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        areaSembradaHa: (json['area_sembrada_ha'] as num).toDouble(),
+        gastoPorHa: json['gasto_por_ha'] == null ? null : (json['gasto_por_ha'] as num).toDouble(),
+        ingresoPorHa: json['ingreso_por_ha'] == null ? null : (json['ingreso_por_ha'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'gastos_por_categoria': gastosPorCategoria.map((x) => x.toJson()).toList(),
+        'ingresos_por_categoria': ingresosPorCategoria.map((x) => x.toJson()).toList(),
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'area_sembrada_ha': areaSembradaHa,
+        if (gastoPorHa != null) 'gasto_por_ha': gastoPorHa!,
+        if (ingresoPorHa != null) 'ingreso_por_ha': ingresoPorHa!,
       };
 }
 
@@ -1634,6 +1786,162 @@ class EspecieResponse {
       };
 }
 
+class EstadisticaCultivo {
+  final String cultivoId;
+  final String cultivo;
+  final String grupo;
+  final int siembras;
+  final int fincas;
+  final int agricultores;
+  final double areaHa;
+  final int plantas;
+  final int ciclosAbiertos;
+  final int ciclosCerrados;
+  final double? duracionMediaDias;
+  final int? cicloMasLargoDias;
+  final int cosechas;
+  final List<CantidadPorUnidad> produccion;
+  final DateTime? primeraCosecha;
+  final DateTime? ultimaCosecha;
+  final double? diasEntreCosechas;
+  final double gastos;
+  final double ingresos;
+  final double utilidad;
+
+  const EstadisticaCultivo({
+    required this.cultivoId,
+    required this.cultivo,
+    required this.grupo,
+    required this.siembras,
+    required this.fincas,
+    required this.agricultores,
+    required this.areaHa,
+    required this.plantas,
+    required this.ciclosAbiertos,
+    required this.ciclosCerrados,
+    this.duracionMediaDias,
+    this.cicloMasLargoDias,
+    required this.cosechas,
+    required this.produccion,
+    this.primeraCosecha,
+    this.ultimaCosecha,
+    this.diasEntreCosechas,
+    required this.gastos,
+    required this.ingresos,
+    required this.utilidad,
+  });
+
+  factory EstadisticaCultivo.fromJson(Map<String, dynamic> json) => EstadisticaCultivo(
+        cultivoId: json['cultivo_id'] as String,
+        cultivo: json['cultivo'] as String,
+        grupo: json['grupo'] as String,
+        siembras: json['siembras'] as int,
+        fincas: json['fincas'] as int,
+        agricultores: json['agricultores'] as int,
+        areaHa: (json['area_ha'] as num).toDouble(),
+        plantas: json['plantas'] as int,
+        ciclosAbiertos: json['ciclos_abiertos'] as int,
+        ciclosCerrados: json['ciclos_cerrados'] as int,
+        duracionMediaDias: json['duracion_media_dias'] == null ? null : (json['duracion_media_dias'] as num).toDouble(),
+        cicloMasLargoDias: json['ciclo_mas_largo_dias'] == null ? null : json['ciclo_mas_largo_dias'] as int,
+        cosechas: json['cosechas'] as int,
+        produccion: (json['produccion'] as List<dynamic>).map((x) => CantidadPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        primeraCosecha: json['primera_cosecha'] == null ? null : DateTime.parse(json['primera_cosecha'] as String),
+        ultimaCosecha: json['ultima_cosecha'] == null ? null : DateTime.parse(json['ultima_cosecha'] as String),
+        diasEntreCosechas: json['dias_entre_cosechas'] == null ? null : (json['dias_entre_cosechas'] as num).toDouble(),
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        utilidad: (json['utilidad'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'cultivo_id': cultivoId,
+        'cultivo': cultivo,
+        'grupo': grupo,
+        'siembras': siembras,
+        'fincas': fincas,
+        'agricultores': agricultores,
+        'area_ha': areaHa,
+        'plantas': plantas,
+        'ciclos_abiertos': ciclosAbiertos,
+        'ciclos_cerrados': ciclosCerrados,
+        if (duracionMediaDias != null) 'duracion_media_dias': duracionMediaDias!,
+        if (cicloMasLargoDias != null) 'ciclo_mas_largo_dias': cicloMasLargoDias!,
+        'cosechas': cosechas,
+        'produccion': produccion.map((x) => x.toJson()).toList(),
+        if (primeraCosecha != null) 'primera_cosecha': primeraCosecha!.toIso8601String().substring(0, 10),
+        if (ultimaCosecha != null) 'ultima_cosecha': ultimaCosecha!.toIso8601String().substring(0, 10),
+        if (diasEntreCosechas != null) 'dias_entre_cosechas': diasEntreCosechas!,
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'utilidad': utilidad,
+      };
+}
+
+class EstadisticaZona {
+  final String zona;
+  final int fincas;
+  final int agricultores;
+  final double areaHaFincas;
+  final int siembras;
+  final double areaSembradaHa;
+  final int cosechas;
+  final List<CantidadPorUnidad> produccion;
+  final double gastos;
+  final double ingresos;
+  final double utilidad;
+  final double? gastoPorHa;
+  final List<String> cultivosPrincipales;
+
+  const EstadisticaZona({
+    required this.zona,
+    required this.fincas,
+    required this.agricultores,
+    required this.areaHaFincas,
+    required this.siembras,
+    required this.areaSembradaHa,
+    required this.cosechas,
+    required this.produccion,
+    required this.gastos,
+    required this.ingresos,
+    required this.utilidad,
+    this.gastoPorHa,
+    required this.cultivosPrincipales,
+  });
+
+  factory EstadisticaZona.fromJson(Map<String, dynamic> json) => EstadisticaZona(
+        zona: json['zona'] as String,
+        fincas: json['fincas'] as int,
+        agricultores: json['agricultores'] as int,
+        areaHaFincas: (json['area_ha_fincas'] as num).toDouble(),
+        siembras: json['siembras'] as int,
+        areaSembradaHa: (json['area_sembrada_ha'] as num).toDouble(),
+        cosechas: json['cosechas'] as int,
+        produccion: (json['produccion'] as List<dynamic>).map((x) => CantidadPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        utilidad: (json['utilidad'] as num).toDouble(),
+        gastoPorHa: json['gasto_por_ha'] == null ? null : (json['gasto_por_ha'] as num).toDouble(),
+        cultivosPrincipales: (json['cultivos_principales'] as List<dynamic>).map((x) => x as String).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'zona': zona,
+        'fincas': fincas,
+        'agricultores': agricultores,
+        'area_ha_fincas': areaHaFincas,
+        'siembras': siembras,
+        'area_sembrada_ha': areaSembradaHa,
+        'cosechas': cosechas,
+        'produccion': produccion.map((x) => x.toJson()).toList(),
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'utilidad': utilidad,
+        if (gastoPorHa != null) 'gasto_por_ha': gastoPorHa!,
+        'cultivos_principales': cultivosPrincipales.map((x) => x).toList(),
+      };
+}
+
 class EtapaCreate {
   final String nombre;
   final double diasEstimados;
@@ -2026,6 +2334,30 @@ class EventosPorTipo {
       };
 }
 
+class ExistenciaPorUnidad {
+  final String unidad;
+  final int insumos;
+  final double existencia;
+
+  const ExistenciaPorUnidad({
+    required this.unidad,
+    required this.insumos,
+    required this.existencia,
+  });
+
+  factory ExistenciaPorUnidad.fromJson(Map<String, dynamic> json) => ExistenciaPorUnidad(
+        unidad: json['unidad'] as String,
+        insumos: json['insumos'] as int,
+        existencia: (json['existencia'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'unidad': unidad,
+        'insumos': insumos,
+        'existencia': existencia,
+      };
+}
+
 class FaseCronograma {
   final String fase;
   final int orden;
@@ -2159,6 +2491,54 @@ class FincaCreate {
         if (departamentoDane != null) 'departamento_dane': departamentoDane!,
         if (municipioDane != null) 'municipio_dane': municipioDane!,
         if (areaHa != null) 'area_ha': areaHa!,
+      };
+}
+
+class FincaDeUsuario {
+  final String id;
+  final String nombre;
+  final String? departamentoDane;
+  final String? municipioDane;
+  final double? areaHa;
+  final int siembras;
+  final int cosechas;
+  final double gastos;
+  final double ingresos;
+
+  const FincaDeUsuario({
+    required this.id,
+    required this.nombre,
+    this.departamentoDane,
+    this.municipioDane,
+    this.areaHa,
+    required this.siembras,
+    required this.cosechas,
+    required this.gastos,
+    required this.ingresos,
+  });
+
+  factory FincaDeUsuario.fromJson(Map<String, dynamic> json) => FincaDeUsuario(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+        departamentoDane: json['departamento_dane'] == null ? null : json['departamento_dane'] as String,
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        areaHa: json['area_ha'] == null ? null : (json['area_ha'] as num).toDouble(),
+        siembras: json['siembras'] as int,
+        cosechas: json['cosechas'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        if (departamentoDane != null) 'departamento_dane': departamentoDane!,
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        if (areaHa != null) 'area_ha': areaHa!,
+        'siembras': siembras,
+        'cosechas': cosechas,
+        'gastos': gastos,
+        'ingresos': ingresos,
       };
 }
 
@@ -2562,6 +2942,30 @@ class InicioSalida {
       };
 }
 
+class InsumoConsumido {
+  final String nombre;
+  final String unidad;
+  final double consumido;
+
+  const InsumoConsumido({
+    required this.nombre,
+    required this.unidad,
+    required this.consumido,
+  });
+
+  factory InsumoConsumido.fromJson(Map<String, dynamic> json) => InsumoConsumido(
+        nombre: json['nombre'] as String,
+        unidad: json['unidad'] as String,
+        consumido: (json['consumido'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'nombre': nombre,
+        'unidad': unidad,
+        'consumido': consumido,
+      };
+}
+
 class InsumoCreate {
   final String nombre;
   final String unidad;
@@ -2579,6 +2983,50 @@ class InsumoCreate {
   Map<String, dynamic> toJson() => {
         'nombre': nombre,
         'unidad': unidad,
+      };
+}
+
+class InsumoDetalle {
+  final String id;
+  final String nombre;
+  final String unidad;
+  final String existencia;
+  final String? costoPromedio;
+  final String valor;
+  final DateTime? ultimoMovimiento;
+  final String estado;
+
+  const InsumoDetalle({
+    required this.id,
+    required this.nombre,
+    required this.unidad,
+    required this.existencia,
+    this.costoPromedio,
+    required this.valor,
+    this.ultimoMovimiento,
+    required this.estado,
+  });
+
+  factory InsumoDetalle.fromJson(Map<String, dynamic> json) => InsumoDetalle(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+        unidad: json['unidad'] as String,
+        existencia: json['existencia'] as String,
+        costoPromedio: json['costo_promedio'] == null ? null : json['costo_promedio'] as String,
+        valor: json['valor'] as String,
+        ultimoMovimiento: json['ultimo_movimiento'] == null ? null : DateTime.parse(json['ultimo_movimiento'] as String),
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        'unidad': unidad,
+        'existencia': existencia,
+        if (costoPromedio != null) 'costo_promedio': costoPromedio!,
+        'valor': valor,
+        if (ultimoMovimiento != null) 'ultimo_movimiento': ultimoMovimiento!.toUtc().toIso8601String(),
+        'estado': estado,
       };
 }
 
@@ -2615,6 +3063,46 @@ class InsumoResponse {
         'unidad': unidad,
         'existencia': existencia,
         'estado': estado,
+      };
+}
+
+class InventarioGeneral {
+  final int insumos;
+  final int agotados;
+  final int entradas;
+  final double costoEntradas;
+  final int consumos;
+  final List<ExistenciaPorUnidad> porUnidad;
+  final List<InsumoConsumido> masConsumidos;
+
+  const InventarioGeneral({
+    required this.insumos,
+    required this.agotados,
+    required this.entradas,
+    required this.costoEntradas,
+    required this.consumos,
+    required this.porUnidad,
+    required this.masConsumidos,
+  });
+
+  factory InventarioGeneral.fromJson(Map<String, dynamic> json) => InventarioGeneral(
+        insumos: json['insumos'] as int,
+        agotados: json['agotados'] as int,
+        entradas: json['entradas'] as int,
+        costoEntradas: (json['costo_entradas'] as num).toDouble(),
+        consumos: json['consumos'] as int,
+        porUnidad: (json['por_unidad'] as List<dynamic>).map((x) => ExistenciaPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        masConsumidos: (json['mas_consumidos'] as List<dynamic>).map((x) => InsumoConsumido.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'insumos': insumos,
+        'agotados': agotados,
+        'entradas': entradas,
+        'costo_entradas': costoEntradas,
+        'consumos': consumos,
+        'por_unidad': porUnidad.map((x) => x.toJson()).toList(),
+        'mas_consumidos': masConsumidos.map((x) => x.toJson()).toList(),
       };
 }
 
@@ -2659,6 +3147,74 @@ class JornalCreate {
         'dias': dias,
         'valor_jornal': valorJornal,
         if (modalidad != null) 'modalidad': modalidad!,
+      };
+}
+
+class JornalDetalle {
+  final String id;
+  final String? trabajadorId;
+  final String? trabajadorNombre;
+  final String actividadId;
+  final String actividadNombre;
+  final String cicloId;
+  final DateTime fecha;
+  final String obreros;
+  final String dias;
+  final String valorJornal;
+  final String modalidad;
+  final String total;
+  final String estado;
+  final DateTime? pagadoEn;
+
+  const JornalDetalle({
+    required this.id,
+    this.trabajadorId,
+    this.trabajadorNombre,
+    required this.actividadId,
+    required this.actividadNombre,
+    required this.cicloId,
+    required this.fecha,
+    required this.obreros,
+    required this.dias,
+    required this.valorJornal,
+    required this.modalidad,
+    required this.total,
+    required this.estado,
+    this.pagadoEn,
+  });
+
+  factory JornalDetalle.fromJson(Map<String, dynamic> json) => JornalDetalle(
+        id: json['id'] as String,
+        trabajadorId: json['trabajador_id'] == null ? null : json['trabajador_id'] as String,
+        trabajadorNombre: json['trabajador_nombre'] == null ? null : json['trabajador_nombre'] as String,
+        actividadId: json['actividad_id'] as String,
+        actividadNombre: json['actividad_nombre'] as String,
+        cicloId: json['ciclo_id'] as String,
+        fecha: DateTime.parse(json['fecha'] as String),
+        obreros: json['obreros'] as String,
+        dias: json['dias'] as String,
+        valorJornal: json['valor_jornal'] as String,
+        modalidad: json['modalidad'] as String,
+        total: json['total'] as String,
+        estado: json['estado'] as String,
+        pagadoEn: json['pagado_en'] == null ? null : DateTime.parse(json['pagado_en'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        if (trabajadorId != null) 'trabajador_id': trabajadorId!,
+        if (trabajadorNombre != null) 'trabajador_nombre': trabajadorNombre!,
+        'actividad_id': actividadId,
+        'actividad_nombre': actividadNombre,
+        'ciclo_id': cicloId,
+        'fecha': fecha.toUtc().toIso8601String(),
+        'obreros': obreros,
+        'dias': dias,
+        'valor_jornal': valorJornal,
+        'modalidad': modalidad,
+        'total': total,
+        'estado': estado,
+        if (pagadoEn != null) 'pagado_en': pagadoEn!.toUtc().toIso8601String(),
       };
 }
 
@@ -2951,6 +3507,86 @@ class ManejoSalida {
         'descripcion': descripcion,
         if (productoIca != null) 'producto_ica': productoIca!,
         if (fuente != null) 'fuente': fuente!.toJson(),
+      };
+}
+
+class ManoDeObraGeneral {
+  final int trabajadores;
+  final Map<String, dynamic> trabajadoresPorTipo;
+  final int jornales;
+  final int jornalesPendientes;
+  final double totalPendiente;
+  final int jornalesPagados;
+  final double totalPagado;
+  final List<TotalPorCategoria> porModalidad;
+  final List<ManoDeObraZona> porZona;
+
+  const ManoDeObraGeneral({
+    required this.trabajadores,
+    required this.trabajadoresPorTipo,
+    required this.jornales,
+    required this.jornalesPendientes,
+    required this.totalPendiente,
+    required this.jornalesPagados,
+    required this.totalPagado,
+    required this.porModalidad,
+    required this.porZona,
+  });
+
+  factory ManoDeObraGeneral.fromJson(Map<String, dynamic> json) => ManoDeObraGeneral(
+        trabajadores: json['trabajadores'] as int,
+        trabajadoresPorTipo: json['trabajadores_por_tipo'] as Map<String, dynamic>,
+        jornales: json['jornales'] as int,
+        jornalesPendientes: json['jornales_pendientes'] as int,
+        totalPendiente: (json['total_pendiente'] as num).toDouble(),
+        jornalesPagados: json['jornales_pagados'] as int,
+        totalPagado: (json['total_pagado'] as num).toDouble(),
+        porModalidad: (json['por_modalidad'] as List<dynamic>).map((x) => TotalPorCategoria.fromJson(x as Map<String, dynamic>)).toList(),
+        porZona: (json['por_zona'] as List<dynamic>).map((x) => ManoDeObraZona.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'trabajadores': trabajadores,
+        'trabajadores_por_tipo': trabajadoresPorTipo,
+        'jornales': jornales,
+        'jornales_pendientes': jornalesPendientes,
+        'total_pendiente': totalPendiente,
+        'jornales_pagados': jornalesPagados,
+        'total_pagado': totalPagado,
+        'por_modalidad': porModalidad.map((x) => x.toJson()).toList(),
+        'por_zona': porZona.map((x) => x.toJson()).toList(),
+      };
+}
+
+class ManoDeObraZona {
+  final String zona;
+  final int trabajadores;
+  final int jornales;
+  final double pendiente;
+  final double pagado;
+
+  const ManoDeObraZona({
+    required this.zona,
+    required this.trabajadores,
+    required this.jornales,
+    required this.pendiente,
+    required this.pagado,
+  });
+
+  factory ManoDeObraZona.fromJson(Map<String, dynamic> json) => ManoDeObraZona(
+        zona: json['zona'] as String,
+        trabajadores: json['trabajadores'] as int,
+        jornales: json['jornales'] as int,
+        pendiente: (json['pendiente'] as num).toDouble(),
+        pagado: (json['pagado'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'zona': zona,
+        'trabajadores': trabajadores,
+        'jornales': jornales,
+        'pendiente': pendiente,
+        'pagado': pagado,
       };
 }
 
@@ -3278,6 +3914,38 @@ class PageConsultaResumen {
       };
 }
 
+class PageCosechaRegistrada {
+  final List<CosechaRegistrada> items;
+  final int total;
+  final int page;
+  final int size;
+  final bool hasMore;
+
+  const PageCosechaRegistrada({
+    required this.items,
+    required this.total,
+    required this.page,
+    required this.size,
+    required this.hasMore,
+  });
+
+  factory PageCosechaRegistrada.fromJson(Map<String, dynamic> json) => PageCosechaRegistrada(
+        items: (json['items'] as List<dynamic>).map((x) => CosechaRegistrada.fromJson(x as Map<String, dynamic>)).toList(),
+        total: json['total'] as int,
+        page: json['page'] as int,
+        size: json['size'] as int,
+        hasMore: json['has_more'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'items': items.map((x) => x.toJson()).toList(),
+        'total': total,
+        'page': page,
+        'size': size,
+        'has_more': hasMore,
+      };
+}
+
 class PageCultivoResumen {
   final List<CultivoResumen> items;
   final int total;
@@ -3438,6 +4106,38 @@ class PagePropagacionSalida {
       };
 }
 
+class PageSiembraRegistrada {
+  final List<SiembraRegistrada> items;
+  final int total;
+  final int page;
+  final int size;
+  final bool hasMore;
+
+  const PageSiembraRegistrada({
+    required this.items,
+    required this.total,
+    required this.page,
+    required this.size,
+    required this.hasMore,
+  });
+
+  factory PageSiembraRegistrada.fromJson(Map<String, dynamic> json) => PageSiembraRegistrada(
+        items: (json['items'] as List<dynamic>).map((x) => SiembraRegistrada.fromJson(x as Map<String, dynamic>)).toList(),
+        total: json['total'] as int,
+        page: json['page'] as int,
+        size: json['size'] as int,
+        hasMore: json['has_more'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'items': items.map((x) => x.toJson()).toList(),
+        'total': total,
+        'page': page,
+        'size': size,
+        'has_more': hasMore,
+      };
+}
+
 class PageSiembraResumen {
   final List<SiembraResumen> items;
   final int total;
@@ -3455,6 +4155,38 @@ class PageSiembraResumen {
 
   factory PageSiembraResumen.fromJson(Map<String, dynamic> json) => PageSiembraResumen(
         items: (json['items'] as List<dynamic>).map((x) => SiembraResumen.fromJson(x as Map<String, dynamic>)).toList(),
+        total: json['total'] as int,
+        page: json['page'] as int,
+        size: json['size'] as int,
+        hasMore: json['has_more'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'items': items.map((x) => x.toJson()).toList(),
+        'total': total,
+        'page': page,
+        'size': size,
+        'has_more': hasMore,
+      };
+}
+
+class PageUsuarioResumen {
+  final List<UsuarioResumen> items;
+  final int total;
+  final int page;
+  final int size;
+  final bool hasMore;
+
+  const PageUsuarioResumen({
+    required this.items,
+    required this.total,
+    required this.page,
+    required this.size,
+    required this.hasMore,
+  });
+
+  factory PageUsuarioResumen.fromJson(Map<String, dynamic> json) => PageUsuarioResumen(
+        items: (json['items'] as List<dynamic>).map((x) => UsuarioResumen.fromJson(x as Map<String, dynamic>)).toList(),
         total: json['total'] as int,
         page: json['page'] as int,
         size: json['size'] as int,
@@ -3794,6 +4526,86 @@ class ProcesoCreate {
       };
 }
 
+class ProcesoDetalle {
+  final String id;
+  final String nombre;
+  final String producto;
+  final String materiaPrima;
+  final String origenMateria;
+  final DateTime fechaInicio;
+  final DateTime? fechaFin;
+  final int etapas;
+  final int etapasFinalizadas;
+  final String estado;
+
+  const ProcesoDetalle({
+    required this.id,
+    required this.nombre,
+    required this.producto,
+    required this.materiaPrima,
+    required this.origenMateria,
+    required this.fechaInicio,
+    this.fechaFin,
+    required this.etapas,
+    required this.etapasFinalizadas,
+    required this.estado,
+  });
+
+  factory ProcesoDetalle.fromJson(Map<String, dynamic> json) => ProcesoDetalle(
+        id: json['id'] as String,
+        nombre: json['nombre'] as String,
+        producto: json['producto'] as String,
+        materiaPrima: json['materia_prima'] as String,
+        origenMateria: json['origen_materia'] as String,
+        fechaInicio: DateTime.parse(json['fecha_inicio'] as String),
+        fechaFin: json['fecha_fin'] == null ? null : DateTime.parse(json['fecha_fin'] as String),
+        etapas: json['etapas'] as int,
+        etapasFinalizadas: json['etapas_finalizadas'] as int,
+        estado: json['estado'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        'producto': producto,
+        'materia_prima': materiaPrima,
+        'origen_materia': origenMateria,
+        'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
+        if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+        'etapas': etapas,
+        'etapas_finalizadas': etapasFinalizadas,
+        'estado': estado,
+      };
+}
+
+class ProcesoPorProducto {
+  final String producto;
+  final int procesos;
+  final int finalizados;
+  final double? duracionMediaDias;
+
+  const ProcesoPorProducto({
+    required this.producto,
+    required this.procesos,
+    required this.finalizados,
+    this.duracionMediaDias,
+  });
+
+  factory ProcesoPorProducto.fromJson(Map<String, dynamic> json) => ProcesoPorProducto(
+        producto: json['producto'] as String,
+        procesos: json['procesos'] as int,
+        finalizados: json['finalizados'] as int,
+        duracionMediaDias: json['duracion_media_dias'] == null ? null : (json['duracion_media_dias'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'producto': producto,
+        'procesos': procesos,
+        'finalizados': finalizados,
+        if (duracionMediaDias != null) 'duracion_media_dias': duracionMediaDias!,
+      };
+}
+
 class ProcesoResponse {
   final String id;
   final String fincaId;
@@ -3835,6 +4647,54 @@ class ProcesoResponse {
         'origen_materia': origenMateria,
         'fecha_inicio': fechaInicio.toUtc().toIso8601String(),
         if (fechaFin != null) 'fecha_fin': fechaFin!.toUtc().toIso8601String(),
+      };
+}
+
+class ProcesosGeneral {
+  final int procesos;
+  final int enCurso;
+  final int finalizados;
+  final double? duracionMediaDias;
+  final Map<String, dynamic> porOrigen;
+  final int etapas;
+  final int etapasFinalizadas;
+  final int etapasConRetraso;
+  final List<ProcesoPorProducto> porProducto;
+
+  const ProcesosGeneral({
+    required this.procesos,
+    required this.enCurso,
+    required this.finalizados,
+    this.duracionMediaDias,
+    required this.porOrigen,
+    required this.etapas,
+    required this.etapasFinalizadas,
+    required this.etapasConRetraso,
+    required this.porProducto,
+  });
+
+  factory ProcesosGeneral.fromJson(Map<String, dynamic> json) => ProcesosGeneral(
+        procesos: json['procesos'] as int,
+        enCurso: json['en_curso'] as int,
+        finalizados: json['finalizados'] as int,
+        duracionMediaDias: json['duracion_media_dias'] == null ? null : (json['duracion_media_dias'] as num).toDouble(),
+        porOrigen: json['por_origen'] as Map<String, dynamic>,
+        etapas: json['etapas'] as int,
+        etapasFinalizadas: json['etapas_finalizadas'] as int,
+        etapasConRetraso: json['etapas_con_retraso'] as int,
+        porProducto: (json['por_producto'] as List<dynamic>).map((x) => ProcesoPorProducto.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'procesos': procesos,
+        'en_curso': enCurso,
+        'finalizados': finalizados,
+        if (duracionMediaDias != null) 'duracion_media_dias': duracionMediaDias!,
+        'por_origen': porOrigen,
+        'etapas': etapas,
+        'etapas_finalizadas': etapasFinalizadas,
+        'etapas_con_retraso': etapasConRetraso,
+        'por_producto': porProducto.map((x) => x.toJson()).toList(),
       };
 }
 
@@ -3907,6 +4767,42 @@ class ProduccionResponse {
         'tipo': tipo,
         'cantidad': cantidad,
         'unidad': unidad,
+      };
+}
+
+class Productor {
+  final String usuarioId;
+  final String nombre;
+  final int fincas;
+  final int cosechas;
+  final List<CantidadPorUnidad> produccion;
+  final DateTime? ultimaCosecha;
+
+  const Productor({
+    required this.usuarioId,
+    required this.nombre,
+    required this.fincas,
+    required this.cosechas,
+    required this.produccion,
+    this.ultimaCosecha,
+  });
+
+  factory Productor.fromJson(Map<String, dynamic> json) => Productor(
+        usuarioId: json['usuario_id'] as String,
+        nombre: json['nombre'] as String,
+        fincas: json['fincas'] as int,
+        cosechas: json['cosechas'] as int,
+        produccion: (json['produccion'] as List<dynamic>).map((x) => CantidadPorUnidad.fromJson(x as Map<String, dynamic>)).toList(),
+        ultimaCosecha: json['ultima_cosecha'] == null ? null : DateTime.parse(json['ultima_cosecha'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'usuario_id': usuarioId,
+        'nombre': nombre,
+        'fincas': fincas,
+        'cosechas': cosechas,
+        'produccion': produccion.map((x) => x.toJson()).toList(),
+        if (ultimaCosecha != null) 'ultima_cosecha': ultimaCosecha!.toIso8601String().substring(0, 10),
       };
 }
 
@@ -4019,6 +4915,114 @@ class PropagacionSalida {
         'listas': listas,
         'perdidas': perdidas,
         'trasplantadas': trasplantadas,
+      };
+}
+
+class ProyeccionAgricolaEntrada {
+  final String cultivoId;
+  final double areaM2;
+
+  const ProyeccionAgricolaEntrada({
+    required this.cultivoId,
+    required this.areaM2,
+  });
+
+  factory ProyeccionAgricolaEntrada.fromJson(Map<String, dynamic> json) => ProyeccionAgricolaEntrada(
+        cultivoId: json['cultivo_id'] as String,
+        areaM2: (json['area_m2'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'cultivo_id': cultivoId,
+        'area_m2': areaM2,
+      };
+}
+
+class ProyeccionAgricolaSalida {
+  final String areaM2;
+  final String cultivoNombre;
+  final int plantasEstimadas;
+  final int? mesesPrimeraCosecha;
+  final String? cosechasPorAnio;
+  final String costoSemillaEstimado;
+  final String costoAbonoEstimado;
+  final String ingresoEstimadoAnual;
+  final String utilidadEstimadaAnual;
+
+  const ProyeccionAgricolaSalida({
+    required this.areaM2,
+    required this.cultivoNombre,
+    required this.plantasEstimadas,
+    this.mesesPrimeraCosecha,
+    this.cosechasPorAnio,
+    required this.costoSemillaEstimado,
+    required this.costoAbonoEstimado,
+    required this.ingresoEstimadoAnual,
+    required this.utilidadEstimadaAnual,
+  });
+
+  factory ProyeccionAgricolaSalida.fromJson(Map<String, dynamic> json) => ProyeccionAgricolaSalida(
+        areaM2: json['area_m2'] as String,
+        cultivoNombre: json['cultivo_nombre'] as String,
+        plantasEstimadas: json['plantas_estimadas'] as int,
+        mesesPrimeraCosecha: json['meses_primera_cosecha'] == null ? null : json['meses_primera_cosecha'] as int,
+        cosechasPorAnio: json['cosechas_por_anio'] == null ? null : json['cosechas_por_anio'] as String,
+        costoSemillaEstimado: json['costo_semilla_estimado'] as String,
+        costoAbonoEstimado: json['costo_abono_estimado'] as String,
+        ingresoEstimadoAnual: json['ingreso_estimado_anual'] as String,
+        utilidadEstimadaAnual: json['utilidad_estimada_anual'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'area_m2': areaM2,
+        'cultivo_nombre': cultivoNombre,
+        'plantas_estimadas': plantasEstimadas,
+        if (mesesPrimeraCosecha != null) 'meses_primera_cosecha': mesesPrimeraCosecha!,
+        if (cosechasPorAnio != null) 'cosechas_por_anio': cosechasPorAnio!,
+        'costo_semilla_estimado': costoSemillaEstimado,
+        'costo_abono_estimado': costoAbonoEstimado,
+        'ingreso_estimado_anual': ingresoEstimadoAnual,
+        'utilidad_estimada_anual': utilidadEstimadaAnual,
+      };
+}
+
+class PuntoMensual {
+  final String mes;
+  final int usuarios;
+  final int fincas;
+  final int siembras;
+  final int cosechas;
+  final double gastos;
+  final double ingresos;
+
+  const PuntoMensual({
+    required this.mes,
+    required this.usuarios,
+    required this.fincas,
+    required this.siembras,
+    required this.cosechas,
+    required this.gastos,
+    required this.ingresos,
+  });
+
+  factory PuntoMensual.fromJson(Map<String, dynamic> json) => PuntoMensual(
+        mes: json['mes'] as String,
+        usuarios: json['usuarios'] as int,
+        fincas: json['fincas'] as int,
+        siembras: json['siembras'] as int,
+        cosechas: json['cosechas'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'mes': mes,
+        'usuarios': usuarios,
+        'fincas': fincas,
+        'siembras': siembras,
+        'cosechas': cosechas,
+        'gastos': gastos,
+        'ingresos': ingresos,
       };
 }
 
@@ -4202,6 +5206,82 @@ class RespuestaAsistente {
       };
 }
 
+class ResumenGeneral {
+  final int usuarios;
+  final int usuariosActivos;
+  final Map<String, dynamic> usuariosPorRol;
+  final int fincas;
+  final double areaHaFincas;
+  final int siembras;
+  final Map<String, dynamic> siembrasPorEstado;
+  final int ciclosAbiertos;
+  final int ciclosCerrados;
+  final int cosechas;
+  final int trabajadores;
+  final double gastos;
+  final double ingresos;
+  final double utilidad;
+  final int eventosAdversos;
+  final double perdidaEstimada;
+
+  const ResumenGeneral({
+    required this.usuarios,
+    required this.usuariosActivos,
+    required this.usuariosPorRol,
+    required this.fincas,
+    required this.areaHaFincas,
+    required this.siembras,
+    required this.siembrasPorEstado,
+    required this.ciclosAbiertos,
+    required this.ciclosCerrados,
+    required this.cosechas,
+    required this.trabajadores,
+    required this.gastos,
+    required this.ingresos,
+    required this.utilidad,
+    required this.eventosAdversos,
+    required this.perdidaEstimada,
+  });
+
+  factory ResumenGeneral.fromJson(Map<String, dynamic> json) => ResumenGeneral(
+        usuarios: json['usuarios'] as int,
+        usuariosActivos: json['usuarios_activos'] as int,
+        usuariosPorRol: json['usuarios_por_rol'] as Map<String, dynamic>,
+        fincas: json['fincas'] as int,
+        areaHaFincas: (json['area_ha_fincas'] as num).toDouble(),
+        siembras: json['siembras'] as int,
+        siembrasPorEstado: json['siembras_por_estado'] as Map<String, dynamic>,
+        ciclosAbiertos: json['ciclos_abiertos'] as int,
+        ciclosCerrados: json['ciclos_cerrados'] as int,
+        cosechas: json['cosechas'] as int,
+        trabajadores: json['trabajadores'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        utilidad: (json['utilidad'] as num).toDouble(),
+        eventosAdversos: json['eventos_adversos'] as int,
+        perdidaEstimada: (json['perdida_estimada'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'usuarios': usuarios,
+        'usuarios_activos': usuariosActivos,
+        'usuarios_por_rol': usuariosPorRol,
+        'fincas': fincas,
+        'area_ha_fincas': areaHaFincas,
+        'siembras': siembras,
+        'siembras_por_estado': siembrasPorEstado,
+        'ciclos_abiertos': ciclosAbiertos,
+        'ciclos_cerrados': ciclosCerrados,
+        'cosechas': cosechas,
+        'trabajadores': trabajadores,
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'utilidad': utilidad,
+        'eventos_adversos': eventosAdversos,
+        'perdida_estimada': perdidaEstimada,
+      };
+}
+
 class RetroalimentacionEntrada {
   final String valor;
   final String? comentario;
@@ -4339,6 +5419,58 @@ class SiembraCrear {
         if (plantasSembradas != null) 'plantas_sembradas': plantasSembradas!,
         'fecha_plan': fechaPlan.toIso8601String().substring(0, 10),
         if (presupuesto != null) 'presupuesto': presupuesto!,
+      };
+}
+
+class SiembraRegistrada {
+  final String id;
+  final String cultivo;
+  final String estado;
+  final double areaHa;
+  final int? plantas;
+  final DateTime fechaPlan;
+  final DateTime? inicioCiclo;
+  final String finca;
+  final String zona;
+  final String? agricultor;
+
+  const SiembraRegistrada({
+    required this.id,
+    required this.cultivo,
+    required this.estado,
+    required this.areaHa,
+    this.plantas,
+    required this.fechaPlan,
+    this.inicioCiclo,
+    required this.finca,
+    required this.zona,
+    this.agricultor,
+  });
+
+  factory SiembraRegistrada.fromJson(Map<String, dynamic> json) => SiembraRegistrada(
+        id: json['id'] as String,
+        cultivo: json['cultivo'] as String,
+        estado: json['estado'] as String,
+        areaHa: (json['area_ha'] as num).toDouble(),
+        plantas: json['plantas'] == null ? null : json['plantas'] as int,
+        fechaPlan: DateTime.parse(json['fecha_plan'] as String),
+        inicioCiclo: json['inicio_ciclo'] == null ? null : DateTime.parse(json['inicio_ciclo'] as String),
+        finca: json['finca'] as String,
+        zona: json['zona'] as String,
+        agricultor: json['agricultor'] == null ? null : json['agricultor'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'cultivo': cultivo,
+        'estado': estado,
+        'area_ha': areaHa,
+        if (plantas != null) 'plantas': plantas!,
+        'fecha_plan': fechaPlan.toIso8601String().substring(0, 10),
+        if (inicioCiclo != null) 'inicio_ciclo': inicioCiclo!.toIso8601String().substring(0, 10),
+        'finca': finca,
+        'zona': zona,
+        if (agricultor != null) 'agricultor': agricultor!,
       };
 }
 
@@ -4554,6 +5686,30 @@ class TokenResponse {
       };
 }
 
+class TotalPorCategoria {
+  final String categoria;
+  final int registros;
+  final double total;
+
+  const TotalPorCategoria({
+    required this.categoria,
+    required this.registros,
+    required this.total,
+  });
+
+  factory TotalPorCategoria.fromJson(Map<String, dynamic> json) => TotalPorCategoria(
+        categoria: json['categoria'] as String,
+        registros: json['registros'] as int,
+        total: (json['total'] as num).toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'categoria': categoria,
+        'registros': registros,
+        'total': total,
+      };
+}
+
 class TrabajadorCreate {
   final String nombre;
   final String tipo;
@@ -4738,6 +5894,78 @@ class UsuarioCreate {
       };
 }
 
+class UsuarioDetalle {
+  final String id;
+  final String email;
+  final String nombre;
+  final String rol;
+  final bool activo;
+  final DateTime creadoEn;
+  final DateTime? ultimoAcceso;
+  final String? municipioDane;
+  final int fincas;
+  final int siembras;
+  final bool bloqueado;
+  final int cosechas;
+  final double gastos;
+  final double ingresos;
+  final List<FincaDeUsuario> detalleFincas;
+
+  const UsuarioDetalle({
+    required this.id,
+    required this.email,
+    required this.nombre,
+    required this.rol,
+    required this.activo,
+    required this.creadoEn,
+    this.ultimoAcceso,
+    this.municipioDane,
+    required this.fincas,
+    required this.siembras,
+    required this.bloqueado,
+    required this.cosechas,
+    required this.gastos,
+    required this.ingresos,
+    required this.detalleFincas,
+  });
+
+  factory UsuarioDetalle.fromJson(Map<String, dynamic> json) => UsuarioDetalle(
+        id: json['id'] as String,
+        email: json['email'] as String,
+        nombre: json['nombre'] as String,
+        rol: json['rol'] as String,
+        activo: json['activo'] as bool,
+        creadoEn: DateTime.parse(json['creado_en'] as String),
+        ultimoAcceso: json['ultimo_acceso'] == null ? null : DateTime.parse(json['ultimo_acceso'] as String),
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        fincas: json['fincas'] as int,
+        siembras: json['siembras'] as int,
+        bloqueado: json['bloqueado'] as bool,
+        cosechas: json['cosechas'] as int,
+        gastos: (json['gastos'] as num).toDouble(),
+        ingresos: (json['ingresos'] as num).toDouble(),
+        detalleFincas: (json['detalle_fincas'] as List<dynamic>).map((x) => FincaDeUsuario.fromJson(x as Map<String, dynamic>)).toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'email': email,
+        'nombre': nombre,
+        'rol': rol,
+        'activo': activo,
+        'creado_en': creadoEn.toUtc().toIso8601String(),
+        if (ultimoAcceso != null) 'ultimo_acceso': ultimoAcceso!.toUtc().toIso8601String(),
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        'fincas': fincas,
+        'siembras': siembras,
+        'bloqueado': bloqueado,
+        'cosechas': cosechas,
+        'gastos': gastos,
+        'ingresos': ingresos,
+        'detalle_fincas': detalleFincas.map((x) => x.toJson()).toList(),
+      };
+}
+
 class UsuarioResponse {
   final String id;
   final String email;
@@ -4767,6 +5995,58 @@ class UsuarioResponse {
         'nombre': nombre,
         'rol': rol,
         'activo': activo,
+      };
+}
+
+class UsuarioResumen {
+  final String id;
+  final String email;
+  final String nombre;
+  final String rol;
+  final bool activo;
+  final DateTime creadoEn;
+  final DateTime? ultimoAcceso;
+  final String? municipioDane;
+  final int fincas;
+  final int siembras;
+
+  const UsuarioResumen({
+    required this.id,
+    required this.email,
+    required this.nombre,
+    required this.rol,
+    required this.activo,
+    required this.creadoEn,
+    this.ultimoAcceso,
+    this.municipioDane,
+    required this.fincas,
+    required this.siembras,
+  });
+
+  factory UsuarioResumen.fromJson(Map<String, dynamic> json) => UsuarioResumen(
+        id: json['id'] as String,
+        email: json['email'] as String,
+        nombre: json['nombre'] as String,
+        rol: json['rol'] as String,
+        activo: json['activo'] as bool,
+        creadoEn: DateTime.parse(json['creado_en'] as String),
+        ultimoAcceso: json['ultimo_acceso'] == null ? null : DateTime.parse(json['ultimo_acceso'] as String),
+        municipioDane: json['municipio_dane'] == null ? null : json['municipio_dane'] as String,
+        fincas: json['fincas'] as int,
+        siembras: json['siembras'] as int,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'email': email,
+        'nombre': nombre,
+        'rol': rol,
+        'activo': activo,
+        'creado_en': creadoEn.toUtc().toIso8601String(),
+        if (ultimoAcceso != null) 'ultimo_acceso': ultimoAcceso!.toUtc().toIso8601String(),
+        if (municipioDane != null) 'municipio_dane': municipioDane!,
+        'fincas': fincas,
+        'siembras': siembras,
       };
 }
 

@@ -51,6 +51,7 @@ EscribeProduccion = Annotated[Usuario, Depends(RequiereRol("admin", "agricultor"
 LeeProduccion = Annotated[Usuario, Depends(RequiereRol("admin", "agricultor", "contador"))]
 Revisa = Annotated[Usuario, Depends(RequiereRol("admin", "experto"))]
 SoloAdmin = Annotated[Usuario, Depends(RequiereRol("admin"))]
+SoloLectura = Annotated[Usuario, Depends(RequiereRol("admin", "agricultor", "contador"))]
 
 
 async def idempotency_key(

@@ -8,6 +8,7 @@ from app.core.etiquetas import CUENTA
 from app.dependencies import Autenticado
 from app.routers.dependencias import BD
 from app.schemas.cuenta import (
+    CambioClaveEntrada,
     ConsentimientoEntrada,
     ConsentimientoSalida,
     PoliticaSalida,
@@ -53,3 +54,12 @@ async def aceptar(
     return ConsentimientoSalida.model_validate(
         await cuenta_service.registrar(db, usuario.id, datos)
     )
+
+
+@router.post(
+    "/cuenta/cambiar-clave",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Cambiar mi contraseña",
+)
+async def cambiar_clave(db: BD, usuario: Autenticado, datos: CambioClaveEntrada) -> None:
+    await cuenta_service.cambiar_clave(db, usuario, datos)

@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import EmailStr, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     noticias_dias_vigencia: int = Field(default=7, ge=1, le=60)
     log_level: str = "INFO"
     seed_password: str | None = None
+    admin_email: EmailStr | None = None
+    admin_password: SecretStr | None = Field(default=None, min_length=10)
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", env_ignore_empty=True, extra="ignore"
     )

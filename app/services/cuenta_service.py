@@ -8,9 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.core.exceptions import Conflicto, NoEncontrado, ReglaNegocio
+from app.core.security import hash_password, verify_password
+from app.models import Usuario
 from app.models.glosario import GlosarioTermino
 from app.models.usuario import Consentimiento
-from app.schemas.cuenta import ConsentimientoEntrada, PoliticaSalida
+from app.schemas.cuenta import CambioClaveEntrada, ConsentimientoEntrada, PoliticaSalida
 
 settings = get_settings()
 
@@ -80,3 +82,12 @@ async def registrar(
     db.add(fila)
     await db.commit()
     return fila
+
+
+async def cambiar_clave(db: AsyncSession, usuario: Usuario, datos: CambioClaveEntrada) -> None:
+    if not verify_password(datos.clave_actual, usuario.password_hash):
+        raise ReglaNegocio("La clave actual no coincide.", "CLAVE_ACTUAL_INCORRECTA")
+    if datos.clave_actual == datos.clave_nueva:
+        raise ReglaNegocio("La clave nueva debe ser distinta de la actual.", "CLAVE_REPETIDA")
+    usuario.password_hash = hash_password(datos.clave_nueva)
+    await db.commit()

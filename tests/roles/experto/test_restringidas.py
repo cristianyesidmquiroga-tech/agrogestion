@@ -19,6 +19,11 @@ VISTAS = [
     pytest.param("get", "/avisos", id="avisos"),
     pytest.param("get", "/reportes/indices", id="reporte_indices"),
     pytest.param("get", "/reportes/cronograma", id="reporte_cronograma"),
+    pytest.param(
+        "get", "/fincas/00000000-0000-0000-0000-000000000000/jornales", id="pagos_pendientes"
+    ),
+    pytest.param("get", "/fincas/00000000-0000-0000-0000-000000000000/insumos", id="inventario"),
+    pytest.param("get", "/fincas/00000000-0000-0000-0000-000000000000/procesos", id="procesos"),
 ]
 
 
