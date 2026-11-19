@@ -1,20 +1,40 @@
 services:
-  agrogestion:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:?Defina DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS:?Defina DB_PASS}
+      POSTGRES_DB: ${DB_NAME:-agrogestion}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME:-agrogestion}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    mem_limit: 512m
+    cpus: 1.0
+
+  api:
     build: .
-    expose:
-      - "8000"
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       APP_ENV: production
-      DATABASE_URL: sqlite+aiosqlite:////data/agrogestion.db
-      JWT_SECRET: "${JWT_SECRET:?Define JWT_SECRET en las variables runtime de Coolify}"
-      FIELD_ENCRYPTION_KEY: "${FIELD_ENCRYPTION_KEY:?Define FIELD_ENCRYPTION_KEY en las variables runtime de Coolify}"
-      ADMIN_EMAIL: "${ADMIN_EMAIL:-}"
-      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-}"
+      DATABASE_URL: postgresql+asyncpg://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME:-agrogestion}
+      JWT_SECRET: "${JWT_SECRET:?Defina JWT_SECRET en las variables de Coolify}"
+      FIELD_ENCRYPTION_KEY: "${FIELD_ENCRYPTION_KEY:?Defina FIELD_ENCRYPTION_KEY en las variables de Coolify}"
       ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-https://agrogestion.proyecto.sbs}"
-      ALERT_ALLOWED_HOSTS: "${ALERT_ALLOWED_HOSTS:-}"
-    volumes:
-      - agrogestion_data:/data
-    restart: unless-stopped
+      ALERT_ALLOWED_HOSTS: ${ALERT_ALLOWED_HOSTS:-}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    expose:
+      - "8000"
+    mem_limit: 512m
+    cpus: 1.0
 
 volumes:
-  agrogestion_data:
+  pgdata:
