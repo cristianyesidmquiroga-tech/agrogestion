@@ -1,5 +1,7 @@
 # AgroGestion
 
+[![CI](https://github.com/cristianyesidmquiroga-tech/agrogestion/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/cristianyesidmquiroga-tech/agrogestion/actions/workflows/ci.yml)
+
 <details>
 <summary><b>Read this in English</b></summary>
 
