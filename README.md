@@ -11,6 +11,8 @@ Quick start: copy `.env.example` to `.env`, run `python -m pip install -e ".[dev
 
 </details>
 
+![Documentación interactiva en /docs: menú por perfil y grupos de rutas](docs/capturas/documentacion.webp)
+
 API REST para la gestión de cultivos y ganadería con FastAPI, PostgreSQL 16, SQLAlchemy 2.0 y `asyncpg`. Cubre fincas y lotes, catálogo de cultivos con perfil, siembras y ciclos, conteo de plantas, vivero, eventos adversos, base de conocimiento, asistente, noticias regionales, mano de obra, insumos, cosechas, procesos, contabilidad y pecuario, y estadísticas de toda la aplicación para el administrador (`/usuarios` y `/estadisticas`).
 
 ## Inicio
