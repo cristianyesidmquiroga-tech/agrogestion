@@ -40,3 +40,4 @@ docs/*
 !docs/AgroGestion_Postman_Collection.json
 !docs/dart/
 !docs/android/
+!docs/capturas/
